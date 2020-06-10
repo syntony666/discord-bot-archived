@@ -9,7 +9,8 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {},
-  "scripts": {
+  "scripts": {  
+    "start": "node bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "syntony666",
