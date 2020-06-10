@@ -3,7 +3,10 @@
     "version": "1.0.0",
     "description": "Lolicon's bot",
     "main": "bot.js",
-    "author": "syntony666",
+    "author": "syntony666",  
+    "scripts": {
+        "start": "node bot.js"
+      },
     "dependencies": {
         "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
         "discord.js": "^12.2.0",
