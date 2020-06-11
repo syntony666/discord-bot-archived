@@ -116,5 +116,3 @@ dist
 .pnp.*
 
 *.bat
-
-response.json
