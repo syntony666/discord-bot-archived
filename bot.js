@@ -19,6 +19,13 @@ bot.on("ready", function (evt) {
     logger.info(bot.username + " - (" + bot.id + ")");
     console.log()
 });
+// bot.on('guildMemberAdd', function (member) { //Confirm Member ID is correct (verified) 
+//     console.dir(member.id); //Store the member ID as a variable, and pass that as the User ID 
+//     userID = member.id; 
+//     console.dir("User ID: "+userID); 
+//     bot.sendMessage({ to: ''+userID+'', 
+//                     message: 'Test.' }); 
+//                 });
 bot.on("message", function (user, userID, channelID, message, evt) {
     var serverID = bot.channels[channelID].guild_id;
     console.log('<' + channelID +'> ' + user + '(' + userID + '): ' + message)
@@ -42,29 +49,37 @@ bot.on("message", function (user, userID, channelID, message, evt) {
                 }
                 break;
             case 'teach':
-                fs.readFile('./response.json', 'utf8', 
-                    function readFileCallback(err, data){
-                        if (err){
-                            console.log(err);
-                        } 
-                        else {
-                            obj = JSON.parse(data); //now it an object
-                            mes = ''
-                            for(let i=2;i < args.length; i++){
-                                if(i!=2)
-                                    mes+=' ';
-                                mes+=args[i];
+                if(args[1]!=undefined){
+                    fs.readFile('./response.json', 'utf8', 
+                        function readFileCallback(err, data){
+                            if (err){
+                                console.log(err);
+                            } 
+                            else {
+                                obj = JSON.parse(data); //now it an object
+                                mes = ''
+                                for(let i=2;i < args.length; i++){
+                                    if(i!=2)
+                                        mes+=' ';
+                                    mes+=args[i];
+                                }
+                                obj["keyword"].push({server: serverID, user: userID, receive: args[1], send: mes}); //add some data
+                                json = JSON.stringify(obj); //convert it back to json
+                                fs.writeFile('./response.json', json, 'utf8',function(err){}); // write it back 
+                                bot.sendMessage({
+                                    to: channelID,
+                                    message: '<@'+userID+'> 教我聽到人家說 '+ args[1]+' 要回答 '+ mes
+                                });
                             }
-                            obj["keyword"].push({server: serverID, user: userID, receive: args[1], send: mes}); //add some data
-                            json = JSON.stringify(obj); //convert it back to json
-                            fs.writeFile('./response.json', json, 'utf8',function(err){}); // write it back 
-                            bot.sendMessage({
-                                to: channelID,
-                                message: '<@'+userID+'> 教我聽到人家說 '+ args[1]+' 要回答 '+ mes
-                            });
                         }
-                    }
-                );
+                    );
+                }
+                else{
+                    bot.sendMessage({
+                        to: channelID,
+                        message: '所以你要教我什麼?????'
+                    });
+                }
                 break;
         }
     }
