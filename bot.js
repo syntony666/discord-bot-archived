@@ -144,13 +144,14 @@ bot.on("message", function (user, userID, channelID, message, evt) {
         }
     }
     var keyword = JSON.parse(fs.readFileSync('./response.json','utf8'))["keyword"]
-    for (let index = 0; index < keyword.length; index++) {
-        if(message == keyword[index]["receive"] && serverID == keyword[index]["server"]){
-            bot.sendMessage({
-                to: channelID,
-                message: keyword[index]["send"]
-            });
-            break;
+    if(userID !== bot.id)
+        for (let index = 0; index < keyword.length; index++) {
+            if(message == keyword[index]["receive"] && serverID == keyword[index]["server"]){
+                bot.sendMessage({
+                    to: channelID,
+                    message: keyword[index]["send"]
+                });
+                break;
+            }
         }
-    }
 });
