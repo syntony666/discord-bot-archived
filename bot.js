@@ -19,13 +19,21 @@ bot.on("ready", function (evt) {
     logger.info(bot.username + " - (" + bot.id + ")");
     console.log()
 });
-// bot.on('guildMemberAdd', function (member) { //Confirm Member ID is correct (verified) 
-//     console.dir(member.id); //Store the member ID as a variable, and pass that as the User ID 
-//     userID = member.id; 
-//     console.dir("User ID: "+userID); 
-//     bot.sendMessage({ to: ''+userID+'', 
-//                     message: 'Test.' }); 
-//                 });
+bot.on('guildMemberAdd', function (member) {
+    userID = member.id; 
+    console.dir("User ID: "+userID); 
+    var serverID = member.guild_id;
+    var welcome = JSON.parse(fs.readFileSync('./response.json','utf8'))["welcome"]
+    for (let index = 0; index < welcome.length; index++) {
+        if(serverID == welcome[index]["server"]){
+            eval('var mes='+welcome[index]["message"]);
+            bot.sendMessage({
+                to: welcome[index]["channel"], 
+                message: mes
+            }); 
+        }
+    }
+});
 bot.on("message", function (user, userID, channelID, message, evt) {
     var serverID = bot.channels[channelID].guild_id;
     console.log('<' + channelID +'> ' + user + '(' + userID + '): ' + message)
@@ -33,6 +41,12 @@ bot.on("message", function (user, userID, channelID, message, evt) {
         var args = message.substring(1).split(' ');
         var cmd = args[0];
         switch(cmd) {
+            case 'help':
+                bot.sendMessage({
+                    to: channelID,
+                    message: 'https://imgur.com/0VC5Lmu.jpg'
+                });
+                break;
             case 'draw':            // >draw max min
                 if(args[1]!=undefined){
                     if(args[2]==undefined){args[2]=0;}
@@ -48,6 +62,17 @@ bot.on("message", function (user, userID, channelID, message, evt) {
                     });
                 }
                 break;
+            case 'list':
+                var keyword = JSON.parse(fs.readFileSync('./response.json','utf8'))["keyword"]
+                for (let index = 0; index < keyword.length; index++) {
+                    if(serverID == keyword[index]["server"]){
+                        bot.sendMessage({
+                            to: channelID,
+                            message: '> ' + keyword[index]["receive"] +'\n'+ keyword[index]["send"]
+                        });
+                    }
+                }
+                break;
             case 'teach':
                 if(args[1]!=undefined){
                     fs.readFile('./response.json', 'utf8', 
@@ -56,7 +81,11 @@ bot.on("message", function (user, userID, channelID, message, evt) {
                                 console.log(err);
                             } 
                             else {
-                                obj = JSON.parse(data); //now it an object
+                                obj = JSON.parse(data);
+                                for (let index = 0; index < keyword.length; index++) {
+                                    if(args[1] == obj["keyword"][index]["receive"])
+                                        delete obj["keyword"][index]
+                                }
                                 mes = ''
                                 for(let i=2;i < args.length; i++){
                                     if(i!=2)
@@ -64,7 +93,8 @@ bot.on("message", function (user, userID, channelID, message, evt) {
                                     mes+=args[i];
                                 }
                                 obj["keyword"].push({server: serverID, user: userID, receive: args[1], send: mes}); //add some data
-                                json = JSON.stringify(obj); //convert it back to json
+                                obj["keyword"] = obj["keyword"].filter(function(x) { return x !== null }); 
+                                json = JSON.stringify(obj, null, '\t'); //convert it back to json
                                 fs.writeFile('./response.json', json, 'utf8',function(err){}); // write it back 
                                 bot.sendMessage({
                                     to: channelID,
@@ -88,7 +118,7 @@ bot.on("message", function (user, userID, channelID, message, evt) {
         if(message == keyword[index]["receive"] && serverID == keyword[index]["server"]){
             bot.sendMessage({
                 to: channelID,
-                message: mes
+                message: keyword[index]["send"]
             });
             break;
         }
