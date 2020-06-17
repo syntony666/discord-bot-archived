@@ -44,8 +44,19 @@ bot.on("message", function (user, userID, channelID, message, evt) {
             case 'help':
                 bot.sendMessage({
                     to: channelID,
-                    message: 'https://imgur.com/0VC5Lmu.jpg'
+                    message: 'https://imgur.com/Qp5kTlp'
                 });
+                break;
+            case 'list':
+                var keyword = JSON.parse(fs.readFileSync('./response.json','utf8'))["keyword"]
+                for (let index = 0; index < keyword.length; index++) {
+                    if(serverID == keyword[index]["server"]){
+                        bot.sendMessage({
+                            to: channelID,
+                            message: '> ' + keyword[index]["receive"] +'\n'+ keyword[index]["send"]
+                        });
+                    }
+                }
                 break;
             case 'draw':            // >draw max min
                 if(args[1]!=undefined){
@@ -60,17 +71,6 @@ bot.on("message", function (user, userID, channelID, message, evt) {
                         to: channelID,
                         message: '後面要放數字我才知道阿 QQ'
                     });
-                }
-                break;
-            case 'list':
-                var keyword = JSON.parse(fs.readFileSync('./response.json','utf8'))["keyword"]
-                for (let index = 0; index < keyword.length; index++) {
-                    if(serverID == keyword[index]["server"]){
-                        bot.sendMessage({
-                            to: channelID,
-                            message: '> ' + keyword[index]["receive"] +'\n'+ keyword[index]["send"]
-                        });
-                    }
                 }
                 break;
             case 'teach':
@@ -94,8 +94,8 @@ bot.on("message", function (user, userID, channelID, message, evt) {
                                 }
                                 obj["keyword"].push({server: serverID, user: userID, receive: args[1], send: mes}); //add some data
                                 obj["keyword"] = obj["keyword"].filter(function(x) { return x !== null }); 
-                                json = JSON.stringify(obj, null, '\t'); //convert it back to json
-                                fs.writeFile('./response.json', json, 'utf8',function(err){}); // write it back 
+                                json = JSON.stringify(obj, null, '\t');
+                                fs.writeFile('./response.json', json, 'utf8',function(err){}); 
                                 bot.sendMessage({
                                     to: channelID,
                                     message: '<@'+userID+'> 教我聽到人家說 '+ args[1]+' 要回答 '+ mes
@@ -111,6 +111,36 @@ bot.on("message", function (user, userID, channelID, message, evt) {
                     });
                 }
                 break;
+            case 'delete':
+                if(args[1]!=undefined){
+                    fs.readFile('./response.json', 'utf8', 
+                        function readFileCallback(err, data){
+                            if (err){
+                                console.log(err);
+                            } 
+                            else {
+                                obj = JSON.parse(data);
+                                for (let index = 0; index < keyword.length; index++) {
+                                    if(args[1] == obj["keyword"][index]["receive"])
+                                        delete obj["keyword"][index]
+                                }
+                                obj["keyword"] = obj["keyword"].filter(function(x) { return x !== null }); 
+                                json = JSON.stringify(obj, null, '\t');
+                                fs.writeFile('./response.json', json, 'utf8',function(err){}); 
+                                bot.sendMessage({
+                                    to: channelID,
+                                    message: '當你說'+ args[1]+'的時候 我不會理你'
+                                });
+                            }
+                        }
+                    );
+                }
+                else{
+                    bot.sendMessage({
+                        to: channelID,
+                        message: '所以你要幹嘛?????'
+                    });
+                }
         }
     }
     var keyword = JSON.parse(fs.readFileSync('./response.json','utf8'))["keyword"]
