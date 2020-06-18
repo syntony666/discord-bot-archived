@@ -55,11 +55,13 @@ MongoDB.connect(auth.uri,function(err,db){if(err) throw err;
                 if(err) throw err;
                 db.collection('keywords').find({server : serverID}).toArray(function(err,items){if(err) throw err;
                     if(items.length!=0){
+                        let mes = ''
                         items.forEach(keywords => {
-                            bot.sendMessage({
-                                to: channelID, 
-                                message: '> ' + keywords["receive"] +'\n'+ keywords["send"]
-                            }); 
+                            mes += '> ' + keywords["receive"] +'\n'+ keywords["send"] +'\n'
+                        });
+                        bot.sendMessage({
+                            to: channelID, 
+                            message: mes
                         });
                     }
                     else
