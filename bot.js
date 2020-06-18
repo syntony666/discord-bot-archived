@@ -14,12 +14,12 @@ var bot = new Discord.Client({
    autorun: true
 });
 bot.on("ready", function (evt) {
-    logger.info("Connected");
-    logger.info("Logged in as: ");
-    logger.info(bot.username + " - (" + bot.id + ")");
-    console.log()
+    console.log(bot.username + " - (" + bot.id + ") logged in!!!");
+    bot.setPresence( {  game: {     name:"失落的龍絆"}} );
+    bot.editNickname( { serverID:   '438997365194489856',
+                        userID:     bot.id,
+                        nick:       "我是樂高 踩我會痛痛 >..<"});
 });
-bot.setPresence( {name:"蘿莉"} );
 bot.on('guildMemberAdd', function (member) {
     userID = member.id; 
     console.dir("User ID: "+userID); 
@@ -39,9 +39,9 @@ bot.on('guildMemberAdd', function (member) {
     });
 });
 bot.on("message", function (user, userID, channelID, message, evt) {
+console.log(user +'(' +'#' + bot.channels[channelID].name+ ', ' + bot.servers[bot.channels[channelID].guild_id].name+'): ' + message)
 MongoDB.connect(auth.uri,function(err,db){if(err) throw err;
     var serverID = bot.channels[channelID].guild_id;
-    console.log('<' + channelID +'> ' + user + '(' + userID + '): ' + message)
     if (message.substring(0, 1) == '>') {
         var args = message.substring(1).split(' ');
         var cmd = args[0];
