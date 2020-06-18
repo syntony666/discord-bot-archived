@@ -19,6 +19,7 @@ bot.on("ready", function (evt) {
     logger.info(bot.username + " - (" + bot.id + ")");
     console.log()
 });
+bot.setPresence( {name:"蘿莉"} );
 bot.on('guildMemberAdd', function (member) {
     userID = member.id; 
     console.dir("User ID: "+userID); 
