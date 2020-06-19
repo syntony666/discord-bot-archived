@@ -25,14 +25,14 @@ client.on("guildMemberAdd", member=>{
 })
 
 client.on('message', msg => {
-console.log(msg.author.username+': ' + msg.content)
+console.log(`${msg.author.username}(${msg.guild.name},${msg.channel.name}): `)
+console.log(msg.content)
 MongoDB.connect(auth.uri,function(err,db){
     if (msg.author.bot) return;
     if(err) throw err;
     var serverID = msg.guild.id
     var message = msg.content
     var userID = msg.author.id
-    console.log(msg)
     if(message.substring(0, 1) == '>'){
         var args = message.substring(1).split(' ')
         var cmd = args[0].toLowerCase()
@@ -42,6 +42,7 @@ MongoDB.connect(auth.uri,function(err,db){
         else if(cmd == 'list'){
             db.collection('keywords').find({server : serverID})
             .toArray(function(err,items){if(err) throw err;
+                let mes =''
                 if(items.length!=0){
                     items.forEach(keywords => {
                         mes += '> ' + keywords["receive"] +'\n'+ keywords["send"] +'\n'
