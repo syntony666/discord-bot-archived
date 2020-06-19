@@ -4,14 +4,12 @@
   "description": "Lolicon's bot",
   "main": "bot.js",
   "dependencies": {
-    "discord.io": "github:woor/discord.io#gateway_v6",
     "discord.js": "^12.2.0",
-    "mongodb": "^2.2.36",
-    "winston": "^3.2.1"
+    "mongodb": "^2.2.36"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "npm install"
+    "start": "npm install && node bot.js"
   },
   "author": "syntony666",
   "license": "ISC"
