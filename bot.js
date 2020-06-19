@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-var logger = require('winston');
 var auth = require('./auth.json');
 const MongoDB = require('mongodb').MongoClient;
 
