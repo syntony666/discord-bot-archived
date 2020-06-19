@@ -1,2 +1,2 @@
 web: npm start
-worker: node bot.js
+worker: npm install && node bot.js
