@@ -63,11 +63,11 @@ MongoDB.connect(auth.uri,function(err,db){
                     db.collection('silence').insert({server: serverID, channel: args[2]})
                     msg.channel.send(`我不會在 <#${args[2]}> 裡說話`)
                 }
-                if(args[1] == 'd' && args.length==3){
+                else if(args[1] == 'd' && args.length==3){
                     db.collection('silence').remove({server: serverID, channel: args[2]})
                     msg.channel.send(`我會在 <#${args[2]}> 裡說話`)
                 }
-                if(args[1] == 'l' && args.length==2){
+                else if(args[1] == 'l' && args.length==2){
                     db.collection('silence').find({server : serverID})
                     .toArray(function(err,items){if(err) throw err;
                         let mes ='我在 '
@@ -81,6 +81,8 @@ MongoDB.connect(auth.uri,function(err,db){
                             msg.channel.send('我在每個頻道都能說話')
                     });
                 }
+                else
+                    msg.channel.send('連指令都打不好，當什麼管理員')
             }
             else
                 msg.channel.send('你沒權限給我下去!!!!!')
