@@ -82,6 +82,8 @@ MongoDB.connect(auth.uri,function(err,db){
                     });
                 }
             }
+            else
+                msg.channel.send('你沒權限給我下去!!!!!')
         }
         else if(cmd == 'teach'){
             if(args.length>=3){ 
