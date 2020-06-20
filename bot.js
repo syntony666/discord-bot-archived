@@ -28,8 +28,11 @@ client.on('message', msg => {
 console.log(`${msg.author.username}(${msg.guild.name},${msg.channel.name}): `)
 console.log(msg.content)
 MongoDB.connect(auth.uri,function(err,db){
-    if (msg.author.bot) return;
-    if(err) throw err;
+    if (msg.author.bot) {db.close(); return};
+
+    db.collection('silence').find({server: msg.guild.id, channel: msg.channel.id})
+    .toArray((err , items)=>{if(items.length!=0){db.close(); return}
+
     var serverID = msg.guild.id
     var message = msg.content
     var userID = msg.author.id
@@ -53,6 +56,33 @@ MongoDB.connect(auth.uri,function(err,db){
                     msg.channel.send('目前沒記任何東西 >_<')
             });
         }
+        else if(cmd == 'silence'){
+            if(msg.member.hasPermission(['ADMINISTRATOR'])){
+                if(args[1] == 'a' && args.length==3){
+                    db.collection('silence').remove({server: serverID, channel: args[2]})
+                    db.collection('silence').insert({server: serverID, channel: args[2]})
+                    msg.channel.send(`我不會在 <#${args[2]}> 裡說話`)
+                }
+                if(args[1] == 'd' && args.length==3){
+                    db.collection('silence').remove({server: serverID, channel: args[2]})
+                    msg.channel.send(`我會在 <#${args[2]}> 裡說話`)
+                }
+                if(args[1] == 'l' && args.length==2){
+                    db.collection('silence').find({server : serverID})
+                    .toArray(function(err,items){if(err) throw err;
+                        let mes ='我在 '
+                        if(items.length!=0){
+                            items.forEach(keywords => {
+                                mes += '<#' + keywords["channel"] +'> '
+                            });
+                            msg.channel.send(mes+'裡不能說話')
+                        }
+                        else
+                            msg.channel.send('我在每個頻道都能說話')
+                    });
+                }
+            }
+        }
         else if(cmd == 'teach'){
             if(args.length>=3){ 
                 db.collection('keywords').remove({server: serverID, receive: args[1]})
@@ -73,9 +103,6 @@ MongoDB.connect(auth.uri,function(err,db){
             else
                 msg.channel.send('所以你要幹嘛?????')
         }
-        else
-            msg.channel.send('指令打錯了啦!你很笨欸!')
-        
     }
     else
         db.collection('keywords').find({server: serverID, receive: message})
@@ -83,5 +110,5 @@ MongoDB.connect(auth.uri,function(err,db){
             if(items.length!=0)     
             msg.channel.send(items[0]["send"])}); 
     db.close();
-});
+})});
 });
