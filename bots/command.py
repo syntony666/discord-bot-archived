@@ -30,7 +30,14 @@ class Command(Extension):
 
     @commands.command()
     async def teach(self, ctx, keyword, *,msg):
-        await ctx.send(keyword)
+        server = str(ctx.message.guild.id)
+        found = keywords.find_one({'server' : server, 'receive': keyword})
+        if found is not None:
+            keywords.find_one_and_update({'server' : server, 'receive': keyword},{'send': msg})
+            ctx.send(f'<@{ctx.author.id}> 教我把 {keyword} 的回答改成 {msg}')
+            return
+        keywords.insert({'server' : server,'user': ctx.author.id, 'receive': keyword, 'send': msg})
+        ctx.send(f'<@{ctx.author.id}> 教我聽到人家說 {keyword} 要回答 {msg}')
          
 
 def setup(bot):
