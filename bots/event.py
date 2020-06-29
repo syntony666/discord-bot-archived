@@ -26,8 +26,8 @@ class Event(Extension):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        msg = welcome.find({'server': str(member.guild.id)})
-        await self.bot.get_channel(int(msg['channel'])).send(msg['message'])
+        msg = welcome.find_one({'server': str(member.guild.id)})
+        await self.bot.get_channel(int(msg['channel'])).send(f'{member.mention} {msg["message"]}')
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
