@@ -10,8 +10,8 @@ class Command(Extension):
     @commands.command()
     async def status(self, ctx):
         embed=discord.Embed(title="樂高", description="不要踩會痛", color=0xff2600)
-        embed.set_author(name="沒有沒有名字(nononame)")
         embed.add_field(name="ping", value= str(round(self.bot.latency*1000))+' ms', inline=False)
+        embed.add_field(name="狀態", value="上線中", inline=False)
         await ctx.send(embed=embed)
      
     @commands.command()
