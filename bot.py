@@ -3,6 +3,8 @@ from discord.ext import commands
 from pymongo import MongoClient
 import os
 
+# from exceptions import Exceptions
+
 ext_path = 'bots'
 db = MongoClient('mongodb://syntony666:tony738294@ds027519.mlab.com:27519/heroku_vfz6lbdq').heroku_vfz6lbdq
 auth = db['auth'].find_one()

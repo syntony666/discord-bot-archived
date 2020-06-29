@@ -28,5 +28,14 @@ class Event(Extension):
         msg = welcome.find({'server': str(member.guild.id)})
         await self.bot.get_channel(int(msg['channel'])).send(msg['message'])
 
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.errors.CommandNotFound):
+            await ctx.send('你想對我做什麼 我好害怕 QQ')
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send('欸！ 你話沒講完就想跑啊')
+        elif isinstance(error,commands.MissingPermissions):
+            await ctx.send('你沒權限給我下去!!!!!')
+
 def setup(bot):
     bot.add_cog(Event(bot))
