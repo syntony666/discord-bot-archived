@@ -33,7 +33,7 @@ class Command(Extension):
         server = str(ctx.message.guild.id)
         found = keywords.find_one({'server' : server, 'receive': keyword})
         if found is not None:
-            keywords.find_one_and_replace({'server' : server, 'receive': keyword},{'send': msg})
+            keywords.find_one_and_update({'server' : server, 'receive': keyword},'$set':{'send': msg})
             await ctx.send(f'<@{ctx.author.id}> 教我把 {keyword} 的回答改成 {msg}')
             return
         keywords.insert({'server' : server,'user': ctx.author.id, 'receive': keyword, 'send': msg})
