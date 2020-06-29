@@ -28,8 +28,10 @@ class Command(Extension):
         await ctx.send(f'<@{ctx.author.id}> 刪除了 {num} 則訊息')
 
 
-    @commands.command()
-    async def teach(self, ctx, keyword, *,msg):
+    @commands.group()
+    async def teach(self, ctx):
+        pass
+    async def a(self, ctx, keyword, *,msg):
         server = str(ctx.message.guild.id)
         found = keywords.find_one({'server' : server, 'receive': keyword})
         if found is not None:
