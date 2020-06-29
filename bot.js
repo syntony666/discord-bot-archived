@@ -25,7 +25,7 @@ client.on("guildMemberAdd", member=>{
 })
 
 client.on('message', msg => {
-console.log(`${msg.author.username}(${msg.guild.name},${msg.channel.name}): `)
+console.log(`%c${msg.author.username}(${msg.guild.name}, #${msg.channel.name}): `,'color:#FFA500')
 console.log(msg.content)
 MongoDB.connect(auth.uri,function(err,db){
     if (msg.author.bot) {db.close(); return};
