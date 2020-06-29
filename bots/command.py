@@ -31,6 +31,7 @@ class Command(Extension):
     @commands.group()
     async def teach(self, ctx):
         pass
+    @teach.command()
     async def a(self, ctx, keyword, *,msg):
         server = str(ctx.message.guild.id)
         found = keywords.find_one({'server' : server, 'receive': keyword})
