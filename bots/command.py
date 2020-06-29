@@ -31,18 +31,27 @@ class Command(Extension):
     @commands.group()
     async def teach(self, ctx):
         pass
+
     @teach.command()
-    async def a(self, ctx, keyword, *,msg):
+    async def add(self, ctx, keyword, *,msg):
         server = str(ctx.message.guild.id)
         found = keywords.find_one({'server' : server, 'receive': keyword})
-        print(keyword)
-        # if found is not None:
-        #     keywords.find_one_and_update({'server' : server, 'receive': keyword},{'$set':{'send': msg}})
-        #     await ctx.send(f'<@{ctx.author.id}> 教我把 {keyword} 的回答改成 {msg}')
-        #     return
-        # keywords.insert({'server' : server,'user': ctx.author.id, 'receive': keyword, 'send': msg})
-        # await ctx.send(f'<@{ctx.author.id}> 教我聽到人家說 {keyword} 要回答 {msg}')
-         
+        if found is not None:
+            keywords.find_one_and_update({'server' : server, 'receive': keyword},{'$set':{'send': msg}})
+            await ctx.send(f'<@{ctx.author.id}> 教我把 **{keyword}** 的回答改成 **{msg}**')
+            return
+        keywords.insert({'server' : server,'user': ctx.author.id, 'receive': keyword, 'send': msg})
+        await ctx.send(f'<@{ctx.author.id}> 教我聽到人家說 **{keyword}** 要回答 **{msg}**')
+
+    @teach.command()
+    async def delete(self, ctx, keyword):
+        server = str(ctx.message.guild.id)
+        found = keywords.find_one({'server' : server, 'receive': keyword})
+        if found is not None:
+            keywords.find_one_and_delete({'server' : server, 'receive': keyword})
+            await ctx.send(f'當你說 **{keyword}** 時候 我不會理你')
+            return
+        await ctx.send(f'沒人叫我聽到 **{keyword}** 的時候要回答')
 
 def setup(bot):
     bot.add_cog(Command(bot))
