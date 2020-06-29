@@ -3,7 +3,7 @@ from discord.ext import commands
 from pymongo import MongoClient
 from extension import Extension
 
-db = MongoClient('mongodb://syntony666:tony738294@ds027519.mlab.com:27519/heroku_vfz6lbdq').heroku_vfz6lbdq
+db = MongoClient('mongodb://syntony666:tony738294@ds027519.mlab.com:27519/heroku_vfz6lbdq?retryWrites=false').heroku_vfz6lbdq
 keywords = db['keywords']
 
 class Command(Extension):
