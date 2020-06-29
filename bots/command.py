@@ -9,8 +9,11 @@ keywords = db['keywords']
 class Command(Extension):
     @commands.command()
     async def status(self, ctx):
-        await ctx.send(f'{self.bot.latency*1000}')
-    
+        embed=discord.Embed(title="樂高", description="不要踩會痛", color=0xff2600)
+        embed.set_author(name="沒有沒有名字(nononame)")
+        embed.add_field(name="ping", value= round(self.bot.latency*1000)+' ms', inline=False)
+        await ctx.send(mbed=embed)
+     
     @commands.command()
     async def list(self, ctx):
         msg = '```\n'
