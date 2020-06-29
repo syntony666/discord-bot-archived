@@ -30,7 +30,8 @@ class Command(Extension):
 
     @commands.group()
     async def teach(self, ctx):
-        pass
+        if ctx.invoked_subcommand is None:
+            await ctx.send('你要教我什麼?????')
 
     @teach.command()
     async def add(self, ctx, keyword, *,msg):
