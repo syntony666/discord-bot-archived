@@ -16,6 +16,8 @@ class Event(Extension):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        print(f'%c${message.author}({message.guild}, #{message.channel}): ')
+        print(msg.content)
         print(f'Message from {message.author}: {message.content}')
         if message.author == self.bot.user:
             return
