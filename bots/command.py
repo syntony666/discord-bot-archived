@@ -12,7 +12,7 @@ class Command(Extension):
         embed=discord.Embed(title="樂高", description="不要踩會痛", color=0xff2600)
         embed.set_author(name="沒有沒有名字(nononame)")
         embed.add_field(name="ping", value= str(round(self.bot.latency*1000))+' ms', inline=False)
-        await ctx.send(mbed=embed)
+        await ctx.send(embed=embed)
      
     @commands.command()
     async def list(self, ctx):
