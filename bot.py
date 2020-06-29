@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import os
 
 ext_path = 'bots'
-db = MongoClient('mongodb://syntony666:tony738294@ds027519.mlab.com:27519/heroku_vfz6lbdq').heroku_vfz6lbdq
+db = MongoClient('mongodb://syntony666:tony738294@ds027519.mlab.com:27519/heroku_vfz6lbdq?retryWrites=false').heroku_vfz6lbdq
 auth = db['auth'].find_one()
 bot = commands.Bot(command_prefix=auth['prefix'])
 
