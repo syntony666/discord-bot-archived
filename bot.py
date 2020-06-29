@@ -9,16 +9,19 @@ auth = db['auth'].find_one()
 bot = commands.Bot(command_prefix=auth['prefix'])
 
 @bot.command()
+@commands.is_owner()
 async def load(ctx, extension):
     bot.load_extension(f'{ext_path}.{name}')
     await ctx.send(f'loaded {extension} done.')
 
 @bot.command()
+@commands.is_owner()
 async def unload(ctx, extension):
     bot.unload_extension(f'{ext_path}.{name}')
     await ctx.send(f'unloaded {extension} done.')
 
 @bot.command()
+@commands.is_owner()
 async def reload(ctx, extension):
     bot.reload_extension(f'{ext_path}.{name}')
     await ctx.send(f'reloaded {extension} done.')
