@@ -36,6 +36,7 @@ class Command(Extension):
     async def add(self, ctx, keyword, *,msg):
         server = str(ctx.message.guild.id)
         found = keywords.find_one({'server' : server, 'receive': keyword})
+        await ctx.channel.purge(limit = 1)
         if found is not None:
             keywords.find_one_and_update({'server' : server, 'receive': keyword},{'$set':{'send': msg}})
             await ctx.send(f'<@{ctx.author.id}> 教我把 **{keyword}** 的回答改成 **{msg}**')
@@ -47,11 +48,12 @@ class Command(Extension):
     async def delete(self, ctx, keyword):
         server = str(ctx.message.guild.id)
         found = keywords.find_one({'server' : server, 'receive': keyword})
+        await ctx.channel.purge(limit = 1)
         if found is not None:
             keywords.find_one_and_delete({'server' : server, 'receive': keyword})
-            await ctx.send(f'當你說 **{keyword}** 時候 我不會理你')
+            await ctx.send(f'<@{ctx.author.id}> 當你說 **{keyword}** 時候 我不會理你')
             return
-        await ctx.send(f'沒人叫我聽到 **{keyword}** 的時候要回答')
+        await ctx.send(f'<@{ctx.author.id}> 沒人叫我聽到 **{keyword}** 的時候要回答')
 
 def setup(bot):
     bot.add_cog(Command(bot))
