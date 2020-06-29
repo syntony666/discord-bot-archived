@@ -19,6 +19,7 @@ class Command(Extension):
         await ctx.send(f'{msg}```')
     
     @commands.command()
+    @commands.has_permission(administrator==True)
     async def clear(self, ctx, num:int):
         await ctx.channel.purge(limit = num+1)
         await ctx.send(f'<@{ctx.author.id}> 刪除了 {num} 則訊息')
