@@ -34,10 +34,10 @@ class Command(Extension):
         found = keywords.find_one({'server' : server, 'receive': keyword})
         if found is not None:
             keywords.find_one_and_update({'server' : server, 'receive': keyword},{'send': msg})
-            ctx.send(f'<@{ctx.author.id}> 教我把 {keyword} 的回答改成 {msg}')
+            await ctx.send(f'<@{ctx.author.id}> 教我把 {keyword} 的回答改成 {msg}')
             return
         keywords.insert({'server' : server,'user': ctx.author.id, 'receive': keyword, 'send': msg})
-        ctx.send(f'<@{ctx.author.id}> 教我聽到人家說 {keyword} 要回答 {msg}')
+        await ctx.send(f'<@{ctx.author.id}> 教我聽到人家說 {keyword} 要回答 {msg}')
          
 
 def setup(bot):
