@@ -9,7 +9,7 @@ keywords = db['keywords']
 class Command(Extension):
     @commands.command()
     async def status(self, ctx):
-        await ctx.send(f'{self.bot.latancy*1000}')
+        await ctx.send(f'{self.bot.latency*1000}')
     
     @commands.command()
     async def list(self, ctx):
