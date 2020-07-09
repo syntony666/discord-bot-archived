@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from pymongo import MongoClient
-from extension import Extension
+from core.extension import Extension
 import datetime
 import asyncio
 
