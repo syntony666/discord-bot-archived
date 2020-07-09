@@ -1,14 +1,15 @@
 import discord
 from discord.ext import commands
 from pymongo import MongoClient
+from core.bot_db import MongoDB as mongo
 import os
 
 # from exceptions import Exceptions
 
 ext_path = 'bots'
-db = MongoClient('mongodb://syntony666:tony738294@ds027519.mlab.com:27519/heroku_vfz6lbdq').heroku_vfz6lbdq
-auth = db['auth'].find_one()
-bot = commands.Bot(command_prefix=auth['prefix'])
+db = mongo()
+# auth = db['auth'].find_one()
+bot = commands.Bot(command_prefix=db.auth('prefix'))
 
 @bot.command()
 @commands.is_owner()
@@ -34,5 +35,5 @@ for file in os.listdir('./'+ext_path):
         bot.load_extension(f'{ext_path}.{name}')
 
 if __name__ == "__main__":
-
-    bot.run(auth['token'])
+    print(db.auth('token'))
+    bot.run(db.auth('token'))
