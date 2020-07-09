@@ -262,3 +262,5 @@ dmypy.json
 cython_debug/
 
 bot-env/
+
+.vscode/
