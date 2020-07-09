@@ -7,23 +7,25 @@ db = MongoClient('mongodb://syntony666:tony738294@ds027519.mlab.com:27519/heroku
 
 welcome, keywords = db['welcome'], db['keywords']
 
+ext_path = 'ext'
+
 class Load(Extension):
     @commands.command()
     @commands.is_owner()
     async def load(self, ctx, extension):
-        bot.load_extension(f'{ext_path}.{name}')
+        self.bot.load_extension(f'{ext_path}.{extension}')
         await ctx.send(f'loaded {extension} done.')
 
     @commands.command()
     @commands.is_owner()
     async def unload(self, ctx, extension):
-        bot.unload_extension(f'{ext_path}.{name}')
+        self.bot.unload_extension(f'{ext_path}.{extension}')
         await ctx.send(f'unloaded {extension} done.')
 
     @commands.command()
     @commands.is_owner()
     async def reload(self, ctx, extension):
-        bot.reload_extension(f'{ext_path}.{name}')
+        self.bot.reload_extension(f'{ext_path}.{extension}')
         await ctx.send(f'reloaded {extension} done.')
 
 def setup(bot):
