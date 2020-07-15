@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 from core.util import getDatabase
-import pymongo
 import os
 
 ext_path = 'ext'
