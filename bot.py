@@ -1,12 +1,11 @@
 import discord
 from discord.ext import commands
-from core.bot_db import MongoDB as mongo
+from core.util import getDatabase
+import pymongo
 import os
 
-# from exceptions import Exceptions
-
 ext_path = 'ext'
-db = mongo()
+db = getDatabase()
 bot = commands.Bot(command_prefix=db.auth('prefix'))
 
 for file in os.listdir('./'+ ext_path):
