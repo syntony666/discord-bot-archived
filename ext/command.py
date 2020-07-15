@@ -3,9 +3,6 @@ from discord.ext import commands
 from pymongo import MongoClient
 from core.extension import Extension
 
-db = MongoClient('mongodb://syntony666:tony738294@ds027519.mlab.com:27519/heroku_vfz6lbdq?retryWrites=false').heroku_vfz6lbdq
-keywords = db['keywords']
-
 class Command(Extension):
     @commands.command()
     async def status(self, ctx):
@@ -17,7 +14,7 @@ class Command(Extension):
     @commands.command()
     async def list(self, ctx):
         msg = '```\n'
-        for x in keywords.find({"server" : str(ctx.message.guild.id)},{'_id' : 0, 'receive' : 1, 'send' : 1}):
+        for x in self.db['keywords'].find({"server" : str(ctx.message.guild.id)},{'_id' : 0, 'receive' : 1, 'send' : 1}):
             msg+=str(x)+'\n'
         await ctx.send(f'{msg}```')
     
@@ -35,25 +32,26 @@ class Command(Extension):
     @teach.command()
     async def add(self, ctx, keyword, *,msg):
         server = str(ctx.message.guild.id)
-        found = keywords.find_one({'server' : server, 'receive': keyword})
+        found = self.db['keywords'].find_one({'server' : server, 'receive': keyword})
         await ctx.channel.purge(limit = 1)
         if found is not None:
-            keywords.find_one_and_update({'server' : server, 'receive': keyword},{'$set':{'send': msg}})
+            self.db['keywords'].find_one_and_update({'server' : server, 'receive': keyword},{'$set':{'send': msg}})
             await ctx.send(f'{ctx.author.mention} 教我把 **{keyword}** 的回答改成 **{msg}**')
             return
-        keywords.insert({'server' : server,'user': ctx.author.id, 'receive': keyword, 'send': msg})
+        self.db['keywords'].insert({'server' : server,'user': ctx.author.id, 'receive': keyword, 'send': msg})
         await ctx.send(f'{ctx.author.mention} 教我聽到人家說 **{keyword}** 要回答 **{msg}**')
 
     @teach.command()
     async def delete(self, ctx, keyword):
         server = str(ctx.message.guild.id)
-        found = keywords.find_one({'server' : server, 'receive': keyword})
+        found = self.db['keywords'].find_one({'server' : server, 'receive': keyword})
         await ctx.channel.purge(limit = 1)
         if found is not None:
-            keywords.find_one_and_delete({'server' : server, 'receive': keyword})
+            self.db['keywords'].find_one_and_delete({'server' : server, 'receive': keyword})
             await ctx.send(f'{ctx.author.mention} 當你說 **{keyword}** 時候 我不會理你')
             return
         await ctx.send(f'{ctx.author.mention} 沒人叫我聽到 **{keyword}** 的時候要回答')
 
 def setup(bot):
     bot.add_cog(Command(bot))
+    
