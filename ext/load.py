@@ -31,7 +31,7 @@ class Load(Extension):
         await ctx.send(f'reloaded {extension} done.')
 
     def checkExtension(extension):
-        if extension is in loadException:
+        if extension in loadException:
             print('Permission denied')
             return True
         return False
