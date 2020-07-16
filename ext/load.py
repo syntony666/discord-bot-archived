@@ -9,7 +9,8 @@ class Load(Extension):
     @commands.command()
     @commands.is_owner()
     async def load(self, ctx, extension):
-        if checkExtension(extension):
+        if extension in loadException:
+            await ctx.send('Permission denied')
             return
         self.bot.load_extension(f'{ext_path}.{extension}')
         await ctx.send(f'loaded {extension} done.')
@@ -17,7 +18,8 @@ class Load(Extension):
     @commands.command()
     @commands.is_owner()
     async def unload(self, ctx, extension):
-        if checkExtension(extension):
+        if extension in loadException:
+            await ctx.send('Permission denied')
             return
         self.bot.unload_extension(f'{ext_path}.{extension}')
         await ctx.send(f'unloaded {extension} done.')
@@ -25,16 +27,11 @@ class Load(Extension):
     @commands.command()
     @commands.is_owner()
     async def reload(self, ctx, extension):
-        if checkExtension(extension):
+        if extension in loadException:
+            await ctx.send('Permission denied')
             return
         self.bot.reload_extension(f'{ext_path}.{extension}')
         await ctx.send(f'reloaded {extension} done.')
-
-    def checkExtension(self, extension):
-        if extension in loadException:
-            print('Permission denied')
-            return True
-        return False
 
 def setup(bot):
     bot.add_cog(Load(bot))
