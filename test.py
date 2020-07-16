@@ -1,21 +1,17 @@
 import discord
 from discord.ext import commands
 from pymongo import MongoClient
+from core.util import getDatabase
 import os
 
+db = getDatabase()
 
-client = MongoClient("mongodb+srv://admin:1gDBfQklGazHlNeo@discordbotdb-iopzr.gcp.mongodb.net/bot_db?retryWrites=true&w=majority")
-
-print('db connected')
-
-auth = client['bot-db']['auth']
+collection = db['welcome']
 
 print('connected')
 
 
-post = {"token" : "NzIwMjM4NTQ0Mjg2OTA4NDI2.Xuy9zQ.YwwLbNsebuSBvNERYt1kWPMS-1k",
-        "uri" : "mongodb://syntony666:tony738294@ds027519.mlab.com:27519/heroku_vfz6lbdq",
-        "database" : "heroku_vfz6lbdq",
-        "prefix" : ">"}
-
-print(auth.find_one())
+post = {    "server": "438997365194489856",
+    "channel": "676414129145249792",
+    "message": "歡迎加入，請問是玩什麼遊戲呢?"}
+collection.insert_one(post)
