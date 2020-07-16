@@ -1,7 +1,7 @@
-# import discord
-# from discord.ext import commands
+import discord
+from discord.ext import commands
 # from pymongo import MongoClient
-# from core.extension import Extension
+from core.extension import Extension
 # import datetime
 # import asyncio
 
@@ -9,8 +9,10 @@
 # team = db['team']
 # teamInfo = db['team_info']
 
-# class Task(Extension):
-#     def __init__(self, *args, **kwargs):
+class Task(Extension):
+    
+    def __init__(self, *args, **kwargs):
+        pass
 #         super().__init__(*args, **kwargs)
 
 #         async def time_task():
@@ -51,5 +53,5 @@
 #         team.insert({'server': server,'message': mes_id, 'player': [ctx.author.id], 'instance': instance,
 #                      'num': num, 'time': time, 'own': own, 'req': req, 'channel':channel, 'memo': memo})
 
-# def setup(bot):
-#     bot.add_cog(Task(bot))
+def setup(bot):
+    bot.add_cog(Task(bot))
