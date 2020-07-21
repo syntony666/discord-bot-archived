@@ -1,8 +1,9 @@
 from pymongo import MongoClient
+import os
 
 def getDatabase():
-    username = 'admin'
-    password = '1gDBfQklGazHlNeo'
-    dbName = 'bot-db'
-    db = MongoClient(f'mongodb+srv://{username}:{password}@discordbotdb-iopzr.gcp.mongodb.net/{dbName}?retryWrites=true&w=majority')
-    return db[dbName]
+    username = os.environ.get('username')
+    password = os.environ.get('password')
+    dbname = os.environ.get('dbName')
+    db = MongoClient(f'mongodb+srv://{username}:{password}@discordbotdb-iopzr.gcp.mongodb.net/{dbname}?retryWrites=true&w=majority')
+    return db[str(dbname)]

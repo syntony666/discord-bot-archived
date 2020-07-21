@@ -1,0 +1,6 @@
+{
+    "username" : "admin",
+    "password" : "1gDBfQklGazHlNeo",
+    "dbName" : "bot-db",
+    "url" : "discordbotdb-iopzr.gcp.mongodb.net"
+}

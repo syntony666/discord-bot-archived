@@ -264,3 +264,4 @@ cython_debug/
 bot-env/
 
 .vscode/
+.DS_Store
