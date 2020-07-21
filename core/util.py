@@ -6,7 +6,9 @@ def getDatabase():
     username = str(os.environ.get('username'))
     password = str(os.environ.get('password'))
     dbname = str(os.environ.get('dbName'))
-    print(os.environ.get('username'))
+    print(username)
+    print(password)
+    print(username)
     # access data from MongoDB
     db = MongoClient(f'mongodb+srv://{username}:{password}@discordbotdb-iopzr.gcp.mongodb.net/{dbname}?retryWrites=true&w=majority')
     return db[dbname]
