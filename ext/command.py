@@ -58,7 +58,7 @@ class Command(Extension):
         found = self.db['welcome'].find_one({'server' : server, 'message': welmes})
         await ctx.channel.purge(limit = 1)
         if found is not None:
-            self.db['welcome'].find_one_and_delete({'server' : server, 'message': welmes})
+            self.db['welcome'].find_one_and_update({'server' : server, 'message': welmes})
             await ctx.send(f'{ctx.message.guild} 的歡迎訊息為 {welmes}')
             return
         await ctx.send(f'未設定歡迎訊息')
