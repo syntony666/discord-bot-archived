@@ -55,7 +55,7 @@ class Command(Extension):
     @commands.command()
     async def welcome(self, ctx, welmes):
         server = str(ctx.message.guild.id)
-        found = self.db['welcome'].find_one({'server' : server, 'message': welmes})
+        found = self.db['welcome'].find_one({'server' : server})
         await ctx.channel.purge(limit = 1)
         if found is not None:
             self.db['welcome'].find_one_and_update({'server' : server, 'message': welmes})
