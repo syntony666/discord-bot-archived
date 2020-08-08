@@ -8,7 +8,24 @@ class Reply(Extension):
     @commands.group()
     async def reply(self, ctx):
         if ctx.invoked_subcommand == None:
-            await ctx.send('指令說明：\n>reply a [聽到的話] [要回答的話]\n>reply d [要刪掉的話]')
+            embed=discord.Embed(title='指令說明', color=0xff2600)
+            embed.add_field(name='列表',value='>reply l',inline=False)
+            embed.add_field(name='新增',value='>reply a [聽到的話] [要回答的話]',inline=False)
+            embed.add_field(name='刪除',value='>reply d [要刪掉的話]',inline=False)
+            await ctx.send(embed=embed)
+
+    @reply.command()
+    async def l(self, ctx):
+        server = str(ctx.message.guild.id)
+        await ctx.channel.purge(limit = 1)
+        embed=discord.Embed(title='回應列表', color=0xff2600)
+        if self.db['keywords'].find_one({'server' : server}) is None:
+            await ctx.send('**沒有回應列表**')
+            return
+        else:
+            for x in self.db['keywords'].find({'server' : str(ctx.message.guild.id)},{'_id' : 0, 'receive' : 1, 'send' : 1}):
+                embed.add_field(name=x['receive'],value=x['send'],inline=False)
+        await ctx.send(embed=embed)
 
     @reply.command()
     async def a(self, ctx, keyword, *,msg):

@@ -27,13 +27,6 @@ class Command(Extension):
         embed.add_field(name='Ping', value= str(round(self.bot.latency*1000))+' ms', inline=True)
         embed.add_field(name='狀態', value='上線中', inline=True)
         await ctx.send(embed=embed)
-     
-    @commands.command()
-    async def list(self, ctx):
-        msg = '```\n'
-        for x in self.db['keywords'].find({'server' : str(ctx.message.guild.id)},{'_id' : 0, 'receive' : 1, 'send' : 1}):
-            msg+=str(x)+'\n'
-        await ctx.send(f'{msg}```')
     
     @commands.command()
     @commands.has_permissions(manage_messages=True)
@@ -41,8 +34,22 @@ class Command(Extension):
         await ctx.channel.purge(limit = num+1)
         await ctx.send(f'{ctx.author.mention} 刪除了 {num} 則訊息')
 
+    @commands.command()
+    async def poll(self, ctx, question, *options: str):
+        if len(options)>10:
+            await ctx.send('你只能給10個選項')
 
+        reactions = ('1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟')
+        description = []
+        for x, option in enumerate(options):
+            description += '\n\n {} {}'.format(reactions[x], option)
+        embed = discord.Embed(title = question, color = 3553599, description = ''.join(description))
+        embed.set_footer(text='發起者: {}'.format(ctx.author.name))
+        await ctx.channel.purge(limit = 1)
+        react_message = await ctx.send(embed = embed)
 
+        for x, option in enumerate(options):
+            await react_message.add_reaction(reactions[x])
 
 def setup(bot):
     bot.add_cog(Command(bot))
