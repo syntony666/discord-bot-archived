@@ -9,12 +9,14 @@ class Welcome(Extension):
     @commands.has_permissions(administrator=True)
     async def welcome(self, ctx):
         if ctx.invoked_subcommand == None:
-            embed=discord.Embed(title='指令說明', description='只有管理員能修改', color=0xff2600)
-            embed.add_field(name='列表',value='>welcome l',inline=False)
-            embed.add_field(name='新增',value='>welcome a [訊息位置] [訊息內容]',inline=False)
-            embed.add_field(name='修改',value='>welcome s c [訊息位置]\n>welcome s m [訊息內容]',inline=False)
-            embed.add_field(name='刪除',value='>welcome d',inline=False)
-            await ctx.send(embed=embed)
+            title = '指令說明 (歡迎訊息)'
+            description = '只有管理員能修改'
+            context = {
+                '列表':'>welcome l', 
+                '新增':'>welcome a [頻道ID] [訊息內容]',
+                '修改':'>welcome s c [頻道ID]\n>welcome s m [訊息內容]',
+                '刪除':'>welcome d'}
+            await ctx.send(embed=self.setEmbedList(title, description, context))
     
     @welcome.command()
     async def l(self, ctx):

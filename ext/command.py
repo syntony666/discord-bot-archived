@@ -42,7 +42,7 @@ class Command(Extension):
         reactions = ('1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟')
         description = []
         for x, option in enumerate(options):
-            description += '\n\n {} {}'.format(reactions[x], option)
+            description += '\n\n{} {}'.format(reactions[x], option)
         embed = discord.Embed(title = question, color = 3553599, description = ''.join(description))
         embed.set_footer(text='發起者: {}'.format(ctx.author.name))
         await ctx.channel.purge(limit = 1)

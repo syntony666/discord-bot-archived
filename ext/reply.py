@@ -8,11 +8,13 @@ class Reply(Extension):
     @commands.group()
     async def reply(self, ctx):
         if ctx.invoked_subcommand == None:
-            embed=discord.Embed(title='指令說明', color=0xff2600)
-            embed.add_field(name='列表',value='>reply l',inline=False)
-            embed.add_field(name='新增',value='>reply a [聽到的話] [要回答的話]',inline=False)
-            embed.add_field(name='刪除',value='>reply d [要刪掉的話]',inline=False)
-            await ctx.send(embed=embed)
+            title = '指令說明 (回應設定)'
+            description = ''
+            context = {
+                '列表':'>reply l', 
+                '新增':'>reply a [聽到的話] [要回答的話]',
+                '刪除':'>reply d [要刪掉的話]'}
+            await ctx.send(embed=self.setEmbedList(title, description, context))
 
     @reply.command()
     async def l(self, ctx):
