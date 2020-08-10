@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from pymongo import MongoClient
 from core.extension import Extension
 
 class Command(Extension):
@@ -33,23 +32,6 @@ class Command(Extension):
     async def clear(self, ctx, num:int):
         await ctx.channel.purge(limit = num+1)
         await ctx.send(f'{ctx.author.mention} 刪除了 {num} 則訊息')
-
-    @commands.command()
-    async def poll(self, ctx, question, *options: str):
-        if len(options)>10:
-            await ctx.send('你只能給10個選項')
-
-        reactions = ('1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟')
-        description = []
-        for x, option in enumerate(options):
-            description += '\n\n{} {}'.format(reactions[x], option)
-        embed = discord.Embed(title = question, color = 3553599, description = ''.join(description))
-        embed.set_footer(text='發起者: {}'.format(ctx.author.name))
-        await ctx.channel.purge(limit = 1)
-        react_message = await ctx.send(embed = embed)
-
-        for x, option in enumerate(options):
-            await react_message.add_reaction(reactions[x])
 
 def setup(bot):
     bot.add_cog(Command(bot))

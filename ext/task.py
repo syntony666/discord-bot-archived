@@ -4,10 +4,6 @@ from core.extension import Extension
 import datetime
 import asyncio
 
-# db = MongoClient('mongodb://syntony666:tony738294@ds027519.mlab.com:27519/heroku_vfz6lbdq?retryWrites=false').heroku_vfz6lbdq
-# team = db['team']
-# teamInfo = db['team_info']
-
 class Task(Extension):
     
     def __init__(self, *args, **kwargs):
