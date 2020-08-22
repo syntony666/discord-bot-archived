@@ -17,20 +17,20 @@ class Reply(Extension):
 
     @reply.command()
     async def l(self, ctx):
-        server = str(ctx.message.guild.id)
+        server = ctx.message.guild.id
         await ctx.channel.purge(limit = 1)
         embed=discord.Embed(title='回應列表', color=0xff2600)
         if self.db['keywords'].find_one({'server' : server}) is None:
             await ctx.send('**沒有回應列表**')
             return
         else:
-            for x in self.db['keywords'].find({'server' : str(ctx.message.guild.id)},{'_id' : 0, 'receive' : 1, 'send' : 1}):
+            for x in self.db['keywords'].find({'server' : ctx.message.guild.id},{'_id' : 0, 'receive' : 1, 'send' : 1}):
                 embed.add_field(name=x['receive'],value=x['send'],inline=False)
         await ctx.send(embed=embed)
 
     @reply.command()
     async def a(self, ctx, keyword, *,msg):
-        server = str(ctx.message.guild.id)
+        server = ctx.message.guild.id
         found = self.db['keywords'].find_one({'server' : server, 'receive': keyword})
         await ctx.channel.purge(limit = 1)
         if found is not None:
@@ -42,7 +42,7 @@ class Reply(Extension):
 
     @reply.command()
     async def d(self, ctx, keyword):
-        server = str(ctx.message.guild.id)
+        server = ctx.message.guild.id
         found = self.db['keywords'].find_one({'server' : server, 'receive': keyword})
         await ctx.channel.purge(limit = 1)
         if found is not None:

@@ -20,7 +20,7 @@ class Welcome(Extension):
     
     @welcome.command()
     async def l(self, ctx):
-        server = str(ctx.message.guild.id)
+        server = ctx.message.guild.id
         found = self.db['welcome'].find_one({'server' : server})
         await ctx.channel.purge(limit = 1)
         if found is None:
@@ -31,7 +31,7 @@ class Welcome(Extension):
 
     @welcome.command()
     async def a(self, ctx, channel, *, msg):
-        server = str(ctx.message.guild.id)
+        server = ctx.message.guild.id
         found = self.db['welcome'].find_one({'server' : server})
         await ctx.channel.purge(limit = 1)
         if found is not None:
@@ -43,7 +43,7 @@ class Welcome(Extension):
 
     @welcome.command()
     async def s(self, ctx, option, *, arg):
-        server = str(ctx.message.guild.id)
+        server = ctx.message.guild.id
         found = self.db['welcome'].find_one({'server' : server})
         await ctx.channel.purge(limit = 1)
         if found is None:
@@ -60,7 +60,7 @@ class Welcome(Extension):
 
     @welcome.command()
     async def d(self, ctx):
-        server = str(ctx.message.guild.id)
+        server = ctx.message.guild.id
         found = self.db['welcome'].find_one({'server' : server})
         await ctx.channel.purge(limit = 1)
         if found is not None:
