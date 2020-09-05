@@ -10,7 +10,7 @@ class Leave(Extension):
     async def leave(self, ctx):
         if ctx.invoked_subcommand is None:
             leave = self.db['config'].find_one({'server': ctx.message.guild.id})
-            title = '歡迎訊息'
+            title = '離開訊息'
             description = ''
             context = {'通知頻道': '未設定' if leave["leave"]["channel"] == 0 else f'<#{leave["leave"]["channel"]}>',
                        '通知訊息': '未設定' if leave["leave"]["message"] == '' else leave["leave"]["message"]}
