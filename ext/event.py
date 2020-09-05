@@ -32,7 +32,7 @@ class Event(Extension):
         welcome = self.db['config'].find_one({'server': member.guild.id})
         if welcome["leave"]["channel"] != 0:
             await self.bot.get_channel(welcome["leave"]["channel"])\
-                .send(f'{member} {welcome["leave"]["message"]}')
+                .send(f'**{member}** {welcome["leave"]["message"]}')
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):

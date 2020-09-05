@@ -29,17 +29,6 @@ class Command(Extension):
         embed.add_field(name='狀態', value='上線中', inline=True)
         await ctx.send(embed=embed)
 
-    @commands.command()
-    @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx, year: int, month: int, day: int, hour: int, minute: int):
-        purgeTime = datetime(year, month, day, hour=hour, minute=minute)
-        print(purgeTime - timedelta(hours=8))
-        await ctx.channel.purge(after=purgeTime - timedelta(hours=8))
-        await ctx.send(f'{ctx.author.mention} 刪除 {purgeTime.strftime("%m/%d/%Y %H:%M:%S")} 後的訊息')
-    # async def clear(self, ctx, num: int):
-    #     await ctx.channel.purge(limit=num + 1)
-    #     await ctx.send(f'{ctx.author.mention} 刪除了 {num} 則訊息')
-
 
 def setup(bot):
     bot.add_cog(Command(bot))
