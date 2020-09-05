@@ -20,7 +20,7 @@ class Clear(Extension):
         await ctx.send(f'{ctx.author.mention} 刪除 {purgeTime.strftime("%Y/%m/%d %H:%M")} 後的訊息')
 
     @clear.command()
-    async def clear(self, ctx, num: int):
+    async def num(self, ctx, num: int):
         await ctx.channel.purge(limit=num + 1)
         await ctx.send(f'{ctx.author.mention} 刪除了 {num} 則訊息')
 
