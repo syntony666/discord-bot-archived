@@ -32,7 +32,7 @@ class Command(Extension):
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, year: int, month: int, day: int, hour: int, minute: int):
-        print(datetime(year, month, day, hour=hour, minute=minute) - timedelta(hours=8))
+        print(datetime(year, month, day, hour=hour, minute=minute))
         await ctx.channel.purge(after=datetime(year, month, day, hour=hour, minute=minute))
         await ctx.send(f'{ctx.author.mention} 刪除 {year}/{month}/{day} {hour}:{minute} 後的訊息')
     # async def clear(self, ctx, num: int):
