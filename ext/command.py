@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import discord
 from discord.ext import commands
 
@@ -29,9 +31,12 @@ class Command(Extension):
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx, num: int):
-        await ctx.channel.purge(limit=num + 1)
-        await ctx.send(f'{ctx.author.mention} 刪除了 {num} 則訊息')
+    async def clear(self, ctx, year: int, month: int, day: int, hour: int, minute: int):
+        await ctx.channel.purge(after=datetime(year, month, day, hour=hour, minute=minute))
+        await ctx.send(f'{ctx.author.mention} 刪除 {year}/{month}/{day} {hour}:{minute} 後的訊息')
+    # async def clear(self, ctx, num: int):
+    #     await ctx.channel.purge(limit=num + 1)
+    #     await ctx.send(f'{ctx.author.mention} 刪除了 {num} 則訊息')
 
 
 def setup(bot):
