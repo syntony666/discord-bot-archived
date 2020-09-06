@@ -13,7 +13,7 @@ class Clear(Extension):
         self.invokedNoSubcommand(ctx)
 
     @clear.command(aliases=['t'])
-    async def time(self, ctx, year: int, month: int, day: int, hour: int, minute: int):
+    async def time(self, ctx, year: int, month: int, day: int, hour: int = 0, minute: int = 0):
         purgeTime = datetime(year, month, day, hour=hour, minute=minute)
         await ctx.channel.purge(after=purgeTime - timedelta(hours=8))
         await ctx.send(f'{ctx.author.mention} 刪除 {purgeTime.strftime("%Y/%m/%d %H:%M")} 後的訊息')
