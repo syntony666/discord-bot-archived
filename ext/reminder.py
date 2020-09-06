@@ -17,6 +17,7 @@ class Reminder(Extension):
             await self.bot.wait_until_ready()
             now_time = ''
             while not self.bot.is_closed():
+                await asyncio.sleep(1)
                 if now_time == datetime.now().strftime('%H%M'):
                     continue
                 now_time = datetime.now().strftime('%Y%m%d%H%M')
@@ -25,12 +26,12 @@ class Reminder(Extension):
                     for reminds in self.db['reminder'].find(query):
                         await self.bot.get_channel(reminds['channel']).send(reminds['message'])
                     self.db['reminder'].delete_many(query)
-                await asyncio.sleep(1)
 
         async def reminder_repeat_everyday():
             await self.bot.wait_until_ready()
             now_time = ''
             while not self.bot.is_closed():
+                await asyncio.sleep(1)
                 if now_time == datetime.now().strftime('%H%M'):
                     continue
                 now_time = datetime.now().strftime('%H%M')
@@ -38,7 +39,6 @@ class Reminder(Extension):
                 if self.db['reminder'].find_one(query) is not None:
                     for reminds in self.db['reminder'].find(query):
                         await self.bot.get_channel(reminds['channel']).send(reminds['message'])
-                await asyncio.sleep(1)
 
         self.reminder_no_repeat = self.bot.loop.create_task(reminder_no_repeat())
         self.reminder_repeat_everyday = self.bot.loop.create_task(reminder_repeat_everyday())
