@@ -18,7 +18,7 @@ class Reminder(Extension):
             now_time = ''
             while not self.bot.is_closed():
                 await asyncio.sleep(1)
-                if now_time == datetime.now().strftime('%H%M'):
+                if now_time == datetime.now().strftime('%Y%m%d%H%M'):
                     continue
                 now_time = datetime.now().strftime('%Y%m%d%H%M')
                 query = {"repeat": "none", "time": now_time}
