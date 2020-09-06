@@ -1,5 +1,5 @@
-import discord
 from discord.ext import commands
+
 from core.extension import Extension
 
 ext_path = 'ext'

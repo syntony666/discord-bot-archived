@@ -19,8 +19,8 @@ class Reply(Extension):
                     embed.add_field(name=x['receive'], value=x['send'], inline=False)
             await ctx.send(embed=embed)
 
-    @reply.command()
-    async def a(self, ctx, keyword, *, msg):
+    @reply.command(aliases=['a'])
+    async def add(self, ctx, keyword, *, msg):
         server = ctx.message.guild.id
         found = self.db['reply'].find_one({'server': server, 'receive': keyword})
         await ctx.channel.purge(limit=1)
@@ -31,8 +31,8 @@ class Reply(Extension):
         self.db['reply'].insert({'server': server, 'receive': keyword, 'send': msg})
         await ctx.send(f'{ctx.author.mention} 教我聽到人家說 **{keyword}** 要回答 **{msg}**')
 
-    @reply.command()
-    async def d(self, ctx, keyword):
+    @reply.command(aliases=['d'])
+    async def delete(self, ctx, keyword):
         server = ctx.message.guild.id
         found = self.db['reply'].find_one({'server': server, 'receive': keyword})
         await ctx.channel.purge(limit=1)

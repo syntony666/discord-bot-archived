@@ -1,5 +1,5 @@
-import discord
 from discord.ext import commands
+
 from core.extension import Extension
 
 
@@ -16,7 +16,7 @@ class Leave(Extension):
                        '通知訊息': '未設定' if leave["leave"]["message"] == '' else leave["leave"]["message"]}
             await ctx.send(embed=self.setEmbedList(title, description, context))
 
-    @leave.command()
+    @leave.command(aliases=['c'])
     async def channel(self, ctx, channelId: int):
         server = ctx.message.guild.id
         await ctx.channel.purge(limit=1)
@@ -29,7 +29,7 @@ class Leave(Extension):
         else:
             await ctx.send(f'頻道ID輸入錯誤')
 
-    @leave.command()
+    @leave.command(aliases=['m'])
     async def message(self, ctx, *, msg):
         server = ctx.message.guild.id
         await ctx.channel.purge(limit=1)
