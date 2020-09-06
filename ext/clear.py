@@ -10,7 +10,7 @@ class Clear(Extension):
     @commands.group()
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx):
-        pass
+        self.invokedNoSubcommand(ctx)
 
     @clear.command(aliases=['t'])
     async def time(self, ctx, year: int, month: int, day: int, hour: int, minute: int):

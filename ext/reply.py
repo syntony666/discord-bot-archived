@@ -7,6 +7,10 @@ class Reply(Extension):
 
     @commands.group()
     async def reply(self, ctx):
+        self.invokedNoSubcommand(ctx)
+
+    @reply.command(aliases=['l'])
+    async def list(self, ctx):
         if ctx.invoked_subcommand is None:
             server = ctx.message.guild.id
             await ctx.channel.purge(limit=1)

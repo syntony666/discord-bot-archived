@@ -8,6 +8,10 @@ class Welcome(Extension):
     @commands.group()
     @commands.has_permissions(administrator=True)
     async def welcome(self, ctx):
+        self.invokedNoSubcommand(ctx)
+
+    @welcome.command(aliases=['l'])
+    async def list(self, ctx):
         if ctx.invoked_subcommand is None:
             welcome = self.db['config'].find_one({'server': ctx.message.guild.id})
             title = '歡迎訊息'

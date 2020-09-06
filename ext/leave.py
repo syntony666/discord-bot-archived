@@ -8,6 +8,10 @@ class Leave(Extension):
     @commands.group()
     @commands.has_permissions(administrator=True)
     async def leave(self, ctx):
+        self.invokedNoSubcommand(ctx)
+
+    @leave.command(aliases=['l'])
+    async def list(self, ctx):
         if ctx.invoked_subcommand is None:
             leave = self.db['config'].find_one({'server': ctx.message.guild.id})
             title = '離開訊息'

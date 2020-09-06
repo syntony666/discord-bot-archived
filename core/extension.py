@@ -19,3 +19,7 @@ class Extension(commands.Cog):
             if channel.id == channelId:
                 return True
         return False
+
+    def invokedNoSubcommand(self, ctx):
+        if ctx.invoked_subcommand is None:
+            raise commands.MissingRequiredArgument
