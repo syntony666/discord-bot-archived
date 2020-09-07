@@ -48,7 +48,7 @@ class Reminder(Extension):
         self.invokedNoSubcommand(ctx)
 
     @reminder.command(aliases=['d'])
-    async def day(self, ctx, hour: int, minute: int, title, *, msg):
+    async def repeat_by_day(self, ctx, hour: int, minute: int, title, *, msg):
         self.db['reminder'].insert_one({
             "server": ctx.guild.id,
             "channel": ctx.channel.id,
@@ -58,8 +58,8 @@ class Reminder(Extension):
             "message": msg
         })
 
-    @reminder.command(aliases=['t'])
-    async def time(self, ctx, year: int, month: int, date: int, hour: int, minute: int, title, *, msg):
+    @reminder.command(aliases=['o', 'once'])
+    async def just_remind_once(self, ctx, year: int, month: int, date: int, hour: int, minute: int, title, *, msg):
         setTime = datetime(year, month, date, hour=hour, minute=minute, second=0)
         if datetime.now() > setTime:
             await ctx.send('時間不會回溯')

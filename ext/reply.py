@@ -9,8 +9,8 @@ class Reply(Extension):
     async def reply(self, ctx):
         self.invokedNoSubcommand(ctx)
 
-    @reply.command(aliases=['l'])
-    async def list(self, ctx):
+    @reply.command(aliases=['l', 'list'])
+    async def get_list(self, ctx):
         if ctx.invoked_subcommand is None:
             server = ctx.message.guild.id
             await ctx.channel.purge(limit=1)
@@ -23,8 +23,8 @@ class Reply(Extension):
                     embed.add_field(name=x['receive'], value=x['send'], inline=False)
             await ctx.send(embed=embed)
 
-    @reply.command(aliases=['a'])
-    async def add(self, ctx, keyword, *, msg):
+    @reply.command(aliases=['a', 'add'])
+    async def add_reply(self, ctx, keyword, *, msg):
         server = ctx.message.guild.id
         found = self.db['reply'].find_one({'server': server, 'receive': keyword})
         await ctx.channel.purge(limit=1)
@@ -35,8 +35,8 @@ class Reply(Extension):
         self.db['reply'].insert({'server': server, 'receive': keyword, 'send': msg})
         await ctx.send(f'{ctx.author.mention} 教我聽到人家說 **{keyword}** 要回答 **{msg}**')
 
-    @reply.command(aliases=['d'])
-    async def delete(self, ctx, keyword):
+    @reply.command(aliases=['d', 'delete'])
+    async def delete_reply(self, ctx, keyword):
         server = ctx.message.guild.id
         found = self.db['reply'].find_one({'server': server, 'receive': keyword})
         await ctx.channel.purge(limit=1)

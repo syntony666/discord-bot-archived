@@ -10,8 +10,8 @@ class Welcome(Extension):
     async def welcome(self, ctx):
         self.invokedNoSubcommand(ctx)
 
-    @welcome.command(aliases=['l'])
-    async def list(self, ctx):
+    @welcome.command(aliases=['l', 'list'])
+    async def get_list(self, ctx):
         if ctx.invoked_subcommand is None:
             welcome = self.db['config'].find_one({'server': ctx.message.guild.id})
             title = '歡迎訊息'
@@ -22,8 +22,8 @@ class Welcome(Extension):
             }
             await ctx.send(embed=self.setEmbedList(title, description, context))
 
-    @welcome.command(aliases=['c'])
-    async def channel(self, ctx, channelId: int):
+    @welcome.command(aliases=['c', 'channel'])
+    async def set_channel(self, ctx, channelId: int):
         server = ctx.message.guild.id
         await ctx.channel.purge(limit=1)
         if self.isChannelInGuild(channelId, ctx.message.guild):
@@ -35,8 +35,8 @@ class Welcome(Extension):
         else:
             await ctx.send(f'頻道ID輸入錯誤')
 
-    @welcome.command(aliases=['m'])
-    async def message(self, ctx, *, msg):
+    @welcome.command(aliases=['m', 'message'])
+    async def set_message(self, ctx, *, msg):
         server = ctx.message.guild.id
         await ctx.channel.purge(limit=1)
         if self.db['config'].find_one({'server': server, 'welcome.channel': 0}) is not None:

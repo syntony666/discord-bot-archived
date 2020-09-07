@@ -10,8 +10,8 @@ class Leave(Extension):
     async def leave(self, ctx):
         self.invokedNoSubcommand(ctx)
 
-    @leave.command(aliases=['l'])
-    async def list(self, ctx):
+    @leave.command(aliases=['l', 'list'])
+    async def get_list(self, ctx):
         if ctx.invoked_subcommand is None:
             leave = self.db['config'].find_one({'server': ctx.message.guild.id})
             title = '離開訊息'
@@ -20,8 +20,8 @@ class Leave(Extension):
                        '通知訊息': '未設定' if leave["leave"]["message"] == '' else leave["leave"]["message"]}
             await ctx.send(embed=self.setEmbedList(title, description, context))
 
-    @leave.command(aliases=['c'])
-    async def channel(self, ctx, channelId: int):
+    @leave.command(aliases=['c', 'channel'])
+    async def set_channel(self, ctx, channelId: int):
         server = ctx.message.guild.id
         await ctx.channel.purge(limit=1)
         if self.isChannelInGuild(channelId, ctx.message.guild):
@@ -33,8 +33,8 @@ class Leave(Extension):
         else:
             await ctx.send(f'頻道ID輸入錯誤')
 
-    @leave.command(aliases=['m'])
-    async def message(self, ctx, *, msg):
+    @leave.command(aliases=['m', 'message'])
+    async def set_message(self, ctx, *, msg):
         server = ctx.message.guild.id
         await ctx.channel.purge(limit=1)
         if self.db['config'].find_one({'server': server, 'leave.channel': 0}) is not None:
