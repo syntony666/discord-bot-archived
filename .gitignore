@@ -266,3 +266,4 @@ bot-env/
 .vscode/
 .DS_Store
 test.py
+.idea/
