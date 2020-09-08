@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from discord.ext import commands
 
 from core.extension import Extension
@@ -6,9 +8,18 @@ from core.extension import Extension
 class Event(Extension):
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Ready!')
-        print('Logged in as ---->', self.bot.user)
-        print('ID:', self.bot.user.id)
+        print(
+            f'Ready!',
+            f'Logged in as ---->{self.bot.user}',
+            f'ID:   {self.bot.user.id}',
+            f'Time: {datetime.now()}',
+            f'Ping: {round(self.bot.latency * 1000)} ms\n',
+            sep='\n'
+        )
+        print(f'Guilds Connected: ')
+        for guild in self.bot.guilds:
+            print(guild.name)
+        print()
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -24,14 +35,14 @@ class Event(Extension):
     async def on_member_join(self, member):
         welcome = self.db['config'].find_one({'server': member.guild.id})
         if welcome["welcome"]["channel"] != 0:
-            await self.bot.get_channel(welcome["welcome"]["channel"])\
+            await self.bot.get_channel(welcome["welcome"]["channel"]) \
                 .send(f'{member.mention} {welcome["welcome"]["message"]}')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         welcome = self.db['config'].find_one({'server': member.guild.id})
         if welcome["leave"]["channel"] != 0:
-            await self.bot.get_channel(welcome["leave"]["channel"])\
+            await self.bot.get_channel(welcome["leave"]["channel"]) \
                 .send(f'**{member}** {welcome["leave"]["message"]}')
 
     @commands.Cog.listener()
