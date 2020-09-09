@@ -68,6 +68,8 @@ class Event(Extension):
             await ctx.send('欸！ 你話沒講完就想跑啊')
         elif isinstance(error, commands.MissingPermissions):
             await ctx.send('你沒權限給我下去!!!!!')
+        else:
+            await ctx.send(str(error))
 
 
 def setup(bot):

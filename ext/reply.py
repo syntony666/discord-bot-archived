@@ -14,13 +14,12 @@ class Reply(Extension):
         if ctx.invoked_subcommand is None:
             server = ctx.message.guild.id
             await ctx.channel.purge(limit=1)
-            embed = discord.Embed(title='回應列表', color=0xff2600)
             if self.db['reply'].find_one({'server': server}) is None:
                 await ctx.send('**沒有回應列表**')
                 return
-            else:
-                for x in self.db['reply'].find({'server': ctx.message.guild.id}):
-                    embed.add_field(name=x['receive'], value=x['send'], inline=False)
+            embed = discord.Embed(title='回應列表', color=0xff2600)
+            for x in self.db['reply'].find({'server': ctx.guild.id}):
+                embed.add_field(name=x['receive'], value=x['send'], inline=False)
             await ctx.send(embed=embed)
 
     @reply.command(aliases=['a', 'add'])

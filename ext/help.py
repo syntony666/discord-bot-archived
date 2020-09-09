@@ -25,6 +25,10 @@ class Help(Extension):
     async def clear(self, ctx):
         await self.sendHelper(ctx, 'clear')
 
+    @help.command()
+    async def reminder(self, ctx):
+        await self.sendHelper(ctx, 'reminder')
+
     async def sendHelper(self, ctx, command):
         helper = self.db['help'].find_one({'ext': command})
         await ctx.send(embed=self.setEmbedList(helper['title'], helper['description'], helper['context']))
