@@ -1,6 +1,6 @@
 pymongo
 pymongo[srv]
-discord.py
+discord.py >=1.5.0
 dnspython
 pip
 setuptools
