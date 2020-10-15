@@ -32,6 +32,29 @@ class Event(Extension):
             await message.channel.send(found['send'])
 
     @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        query = {
+            'server': payload.guild_id,
+            'message_id': payload.message_id,
+            'emoji': str(payload.emoji)
+        }
+        reaction_role = self.db['role-setting'].find_one(query)
+        if reaction_role is not None:
+            await payload.member.add_roles(self.bot.get_guild(payload.guild_id).get_role(reaction_role['role']))
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        guild = self.bot.get_guild(payload.guild_id)
+        query = {
+            'server': payload.guild_id,
+            'message_id': payload.message_id,
+            'emoji': str(payload.emoji)
+        }
+        reaction_role = self.db['role-setting'].find_one(query)
+        if reaction_role is not None:
+            await guild.get_member(payload.user_id).remove_roles(guild.get_role(reaction_role['role']))
+
+    @commands.Cog.listener()
     async def on_member_join(self, member):
         welcome = self.db['config'].find_one({'server': member.guild.id})
         if welcome["welcome"]["channel"] != 0:
@@ -60,6 +83,7 @@ class Event(Extension):
         self.db['config'].find_one_and_delete(serverData)
         self.db['reply'].delete_many(serverData)
 
+
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.errors.CommandNotFound):
@@ -69,7 +93,7 @@ class Event(Extension):
         elif isinstance(error, commands.MissingPermissions):
             await ctx.send('你沒權限給我下去!!!!!')
         else:
-            await ctx.send(str(error))
+            await ctx.send(f'```\n{str(error)}\n```')
 
 
 def setup(bot):
