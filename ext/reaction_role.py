@@ -19,6 +19,21 @@ class ReactionRole(Extension):
             'role': role_id
         })
 
+    @reaction_role.command(alias=['d'])
+    async def delete_one_reaction_role(self, ctx, message_id, emoji: discord.Emoji):
+        self.db['role-setting'].find_one_and_delete({
+            'server': ctx.guild.id,
+            'message_id': message_id,
+            'emoji': str(emoji)
+        })
+
+    @reaction_role.command(alias=['dm'])
+    async def delete_reaction_role_by_message(self, ctx, message_id):
+        self.db['role-setting'].delete_many({
+            'server': ctx.guild.id,
+            'message_id': message_id
+        })
+
 
 def setup(bot):
     bot.add_cog(ReactionRole(bot))

@@ -46,5 +46,13 @@ class Reply(Extension):
         await ctx.send(f'{ctx.author.mention} 沒人叫我聽到 **{keyword}** 的時候要回答')
 
 
+async def reply_process(bot ,db, msg):
+    if msg.author == bot.user:
+        return
+    found = db['reply'].find_one({'server': msg.guild.id, 'receive': msg.content})
+    if found is not None:
+        await msg.channel.send(found['send'])
+
+
 def setup(bot):
     bot.add_cog(Reply(bot))

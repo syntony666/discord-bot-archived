@@ -3,6 +3,7 @@ from datetime import datetime
 from discord.ext import commands
 
 from core.extension import Extension
+from ext.reply import reply_process
 
 
 class Event(Extension):
@@ -25,11 +26,7 @@ class Event(Extension):
     async def on_message(self, message):
         print(f'{message.author}({message.guild}, #{message.channel}): ')
         print(message.content)
-        if message.author == self.bot.user:
-            return
-        found = self.db['reply'].find_one({'server': message.guild.id, 'receive': message.content})
-        if found is not None:
-            await message.channel.send(found['send'])
+        await reply_process(self.bot, self.db, message)
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
