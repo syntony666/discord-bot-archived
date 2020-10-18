@@ -3,6 +3,7 @@ from datetime import datetime
 from discord.ext import commands
 
 from core.extension import Extension
+from ext.member_level import message_exp
 from ext.reply import reply_process
 
 
@@ -26,7 +27,10 @@ class Event(Extension):
     async def on_message(self, message):
         print(f'{message.author}({message.guild}, #{message.channel}): ')
         print(message.content)
-        await reply_process(self.bot, self.db, message)
+        if message.author != self.bot.user:
+            await reply_process(self.db, message)
+            print(message.author.id)
+            message_exp(self.db, message.author)
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):

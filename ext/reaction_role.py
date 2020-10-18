@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 from core.extension import Extension
-from core.util import invokedNoSubcommand, getMessageChannel
+from core.util import invokedNoSubcommand, getChannelByMessage, isRoleInGuild
 
 
 class ReactionRole(Extension):
@@ -13,12 +13,22 @@ class ReactionRole(Extension):
 
     @reaction_role.command(aliases=['a'])
     async def add_reaction_role(self, ctx, message_id: int, emoji: discord.Emoji, role_id: int):
-        self.db['role-setting'].insert_one({
-            'server': ctx.guild.id,
-            'message_id': message_id,
-            'emoji': str(emoji),
-            'role': role_id
-        })
+        if not isRoleInGuild(role_id, ctx.guild):
+            await ctx.send('not found')
+            return
+        channel = await getChannelByMessage(message_id, ctx.guild)
+        if channel is not None:
+            self.db['role-setting'].insert_one({
+                'server': ctx.guild.id,
+                'message_id': message_id,
+                'emoji': str(emoji),
+                'role': role_id
+            })
+            message = await channel.fetch_message(message_id)
+            await message.add_reaction(emoji)
+            return
+        else:
+            return 
 
     @reaction_role.command(alias=['d'])
     async def delete_one_reaction_role(self, ctx, message_id, emoji: discord.Emoji):
@@ -30,15 +40,11 @@ class ReactionRole(Extension):
 
     @reaction_role.command(alias=['dm'])
     async def delete_reaction_role_by_message(self, ctx, message_id):
-        self.db['role-setting'].delete_many({
-            'server': ctx.guild.id,
-            'message_id': message_id
-        })
-
-    @commands.command()
-    async def test(self, ctx, message: int):
-        channel = await getMessageChannel(message, ctx.guild)
-        await ctx.send(channel.name)
+        if getChannelByMessage(message_id, ctx.guild) is not None:
+            self.db['role-setting'].delete_many({
+                'server': ctx.guild.id,
+                'message_id': message_id
+            })
 
 
 def setup(bot):

@@ -22,24 +22,30 @@ def setEmbedList(title: str, description: str, context: dict):
     return embed
 
 
-def isChannelInGuild(channelId: int, guild):
+def invokedNoSubcommand(ctx: discord.ext.commands.context):
+    if ctx.invoked_subcommand is None:
+        raise commands.MissingRequiredArgument
+
+
+def isChannelInGuild(channelId: int, guild: discord.Guild):
     for channel in guild.channels:
         if channel.id == channelId:
             return True
     return False
 
 
-def invokedNoSubcommand(ctx):
-    if ctx.invoked_subcommand is None:
-        raise commands.MissingRequiredArgument
+def isRoleInGuild(roleId: int, guild: discord.Guild):
+    for role in guild.roles:
+        if role.id == roleId:
+            return True
+    return False
 
 
-async def getMessageChannel(messageId: int, guild: discord.Guild):
-    for channel in guild.channels:
-        if isinstance(channel, discord.TextChannel):
-            try:
-                await channel.fetch_message(messageId)
-                return channel
-            except discord.NotFound:
-                pass
-    return 123
+async def getChannelByMessage(messageId: int, guild: discord.Guild):
+    for channel in guild.text_channels:
+        try:
+            await channel.fetch_message(messageId)
+            return channel
+        except discord.NotFound:
+            pass
+    return None
