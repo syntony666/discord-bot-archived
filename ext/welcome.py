@@ -1,6 +1,7 @@
 from discord.ext import commands
 
 from core.extension import Extension
+from core.util import setEmbedList, isChannelInGuild, invokedNoSubcommand
 
 
 class Welcome(Extension):
@@ -8,7 +9,7 @@ class Welcome(Extension):
     @commands.group()
     @commands.has_permissions(administrator=True)
     async def welcome(self, ctx):
-        self.invokedNoSubcommand(ctx)
+        invokedNoSubcommand(ctx)
 
     @welcome.command(aliases=['l', 'list'])
     async def get_list(self, ctx):
@@ -20,13 +21,13 @@ class Welcome(Extension):
                 '通知頻道': '未設定' if welcome["welcome"]["channel"] == 0 else f'<#{welcome["welcome"]["channel"]}>',
                 '通知訊息': '未設定' if welcome["welcome"]["message"] == '' else welcome["welcome"]["message"]
             }
-            await ctx.send(embed=self.setEmbedList(title, description, context))
+            await ctx.send(embed=setEmbedList(title, description, context))
 
     @welcome.command(aliases=['c', 'channel'])
     async def set_channel(self, ctx, channelId: int):
         server = ctx.message.guild.id
         await ctx.channel.purge(limit=1)
-        if self.isChannelInGuild(channelId, ctx.message.guild):
+        if isChannelInGuild(channelId, ctx.message.guild):
             self.db['config'].find_one_and_update({'server': server}, {'$set': {'welcome.channel': channelId}})
             await ctx.send(f'**{ctx.message.guild}** 的歡迎訊息通知在 <#{channelId}>')
         elif channelId == 0:

@@ -2,13 +2,14 @@ import discord
 from discord.ext import commands
 
 from core.extension import Extension
+from core.util import invokedNoSubcommand, getMessageChannel
 
 
 class ReactionRole(Extension):
     @commands.group(aliases=['rr'])
     @commands.has_permissions(administrator=True)
     async def reaction_role(self, ctx):
-        self.invokedNoSubcommand(ctx)
+        invokedNoSubcommand(ctx)
 
     @reaction_role.command(aliases=['a'])
     async def add_reaction_role(self, ctx, message_id: int, emoji: discord.Emoji, role_id: int):
@@ -33,6 +34,11 @@ class ReactionRole(Extension):
             'server': ctx.guild.id,
             'message_id': message_id
         })
+
+    @commands.command()
+    async def test(self, ctx, message: int):
+        channel = await getMessageChannel(message, ctx.guild)
+        await ctx.send(channel.name)
 
 
 def setup(bot):
