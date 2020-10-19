@@ -49,3 +49,13 @@ async def getChannelByMessage(messageId: int, guild: discord.Guild):
         except discord.NotFound:
             pass
     return None
+
+
+def getAllCommand(bot):
+    command_list = list()
+    for command in bot.commands:
+        command_list.append(command.name)
+        for alias in command.aliases:
+            command_list.append(alias)
+    print(command_list)
+    return command_list

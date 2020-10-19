@@ -3,6 +3,7 @@ from datetime import datetime
 from discord.ext import commands
 
 from core.extension import Extension
+from core.util import getAllCommand
 from ext.member_level import message_exp
 from ext.reply import reply_process
 
@@ -29,8 +30,8 @@ class Event(Extension):
         print(message.content)
         if message.author != self.bot.user:
             await reply_process(self.db, message)
-        if all('>'+x.name not in message.content for x in self.bot.commands):
-            message_exp(self.db, message.author)
+            if all('>'+x not in message.content for x in getAllCommand(self.bot)):
+                message_exp(self.db, message.author)
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):

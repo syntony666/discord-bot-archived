@@ -103,7 +103,6 @@ def message_exp(db, member: discord.Member):
         })
     elif datetime.now() > member_info['send-msg-time'] + timedelta(minutes=1):
         exp = member_info['exp'] + new_exp
-        print(exp)
         level = member_info['level']
         if exp > get_need_exp(level):
             exp -= get_need_exp(level)
