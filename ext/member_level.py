@@ -66,7 +66,7 @@ def get_need_exp(level):
 
 
 def get_all_exp(level, exp):
-    for lv in range(level + 1):
+    for lv in range(level):
         exp += get_need_exp(lv)
     return exp
 
