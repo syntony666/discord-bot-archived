@@ -39,7 +39,7 @@ class MemberInfo(Extension):
             embed = discord.Embed(title=member.name, color=member.color.value)
             embed.add_field(name='等級', value=found['level'], inline=False)
             embed.add_field(name='已獲得經驗', value=found['exp'], inline=True)
-            embed.add_field(name='升級所需經驗值', value=get_need_exp(found['level']) - found['exp'], inline=True)
+            embed.add_field(name='升級所需經驗值', value=get_need_exp(found["level"]) - found["exp"], inline=True)
             embed.add_field(name='已傳送對話數量', value=found['msg-count'], inline=False)
             embed.add_field(name='現金', value=found['money'], inline=False)
             await ctx.send(embed=embed)
