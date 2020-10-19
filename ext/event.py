@@ -29,7 +29,7 @@ class Event(Extension):
         print(message.content)
         if message.author != self.bot.user:
             await reply_process(self.db, message)
-            print(message.author.id)
+        if all('>'+x.name not in message.content for x in self.bot.commands):
             message_exp(self.db, message.author)
 
     @commands.Cog.listener()
