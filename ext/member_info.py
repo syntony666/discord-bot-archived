@@ -44,22 +44,6 @@ class MemberInfo(Extension):
             embed.add_field(name='現金', value=found['money'], inline=False)
             await ctx.send(embed=embed)
 
-    @commands.command(aliases=['daily'])
-    async def daily_cash(self, ctx):
-        query = {'server': ctx.guild.id, 'user': ctx.author.id}
-        found = self.db['member-info'].find_one(query)
-        if found is not None:
-            if datetime.now() > found['daily-money'] + timedelta(days=1):
-                self.db['member-info'].find_one_and_update(query, {
-                    '$set': {'money': found['money'] + get_daily_cash(found['level']),
-                             'daily-money': datetime.now()}
-                })
-                await ctx.send(f'這是你今天的薪資 {get_daily_cash(found["level"])}')
-            else:
-                await ctx.send('你今天領過了，做人不要太貪心')
-        else:
-            await ctx.send(f'{ctx.author.mention} 目前沒說過話')
-
 
 def get_need_exp(level):
     return 5 * level ** 2 + (50 * level) + 100
