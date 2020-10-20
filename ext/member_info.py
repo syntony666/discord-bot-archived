@@ -70,6 +70,15 @@ def get_daily_cash(level):
         return 500
 
 
+def message_count(db, member: discord.Member):
+    query = {'server': member.guild.id, 'user': member.id}
+    member_info = db['member-info'].find_one(query)
+    if member_info is not None:
+        db['member-info'].find_one_and_update(query, {
+            '$set': {'msg-count': member_info['msg-count'] + 1}
+        })
+
+
 def message_exp(db, member: discord.Member):
     query = {'server': member.guild.id, 'user': member.id}
     member_info = db['member-info'].find_one(query)
@@ -92,8 +101,7 @@ def message_exp(db, member: discord.Member):
             exp -= get_need_exp(level)
             level += 1
         db['member-info'].find_one_and_update(query, {
-            '$set': {'msg-count': member_info['msg-count'] + 1,
-                     'level': level,
+            '$set': {'level': level,
                      'exp': exp,
                      'send-msg-time': datetime.now()}
         })

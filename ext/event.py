@@ -4,7 +4,7 @@ from discord.ext import commands
 
 from core.extension import Extension
 from core.util import getAllCommand
-from ext.member_info import message_exp
+from ext.member_info import message_exp, message_count
 from ext.reply import reply_process
 
 
@@ -30,6 +30,7 @@ class Event(Extension):
         print(message.content)
         if message.author != self.bot.user:
             await reply_process(self.db, message)
+            message_count(self.db, message.author)
             if all('>' + x not in message.content for x in getAllCommand(self.bot)):
                 message_exp(self.db, message.author)
 

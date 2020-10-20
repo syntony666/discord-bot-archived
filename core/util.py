@@ -57,5 +57,4 @@ def getAllCommand(bot):
         command_list.append(command.name)
         for alias in command.aliases:
             command_list.append(alias)
-    print(command_list)
     return command_list
