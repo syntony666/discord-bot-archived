@@ -16,6 +16,7 @@ class Money(Extension):
         random.seed(time.process_time())
         if num < 1 or num > 6:
             await ctx.send(f'不要亂玩啦!! ><')
+            return
         if member.get_cash() >= 100:
             dice = random.randint(1, 6)
             if dice == num:
@@ -26,7 +27,6 @@ class Money(Extension):
                 await ctx.send(f'你骰到 {dice} 損失現金 100， 你還有現金 {member.get_cash()}')
         else:
             await ctx.send(f'沒錢了 還想賭阿')
-
 
     @commands.command(aliases=['daily'])
     async def daily_cash(self, ctx):
