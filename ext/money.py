@@ -12,8 +12,8 @@ class Money(Extension):
 
     @commands.command()
     async def dice(self, ctx, num):
-        member = Member(ctx.author.id, ctx.author.id)
-        random.seed(time.clock())
+        member = Member(ctx.author.id, ctx.guild.id)
+        random.seed(time.process_time())
         if member.get_cash() < 100:
             dice = random.randint(1, 6)
             if dice == num:
@@ -37,7 +37,7 @@ class Money(Extension):
 
     @commands.command(aliases=['cash'])
     async def get_cash_command(self, ctx):
-        member_info = Member(ctx.guild.id, ctx.author.id)
+        member_info = Member(ctx.author.id, ctx.guild.id)
         await ctx.send(f'你現在有現金 {member_info.get_cash()} 元')
 
 

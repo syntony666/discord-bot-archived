@@ -51,6 +51,7 @@ class Member:
         self.__data = self.__collection.find_one(self.__query)
 
     def get_cash(self):
+        print(self.__data)
         return self.__data.get('cash')
 
     def set_cash(self, cash: int):
@@ -64,7 +65,7 @@ class Member:
 
     def set_msg_count(self, msg_count: int):
         self.__collection.find_one_and_update(self.__query, {
-            '$set': {'cash': msg_count}
+            '$set': {'msg-count': msg_count}
         })
         self.__data = self.__collection.find_one(self.__query)
 
