@@ -14,17 +14,18 @@ class Money(Extension):
     async def dice(self, ctx, num: int):
         member = Member(ctx.author.id, ctx.guild.id)
         random.seed(time.process_time())
+        cost, reward = 50, 300
         if num < 1 or num > 6:
             await ctx.send(f'不要亂玩啦!! ><')
             return
-        elif member.get_cash() >= 100:
+        elif member.get_cash() >= cost:
             dice = random.randint(1, 6)
             if dice == num:
-                member.set_cash(member.get_cash() + 250)
-                await ctx.send(f'你骰到 {dice} 獲得現金 250 你還有現金{member.get_cash()}')
+                member.set_cash(member.get_cash() + reward)
+                await ctx.send(f'你骰到 {dice} 獲得現金 {reward} 你還有現金{member.get_cash()}')
             else:
-                member.set_cash(member.get_cash() - 100)
-                await ctx.send(f'你骰到 {dice} 損失現金 100， 你還有現金 {member.get_cash()}')
+                member.set_cash(member.get_cash() - cost)
+                await ctx.send(f'你骰到 {dice} 損失現金 {cost}， 你還有現金 {member.get_cash()}')
         else:
             await ctx.send(f'沒錢了 還想賭阿')
 
