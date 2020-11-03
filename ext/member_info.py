@@ -39,7 +39,7 @@ class MemberInfo(Extension):
 
 
 def message_count(member: discord.Member):
-    member_info = Member(member.id, member.guild_id)
+    member_info = Member(member.id, member.guild.id)
     member_info.set_msg_count(member_info.get_msg_count()) + 1
 
 

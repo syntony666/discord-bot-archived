@@ -21,8 +21,8 @@ class Member:
             'level': 0,
             'exp': 0,
             'send-msg-time': datetime.now(),
-            'money': 0,
-            'daily-money': datetime.now()
+            'cash': 0,
+            'daily-cash': datetime.now()
         })
         self.__data = self.__collection.find_one(self.__query)
 
