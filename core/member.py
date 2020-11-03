@@ -8,13 +8,13 @@ class Member:
         self.__member_id = member_id
         self.__guild_id = guild_id
         self.__query = {'server': self.__guild_id, 'user': self.__member_id}
-        self.__collection = getDatabase().get('member-info')
+        self.__collection = getDatabase().get_collection('member-info')
         self.__data = self.__collection.find_one(self.__query)
         if self.__data is None:
             self.setup_new_member()
 
     def setup_new_member(self):
-        getDatabase().get('member-info').insert_one({
+        self.__collection.insert_one({
             'server': self.__guild_id,
             'user': self.__member_id,
             'msg-count': 0,
