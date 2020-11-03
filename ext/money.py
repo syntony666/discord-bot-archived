@@ -17,7 +17,7 @@ class Money(Extension):
         if num < 1 or num > 6:
             await ctx.send(f'不要亂玩啦!! ><')
             return
-        if member.get_cash() >= 100:
+        elif member.get_cash() >= 100:
             dice = random.randint(1, 6)
             if dice == num:
                 member.set_cash(member.get_cash() + 100)
