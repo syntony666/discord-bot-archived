@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from core.util import getDatabase
 
@@ -51,7 +51,6 @@ class Member:
         self.__data = self.__collection.find_one(self.__query)
 
     def get_cash(self):
-        print(self.__data)
         return self.__data.get('cash')
 
     def set_cash(self, cash: int):
@@ -79,11 +78,11 @@ class Member:
         self.__data = self.__collection.find_one(self.__query)
 
     def get_daily_cash_time(self):
-        return self.__data.get('send-msg-time')
+        return self.__data.get('daily-cash')
 
     def set_daily_cash_now_time(self):
         self.__collection.find_one_and_update(self.__query, {
-            '$set': {'daily-cash': datetime.now()}
+            '$set': {'daily-cash': datetime.now() + timedelta(days=1)}
         })
         self.__data = self.__collection.find_one(self.__query)
 

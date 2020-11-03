@@ -11,21 +11,21 @@ from core.member import Member
 class Money(Extension):
 
     @commands.command()
-    async def dice(self, ctx, num):
+    async def dice(self, ctx, num: int):
         member = Member(ctx.author.id, ctx.guild.id)
         random.seed(time.process_time())
-        if member.get_cash() < 100:
+        if member.get_cash() >= 100:
             dice = random.randint(1, 6)
             if dice == num:
                 member.set_cash(member.get_cash() + 100)
-                await ctx.send(f'你骰到{dice} 獲得現金 100 你還有現金{member.get_cash()}')
+                await ctx.send(f'你骰到 {dice} 獲得現金 100 你還有現金{member.get_cash()}')
             else:
                 member.set_cash(member.get_cash() - 100)
-                await ctx.send(f'你骰到{dice} 損失現金 100， 你還有現金 {member.get_cash()}')
+                await ctx.send(f'你骰到 {dice} 損失現金 100， 你還有現金 {member.get_cash()}')
 
     @commands.command(aliases=['daily'])
     async def daily_cash(self, ctx):
-        member_info = Member(ctx.guild.id, ctx.author.id)
+        member_info = Member(ctx.author.id, ctx.guild.id)
         if datetime.now() > member_info.get_daily_cash_time():
             member_info.set_cash(member_info.get_cash() + member_info.get_daily_cash())
             member_info.set_daily_cash_now_time()
