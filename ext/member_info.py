@@ -45,7 +45,7 @@ def message_count(member: discord.Member):
 
 def message_exp(member: discord.Member):
     random.seed(time.process_time())
-    member_info = Member(member.id, member.guild_id)
+    member_info = Member(member.id, member.guild.id)
     member_info.add_exp(random.randint(10, 30))
     if datetime.now() > member_info.get_msg_time() + timedelta(minutes=1):
         member_info.add_exp(random.randint(10, 30))
