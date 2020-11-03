@@ -22,6 +22,9 @@ class Money(Extension):
             else:
                 member.set_cash(member.get_cash() - 100)
                 await ctx.send(f'你骰到 {dice} 損失現金 100， 你還有現金 {member.get_cash()}')
+        else:
+            await ctx.send(f'沒錢了 還想賭阿')
+
 
     @commands.command(aliases=['daily'])
     async def daily_cash(self, ctx):
