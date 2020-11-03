@@ -14,6 +14,8 @@ class Money(Extension):
     async def dice(self, ctx, num: int):
         member = Member(ctx.author.id, ctx.guild.id)
         random.seed(time.process_time())
+        if num < 1 or num > 6:
+            await ctx.send(f'不要亂玩啦!! ><')
         if member.get_cash() >= 100:
             dice = random.randint(1, 6)
             if dice == num:
