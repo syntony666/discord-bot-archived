@@ -20,8 +20,8 @@ class Money(Extension):
         elif member.get_cash() >= 100:
             dice = random.randint(1, 6)
             if dice == num:
-                member.set_cash(member.get_cash() + 100)
-                await ctx.send(f'你骰到 {dice} 獲得現金 100 你還有現金{member.get_cash()}')
+                member.set_cash(member.get_cash() + 250)
+                await ctx.send(f'你骰到 {dice} 獲得現金 250 你還有現金{member.get_cash()}')
             else:
                 member.set_cash(member.get_cash() - 100)
                 await ctx.send(f'你骰到 {dice} 損失現金 100， 你還有現金 {member.get_cash()}')
