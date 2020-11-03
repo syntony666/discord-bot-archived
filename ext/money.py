@@ -29,6 +29,36 @@ class Money(Extension):
         else:
             await ctx.send(f'沒錢了 還想賭阿')
 
+    @commands.command()
+    async def guess(self, ctx, guess):
+        member = Member(ctx.author.id, ctx.guild.id)
+        random.seed(time.process_time())
+        cost, reward = 20, 50
+        if guess != 'b' and guess != 's':
+            await ctx.send(f'猜大(1~3)輸入"b", 猜小(4~6)輸入"s", 輸入其他東西沒用')
+            return
+        elif member.get_cash() >= cost:
+            dice = random.randint(1, 6)
+            send_str = f'你骰到 {dice} '
+            if dice > 3:
+                send_str += '是大'
+                if guess == 'b':
+                    member.set_cash(member.get_cash() + reward)
+                    await ctx.send(f'{send_str} 獲得現金 {cost}， 你還有現金 {member.get_cash()}')
+                else:
+                    member.set_cash(member.get_cash() - cost)
+                    await ctx.send(f'{send_str} 損失現金 {cost}， 你還有現金 {member.get_cash()}')
+                return
+            else:
+                send_str += '是小'
+                if guess == 's':
+                    member.set_cash(member.get_cash() + reward)
+                    await ctx.send(f'{send_str} 獲得現金 {cost}， 你還有現金 {member.get_cash()}')
+                else:
+                    member.set_cash(member.get_cash() - cost)
+                    await ctx.send(f'{send_str} 損失現金 {cost}， 你還有現金 {member.get_cash()}')
+                return
+
     @commands.command(aliases=['daily'])
     async def daily_cash(self, ctx):
         member_info = Member(ctx.author.id, ctx.guild.id)
