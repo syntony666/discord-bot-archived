@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime
 
 from discord.ext import commands
@@ -30,6 +31,7 @@ class Event(Extension):
         print(message.content)
         if message.author != self.bot.user:
             await reply_process(self.db, message)
+            await asyncio.sleep(1)
             message_count(message.author)
             if all('>' + x not in message.content for x in getAllCommand(self.bot)):
                 message_exp(message.author)

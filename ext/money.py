@@ -44,7 +44,7 @@ class Money(Extension):
                 send_str += '是大'
                 if guess == 'b':
                     member.set_cash(member.get_cash() + reward)
-                    await ctx.send(f'{send_str} 獲得現金 {cost}， 你還有現金 {member.get_cash()}')
+                    await ctx.send(f'{send_str} 獲得現金 {reward}， 你還有現金 {member.get_cash()}')
                 else:
                     member.set_cash(member.get_cash() - cost)
                     await ctx.send(f'{send_str} 損失現金 {cost}， 你還有現金 {member.get_cash()}')
@@ -53,7 +53,7 @@ class Money(Extension):
                 send_str += '是小'
                 if guess == 's':
                     member.set_cash(member.get_cash() + reward)
-                    await ctx.send(f'{send_str} 獲得現金 {cost}， 你還有現金 {member.get_cash()}')
+                    await ctx.send(f'{send_str} 獲得現金 {reward}， 你還有現金 {member.get_cash()}')
                 else:
                     member.set_cash(member.get_cash() - cost)
                     await ctx.send(f'{send_str} 損失現金 {cost}， 你還有現金 {member.get_cash()}')

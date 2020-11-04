@@ -41,7 +41,7 @@ class MemberInfo(Extension):
 
 def message_count(member: discord.Member):
     member_info = Member(member.id, member.guild.id)
-    asyncio.sleep(2)
+    await asyncio.sleep(2)
     member_info.set_msg_count(member_info.get_msg_count() + 1)
 
 
@@ -49,7 +49,7 @@ def message_exp(member: discord.Member):
     random.seed(time.process_time())
     member_info = Member(member.id, member.guild.id)
     member_info.add_exp(random.randint(10, 30))
-    asyncio.sleep(2)
+    await asyncio.sleep(2)
     if datetime.now() > member_info.get_msg_time() + timedelta(minutes=1):
         member_info.add_exp(random.randint(10, 30))
 
