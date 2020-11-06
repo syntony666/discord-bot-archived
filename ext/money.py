@@ -20,12 +20,14 @@ class Money(Extension):
             return
         elif member.get_cash() >= cost:
             dice = random.randint(1, 6)
+            cash = member.get_cash()
             if dice == num:
-                member.set_cash(member.get_cash() + reward)
-                await ctx.send(f'你骰到 {dice} 獲得現金 {reward} 你還有現金{member.get_cash()}')
+                cash += reward
+                await ctx.send(f'你骰到 {dice} 獲得現金 {reward} 你還有現金{cash}')
             else:
-                member.set_cash(member.get_cash() - cost)
-                await ctx.send(f'你骰到 {dice} 損失現金 {cost}， 你還有現金 {member.get_cash()}')
+                cash -= cost
+                await ctx.send(f'你骰到 {dice} 損失現金 {cost}， 你還有現金 {cash}')
+            member.set_cash(cash)
         else:
             await ctx.send(f'沒錢了 還想賭阿')
 
@@ -39,25 +41,17 @@ class Money(Extension):
             return
         elif member.get_cash() >= cost:
             dice = random.randint(1, 6)
-            send_str = f'你骰到 {dice} '
-            if dice > 3:
-                send_str += '是大'
-                if guess == 'b':
-                    member.set_cash(member.get_cash() + reward)
-                    await ctx.send(f'{send_str} 獲得現金 {reward}， 你還有現金 {member.get_cash()}')
-                else:
-                    member.set_cash(member.get_cash() - cost)
-                    await ctx.send(f'{send_str} 損失現金 {cost}， 你還有現金 {member.get_cash()}')
-                return
+            send_str = f'你骰到 {dice} 是大' if dice > 3 else f'你骰到 {dice} 是小'
+            cash = member.get_cash()
+            if dice > 3 and guess == 'b' or dice < 4 and guess == 's':
+                cash += reward
+                await ctx.send(f'{send_str} 獲得現金 {reward}， 你還有現金 {cash}')
             else:
-                send_str += '是小'
-                if guess == 's':
-                    member.set_cash(member.get_cash() + reward)
-                    await ctx.send(f'{send_str} 獲得現金 {reward}， 你還有現金 {member.get_cash()}')
-                else:
-                    member.set_cash(member.get_cash() - cost)
-                    await ctx.send(f'{send_str} 損失現金 {cost}， 你還有現金 {member.get_cash()}')
-                return
+                cash += reward
+                await ctx.send(f'{send_str} 損失現金 {cost}， 你還有現金 {cash}')
+            member.set_cash(cash)
+        else:
+            await ctx.send(f'沒錢了 還想賭阿')
 
     @commands.command(aliases=['daily'])
     async def daily_cash(self, ctx):
