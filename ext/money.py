@@ -9,11 +9,13 @@ from core.member import Member
 
 
 class Money(Extension):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        random.seed(time.process_time())
 
     @commands.command()
     async def dice(self, ctx, num: int):
         member = Member(ctx.author.id, ctx.guild.id)
-        random.seed(time.process_time())
         cost, reward = 50, 300
         if num < 1 or num > 6:
             await ctx.send(f'不要亂玩啦!! ><')
@@ -21,13 +23,15 @@ class Money(Extension):
         elif member.get_cash() >= cost:
             dice = random.randint(1, 6)
             cash = member.get_cash()
+            send_str = f'你骰到 {dice} '
             if dice == num:
                 cash += reward
-                await ctx.send(f'你骰到 {dice} 獲得現金 {reward} 你還有現金{cash}')
+                send_str += f'{send_str} 獲得現金 {reward}'
             else:
                 cash -= cost
-                await ctx.send(f'你骰到 {dice} 損失現金 {cost}， 你還有現金 {cash}')
+                send_str += f'{send_str} 損失現金 {cost}'
             member.set_cash(cash)
+            await ctx.send(f'{send_str}, 你還有現金 {member.get_cash()}')
         else:
             await ctx.send(f'沒錢了 還想賭阿')
 
@@ -45,11 +49,12 @@ class Money(Extension):
             cash = member.get_cash()
             if dice > 3 and guess == 'b' or dice < 4 and guess == 's':
                 cash += reward
-                await ctx.send(f'{send_str} 獲得現金 {reward}， 你還有現金 {cash}')
+                send_str += f'{send_str} 獲得現金 {reward}'
             else:
-                cash += reward
-                await ctx.send(f'{send_str} 損失現金 {cost}， 你還有現金 {cash}')
+                cash -= cost
+                send_str += f'{send_str} 損失現金 {cost}'
             member.set_cash(cash)
+            await ctx.send(f'{send_str}, 你還有現金 {member.get_cash()}')
         else:
             await ctx.send(f'沒錢了 還想賭阿')
 
