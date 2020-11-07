@@ -26,10 +26,10 @@ class Money(Extension):
             send_str = f'你骰到 {dice} '
             if dice == num:
                 cash += reward
-                send_str += f'{send_str} 獲得現金 {reward}'
+                send_str += f'獲得現金 {reward}'
             else:
                 cash -= cost
-                send_str += f'{send_str} 損失現金 {cost}'
+                send_str += f'損失現金 {cost}'
             member.set_cash(cash)
             await ctx.send(f'{send_str}, 你還有現金 {member.get_cash()}')
         else:
@@ -45,14 +45,14 @@ class Money(Extension):
             return
         elif member.get_cash() >= cost:
             dice = random.randint(1, 6)
-            send_str = f'你骰到 {dice} 是大' if dice > 3 else f'你骰到 {dice} 是小'
+            send_str = f'你骰到 {dice} 是大' if dice > 3 else f'你骰到 {dice} 是小 '
             cash = member.get_cash()
             if dice > 3 and guess == 'b' or dice < 4 and guess == 's':
                 cash += reward
-                send_str += f'{send_str} 獲得現金 {reward}'
+                send_str += f'獲得現金 {reward}'
             else:
                 cash -= cost
-                send_str += f'{send_str} 損失現金 {cost}'
+                send_str += f'損失現金 {cost}'
             member.set_cash(cash)
             await ctx.send(f'{send_str}, 你還有現金 {member.get_cash()}')
         else:
