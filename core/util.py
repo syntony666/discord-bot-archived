@@ -58,3 +58,7 @@ def getAllCommand(bot):
         for alias in command.aliases:
             command_list.append(alias)
     return command_list
+
+
+def getMemberRank(guild: int, filters: list):
+    return list(getDatabase().get_collection('member-info').find({'server': guild}).sort(filters))\
