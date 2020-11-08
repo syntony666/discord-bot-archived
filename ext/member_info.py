@@ -7,7 +7,7 @@ from discord.ext import commands
 
 from core.extension import Extension
 from core.member import Member
-from core.util import getMemberRank
+from core.util import getMemberRank, invokedNoSubcommand
 
 
 class MemberInfo(Extension):
@@ -38,27 +38,35 @@ class MemberInfo(Extension):
         embed.add_field(name='現金', value=member_info.get_cash(), inline=False)
         await ctx.send(embed=embed)
 
-    # @commands.command(aliases=['glr'])
-    # async def get_level_rank(self, ctx):
-    #     members = getMemberRank(ctx.guild.id, [('level', -1)])
-    #     embed = discord.Embed(title='幹話排行', color=0xff2600)
-    #     for x in range(10):
-    #         member_id = members[x].get('user')
-    #         if x >= len(members) or ctx.guild.get_member(member_id) is None:
-    #             break
-    #         embed.add_field(name=f'第{x + 1}名', value=ctx.guild.get_member(member_id).name)
-    #     await ctx.send(embed=embed)
-    #
-    # @commands.command(aliases=['gcr'])
-    # async def get_cash_rank(self, ctx):
-    #     members = getMemberRank(ctx.guild.id, [('cash', -1)])
-    #     embed = discord.Embed(title='$$排行', color=0xff2600)
-    #     for x in range(10):
-    #         member_id = members[x].get('user')
-    #         if x >= len(members) or ctx.guild.get_member(member_id) is None:
-    #             break
-    #         embed.add_field(name=f'第{x + 1}名', value=ctx.guild.get_member(member_id).name)
-    #     await ctx.send(embed=embed)
+    @commands.group()
+    async def rank(self, ctx):
+        invokedNoSubcommand(ctx)
+
+    @rank.command(aliases=['level'])
+    async def get_level_rank(self, ctx):
+        members = getMemberRank(ctx.guild.id, [('level', -1)])
+        embed = discord.Embed(title='幹話排行', color=0xff2600)
+        for x in range(5):
+            member_id = members[x].get('user')
+            if x >= len(members) or ctx.guild.get_member(member_id) is None:
+                break
+            embed_str = f'等級: {members[x].get("level")}\n已傳送對話數量: {members[x].get("msg-count")}'
+            embed.add_field(name=f'__第{x + 1}名__',value='~~  ~~', inline=False)
+            embed.add_field(name=ctx.guild.get_member(member_id).display_name, value=embed_str, inline=False)
+        await ctx.send(embed=embed)
+
+    @rank.command(aliases=['cash'])
+    async def get_cash_rank(self, ctx):
+        members = getMemberRank(ctx.guild.id, [('cash', -1)])
+        embed = discord.Embed(title='富豪排行', color=0xff2600)
+        for x in range(5):
+            member_id = members[x].get('user')
+            if x >= len(members) or ctx.guild.get_member(member_id) is None:
+                break
+            embed_str = f'持有現金: {members[x].get("cash")}'
+            embed.add_field(name=f'__第{x + 1}名__', value='~~  ~~', inline=False)
+            embed.add_field(name=ctx.guild.get_member(member_id).display_name, value=embed_str, inline=False)
+        await ctx.send(embed=embed)
 
 
 def message_count(member: discord.Member):
