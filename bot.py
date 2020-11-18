@@ -3,10 +3,10 @@ import os
 import discord
 from discord.ext import commands
 
-from core.util import getDatabase
+from core.util import get_database
 
 ext_path = 'ext'
-db = getDatabase()
+db = get_database()
 auth = db['auth'].find_one()
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=auth['prefix'], help_command=None, intents=intents)

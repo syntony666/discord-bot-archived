@@ -25,6 +25,7 @@ class Command(Extension):
         embed.add_field(name='勿擾', value=dnd_member, inline=True)
         embed.add_field(name='Ping', value=f'{round(self.bot.latency * 1000)} ms', inline=True)
         embed.add_field(name='狀態', value='上線中', inline=True)
+        embed.set_footer(text='ver. 0.1.0 beta')
         await ctx.send(embed=embed)
 
 

@@ -7,7 +7,7 @@ from discord.ext import commands
 
 from core.extension import Extension
 from core.member import Member
-from core.util import getMemberRank, invokedNoSubcommand
+from core.util import get_member_rank, invoked_no_subcommand
 
 
 class MemberInfo(Extension):
@@ -40,11 +40,11 @@ class MemberInfo(Extension):
 
     @commands.group()
     async def rank(self, ctx):
-        invokedNoSubcommand(ctx)
+        invoked_no_subcommand(ctx)
 
     @rank.command(aliases=['level'])
     async def get_level_rank(self, ctx):
-        members = getMemberRank(ctx.guild.id, [('level', -1)])
+        members = get_member_rank(ctx.guild.id, [('level', -1)])
         embed = discord.Embed(title='幹話排行', color=0xff2600)
         for x in range(5):
             member_id = members[x].get('user')
@@ -57,7 +57,7 @@ class MemberInfo(Extension):
 
     @rank.command(aliases=['cash'])
     async def get_cash_rank(self, ctx):
-        members = getMemberRank(ctx.guild.id, [('cash', -1)])
+        members = get_member_rank(ctx.guild.id, [('cash', -1)])
         embed = discord.Embed(title='富豪排行', color=0xff2600)
         for x in range(5):
             member_id = members[x].get('user')
@@ -72,14 +72,15 @@ class MemberInfo(Extension):
 def message_count(member: discord.Member):
     member_info = Member(member.id, member.guild.id)
     member_info.set_msg_count(member_info.get_msg_count() + 1)
+    member_info.update()
 
 
 def message_exp(member: discord.Member):
     random.seed(time.process_time())
     member_info = Member(member.id, member.guild.id)
-    member_info.add_exp(random.randint(10, 30))
     if datetime.now() > member_info.get_msg_time() + timedelta(minutes=1):
         member_info.add_exp(random.randint(10, 30))
+    member_info.update()
 
 
 def setup(bot):

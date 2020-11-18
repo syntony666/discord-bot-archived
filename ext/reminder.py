@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from discord.ext import commands
 
 from core.extension import Extension
-from core.util import setEmbedList, invokedNoSubcommand
+from core.util import set_embed_list, invoked_no_subcommand
 
 
 class Reminder(Extension):
@@ -46,7 +46,7 @@ class Reminder(Extension):
 
     @commands.group()
     async def reminder(self, ctx):
-        invokedNoSubcommand(ctx)
+        invoked_no_subcommand(ctx)
 
     @reminder.command(aliases=['l', 'list'])
     async def get_list(self, ctx):
@@ -65,7 +65,7 @@ class Reminder(Extension):
                     "訊息": reminder['message']
                 }
             }
-            await ctx.send(embed=setEmbedList(embed["title"], embed["description"], embed["context"]))
+            await ctx.send(embed=set_embed_list(embed["title"], embed["description"], embed["context"]))
 
         for reminder in self.db['reminder'].find({'server': ctx.guild.id}):
             if reminder['repeat'] == 'none':
@@ -133,7 +133,7 @@ class Reminder(Extension):
             }
         }
         await ctx.send(f'{ctx.author.mention} 建立了一個提醒',
-                       embed=setEmbedList(embed["title"], embed["description"], embed["context"]))
+                       embed=set_embed_list(embed["title"], embed["description"], embed["context"]))
 
 
 def setup(bot):

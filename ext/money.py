@@ -31,6 +31,7 @@ class Money(Extension):
                 cash -= cost
                 send_str += f'損失現金 {cost}'
             member.set_cash(cash)
+            member.update()
             await ctx.send(f'{send_str}, 你還有現金 {member.get_cash()}')
         else:
             await ctx.send(f'沒錢了 還想賭阿')
@@ -54,6 +55,7 @@ class Money(Extension):
                 cash -= cost
                 send_str += f'損失現金 {cost}'
             member.set_cash(cash)
+            member.update()
             await ctx.send(f'{send_str}, 你還有現金 {member.get_cash()}')
         else:
             await ctx.send(f'沒錢了 還想賭阿')
@@ -64,6 +66,7 @@ class Money(Extension):
         if datetime.now() > member_info.get_daily_cash_time():
             member_info.set_cash(member_info.get_cash() + member_info.get_daily_cash())
             member_info.set_daily_cash_now_time()
+            member_info.update()
             await ctx.send(f'這是你今天的薪資 {member_info.get_daily_cash()}')
         else:
             time_sec = (member_info.get_daily_cash_time() - datetime.now()).seconds

@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from core.util import getDatabase
+from core.util import get_database
 
 
 class Member:
@@ -8,7 +8,7 @@ class Member:
         self.__member_id = member_id
         self.__guild_id = guild_id
         self.__query = {'server': self.__guild_id, 'user': self.__member_id}
-        self.__collection = getDatabase().get_collection('member-info')
+        self.__collection = get_database().get_collection('member-info')
         self.__data = self.__collection.find_one(self.__query)
         if self.__data is None:
             self.setup_new_member()
@@ -30,10 +30,7 @@ class Member:
         return self.__data.get('level')
 
     def set_level(self, level):
-        self.__collection.find_one_and_update(self.__query, {
-            '$set': {'level': level}
-        })
-        self.__data = self.__collection.find_one(self.__query)
+        self.__data['level'] = level
 
     def get_exp(self):
         return self.__data.get('exp')
@@ -41,50 +38,34 @@ class Member:
     def add_exp(self, exp: int):
         exp = self.get_exp() + exp
         if exp > self.get_level_exp():
-            self.__collection.find_one_and_update(self.__query, {
-                '$set': {'level': self.get_level() + 1, 'exp': exp - self.get_level_exp()}
-            })
+            self.__data['level'] = self.get_level() + 1
+            self.__data['exp'] = exp - self.get_level_exp()
         else:
-            self.__collection.find_one_and_update(self.__query, {
-                '$set': {'exp': exp}
-            })
-        self.__data = self.__collection.find_one(self.__query)
+            self.__data['exp'] = exp
 
     def get_cash(self):
         return self.__data.get('cash')
 
     def set_cash(self, cash: int):
-        self.__collection.find_one_and_update(self.__query, {
-            '$set': {'cash': cash}
-        })
-        self.__data = self.__collection.find_one(self.__query)
+        self.__data['cash'] = cash
 
     def get_msg_count(self):
         return self.__data.get('msg-count')
 
     def set_msg_count(self, msg_count: int):
-        self.__collection.find_one_and_update(self.__query, {
-            '$set': {'msg-count': msg_count}
-        })
-        self.__data = self.__collection.find_one(self.__query)
+        self.__data['msg-count'] = msg_count
 
     def get_msg_time(self):
         return self.__data.get('send-msg-time')
 
     def set_msg_now_time(self):
-        self.__collection.find_one_and_update(self.__query, {
-            '$set': {'send-msg-time': datetime.now()}
-        })
-        self.__data = self.__collection.find_one(self.__query)
+        self.__data['send-msg-time'] = datetime.now()
 
     def get_daily_cash_time(self):
         return self.__data.get('daily-cash')
 
     def set_daily_cash_now_time(self):
-        self.__collection.find_one_and_update(self.__query, {
-            '$set': {'daily-cash': datetime.now() + timedelta(days=1)}
-        })
-        self.__data = self.__collection.find_one(self.__query)
+        self.__data['daily-cash'] = datetime.now() + timedelta(days=1)
 
     def get_level_exp(self):
         return 5 * self.get_level() ** 2 + (50 * self.get_level()) + 100
@@ -112,3 +93,9 @@ class Member:
             return 450
         else:
             return 500
+
+    def update(self):
+        self.__collection.find_one_and_update(self.__query, {
+            '$set': self.__data
+        })
+        self.__data = self.__collection.find_one(self.__query)

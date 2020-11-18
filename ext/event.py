@@ -4,7 +4,7 @@ from datetime import datetime
 from discord.ext import commands
 
 from core.extension import Extension
-from core.util import getAllCommand
+from core.util import get_all_command
 from ext.member_info import message_exp, message_count
 from ext.reply import reply_process
 
@@ -33,7 +33,7 @@ class Event(Extension):
             await reply_process(self.db, message)
             await asyncio.sleep(1)
             message_count(message.author)
-            if all('>' + x not in message.content for x in getAllCommand(self.bot)):
+            if all('>' + x not in message.content for x in get_all_command(self.bot)):
                 message_exp(message.author)
 
     @commands.Cog.listener()

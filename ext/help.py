@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 from core.extension import Extension
-from core.util import setEmbedList
+from core.util import set_embed_list
 
 
 class Help(Extension):
@@ -32,7 +32,7 @@ class Help(Extension):
 
     async def sendHelper(self, ctx, command):
         helper = self.db['help'].find_one({'ext': command})
-        await ctx.send(embed=setEmbedList(helper['title'], helper['description'], helper['context']))
+        await ctx.send(embed=set_embed_list(helper['title'], helper['description'], helper['context']))
 
 
 def setup(bot):

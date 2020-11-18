@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from discord.ext import commands
 
 from core.extension import Extension
-from core.util import invokedNoSubcommand
+from core.util import invoked_no_subcommand
 
 
 class Clear(Extension):
@@ -11,7 +11,7 @@ class Clear(Extension):
     @commands.group()
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx):
-        invokedNoSubcommand(ctx)
+        invoked_no_subcommand(ctx)
 
     @clear.command(aliases=['t', 'time'])
     async def clear_by_time(self, ctx, year: int, month: int, day: int, hour: int = 0, minute: int = 0):

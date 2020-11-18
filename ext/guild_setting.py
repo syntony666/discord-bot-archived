@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 from core.extension import Extension
-from core.util import invokedNoSubcommand, setEmbedList, isChannelInGuild
+from core.util import invoked_no_subcommand, set_embed_list, is_channel_in_guild
 
 
 class GuildSetting(Extension):
@@ -11,7 +11,7 @@ class GuildSetting(Extension):
     @commands.group()
     @commands.has_permissions(administrator=True)
     async def welcome(self, ctx):
-        invokedNoSubcommand(ctx)
+        invoked_no_subcommand(ctx)
 
     @welcome.command(aliases=['l', 'list'])
     async def get_welcome_list(self, ctx):
@@ -30,7 +30,7 @@ class GuildSetting(Extension):
     @commands.group()
     @commands.has_permissions(administrator=True)
     async def leave(self, ctx):
-        invokedNoSubcommand(ctx)
+        invoked_no_subcommand(ctx)
 
     @leave.command(aliases=['l', 'list'])
     async def get_leave_list(self, ctx):
@@ -56,13 +56,13 @@ class GuildSetting(Extension):
                 f'{option_str}頻道': '未設定' if welcome[option]["channel"] == 0 else f'<#{welcome[option]["channel"]}>',
                 f'{option_str}訊息': '未設定' if welcome[option]["message"] == '' else welcome[option]["message"]
             }
-            await ctx.send(embed=setEmbedList(title, description, context))
+            await ctx.send(embed=set_embed_list(title, description, context))
 
     async def set_channel(self, ctx, channelId, option):
         option_str = '歡迎' if option == 'welcome' else '離開'
         server = ctx.message.guild.id
         await ctx.channel.purge(limit=1)
-        if isChannelInGuild(channelId, ctx.message.guild):
+        if is_channel_in_guild(channelId, ctx.message.guild):
             self.db['config'].find_one_and_update({'server': server}, {'$set': {f'{option}.channel': channelId}})
             await ctx.send(f'**{ctx.message.guild}** 的{option_str}訊息通知在 <#{channelId}>')
         elif channelId == 0:

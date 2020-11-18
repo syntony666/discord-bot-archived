@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import os
 
 
-def getDatabase():
+def get_database():
     # get variable from heroku var
     username = os.environ.get('MONGODB_USERNAME')
     password = os.environ.get('MONGODB_PASSWORD')
@@ -15,43 +15,43 @@ def getDatabase():
     return db[dbname]
 
 
-def setEmbedList(title: str, description: str, context: dict):
+def set_embed_list(title: str, description: str, context: dict):
     embed = discord.Embed(title=title, description=description, color=0xff2600)
     for name, value in context.items():
         embed.add_field(name=name, value=value, inline=False)
     return embed
 
 
-def invokedNoSubcommand(ctx: discord.ext.commands.context):
+def invoked_no_subcommand(ctx: discord.ext.commands.context):
     if ctx.invoked_subcommand is None:
         raise commands.MissingRequiredArgument
 
 
-def isChannelInGuild(channelId: int, guild: discord.Guild):
+def is_channel_in_guild(channel_id: int, guild: discord.Guild):
     for channel in guild.channels:
-        if channel.id == channelId:
+        if channel.id == channel_id:
             return True
     return False
 
 
-def isRoleInGuild(roleId: int, guild: discord.Guild):
+def is_role_in_guild(role_id: int, guild: discord.Guild):
     for role in guild.roles:
-        if role.id == roleId:
+        if role.id == role_id:
             return True
     return False
 
 
-async def getChannelByMessage(messageId: int, guild: discord.Guild):
+async def get_channel_by_message(message_id: int, guild: discord.Guild):
     for channel in guild.text_channels:
         try:
-            await channel.fetch_message(messageId)
+            await channel.fetch_message(message_id)
             return channel
         except discord.NotFound:
             pass
     return None
 
 
-def getAllCommand(bot):
+def get_all_command(bot):
     command_list = list()
     for command in bot.commands:
         command_list.append(command.name)
@@ -60,5 +60,5 @@ def getAllCommand(bot):
     return command_list
 
 
-def getMemberRank(guild: int, filters: list):
-    return list(getDatabase().get_collection('member-info').find({'server': guild}).sort(filters))\
+def get_member_rank(guild: int, filters: list):
+    return list(get_database().get_collection('member-info').find({'server': guild}).sort(filters))

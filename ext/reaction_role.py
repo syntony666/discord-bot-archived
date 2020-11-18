@@ -2,21 +2,21 @@ import discord
 from discord.ext import commands
 
 from core.extension import Extension
-from core.util import invokedNoSubcommand, getChannelByMessage, isRoleInGuild
+from core.util import invoked_no_subcommand, get_channel_by_message, is_role_in_guild
 
 
 class ReactionRole(Extension):
     @commands.group(aliases=['rr'])
     @commands.has_permissions(administrator=True)
     async def reaction_role(self, ctx):
-        invokedNoSubcommand(ctx)
+        invoked_no_subcommand(ctx)
 
     @reaction_role.command(aliases=['a'])
     async def add_reaction_role(self, ctx, message_id: int, emoji: discord.Emoji, role_id: int):
-        if not isRoleInGuild(role_id, ctx.guild):
+        if not is_role_in_guild(role_id, ctx.guild):
             await ctx.send('not found')
             return
-        channel = await getChannelByMessage(message_id, ctx.guild)
+        channel = await get_channel_by_message(message_id, ctx.guild)
         if channel is not None:
             self.db['role-setting'].insert_one({
                 'server': ctx.guild.id,
@@ -40,7 +40,7 @@ class ReactionRole(Extension):
 
     @reaction_role.command(alias=['dm'])
     async def delete_reaction_role_by_message(self, ctx, message_id):
-        if getChannelByMessage(message_id, ctx.guild) is not None:
+        if get_channel_by_message(message_id, ctx.guild) is not None:
             self.db['role-setting'].delete_many({
                 'server': ctx.guild.id,
                 'message_id': message_id

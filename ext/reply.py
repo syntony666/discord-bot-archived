@@ -1,14 +1,14 @@
 import discord
 from discord.ext import commands
 from core.extension import Extension
-from core.util import invokedNoSubcommand
+from core.util import invoked_no_subcommand
 
 
 class Reply(Extension):
 
     @commands.group()
     async def reply(self, ctx):
-        invokedNoSubcommand(ctx)
+        invoked_no_subcommand(ctx)
 
     @reply.command(aliases=['l', 'list'])
     async def get_list(self, ctx):
