@@ -31,7 +31,7 @@ class Event(Extension):
         print(message.content)
         if message.author != self.bot.user:
             await reply_process(self.db, message)
-            await asyncio.sleep(0.05)
+            await asyncio.sleep(0.3)
             message_count(message.author)
             if all('>' + x not in message.content for x in get_all_command(self.bot)):
                 message_exp(message.author)
