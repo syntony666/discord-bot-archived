@@ -11,7 +11,7 @@ def get_database():
     dbname = 'bot-db'
     # access data from MongoDB
     db = MongoClient(
-        f'mongodb+srv://{username}:{password}@discordbotdb-iopzr.gcp.mongodb.net/{dbname}?retryWrites=true&w=majority')
+        f'mongodb+srv://{username}:{password}@discordbotdb.iopzr.mongodb.net/{dbname}?retryWrites=true&w=majority')
     return db[dbname]
 
 
