@@ -15,7 +15,7 @@ class Money(Extension):
 
     @commands.command()
     async def dice(self, ctx, num: int):
-        print('此功能目前維護中')
+        await ctx.send('此功能目前維護中')
         # member = Member(ctx.author.id, ctx.guild.id)
         # cost, reward = 50, 300
         # if num < 1 or num > 6:
@@ -39,7 +39,7 @@ class Money(Extension):
 
     @commands.command()
     async def guess(self, ctx, guess):
-        print('此功能目前維護中')
+        await ctx.send('此功能目前維護中')
         # member = Member(ctx.author.id, ctx.guild.id)
         # random.seed(time.process_time())
         # cost, reward = 20, 50
