@@ -1,0 +1,54 @@
+{
+    "auth": {
+        "_id": "",
+        "token": "<token>",
+        "prefix": "",
+        "guild_id": ""
+    },
+    "member": {
+        "_id": "<member_id>",
+        "msg_count": "INT",
+        "level": "INT32",
+        "exp": "INT64",
+        "send_msg_time": "DATETIME",
+        "cash": "INT64",
+        "daily": {
+            "time": "DATETIME",
+            "msg_cash": "int",
+            "gamble": "int",
+            "daily_cash": "bool"
+        }
+    },
+    "reaction_role":{
+        "_id": "<role_id>",
+        "message_id": "<message_id>",
+        "emoji": ""
+    },
+    "reply":
+    {
+        "_id": "TEXT",
+        "value": "TEXT"
+    },
+    "ban":[
+        {
+            "_id":"objectID",
+            "member_id": "<member_id>",
+            "reason": "TEXT",
+            "start_time": "DATETIME",
+            "duration": "<ban_time>"
+        }
+    ],
+    "config": {
+        "_id":"<guild_id>",
+        "welcome_msg": {
+            "channel_id": "<channel_id>",
+            "message": "TEXT"
+        },
+        "leave_msg": {
+            "channel_id": "<channel_id>",
+            "message": "TEXT"
+        },
+        "max_daily_msg_cash": "int",
+        "max_daily_gamble": "int"
+    }
+}

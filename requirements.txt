@@ -1,0 +1,5 @@
+pymongo
+pymongo[srv]
+discord.py >=1.5.1
+dnspython
+psutil
