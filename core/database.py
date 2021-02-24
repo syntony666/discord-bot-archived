@@ -1,12 +1,11 @@
-import os
-
 from pymongo import MongoClient
+
+from setting import DATABASE_URL
 
 
 class Database:
     def __init__(self, col_name: str):
-        # get variable from heroku var
-        db_url = os.environ.get('DB_URL')
+        db_url = DATABASE_URL
         # access data from MongoDB
         self.col = MongoClient(db_url).get_database('dd_bot').get_collection(col_name)
 
