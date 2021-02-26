@@ -7,4 +7,6 @@ STAT_ROLE = {
     'Vtuber工作人員': 811516908867551282
 }
 
+
+
 VERSION = 'ver. 1.0.0 release'
