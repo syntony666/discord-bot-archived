@@ -26,6 +26,7 @@ class Reply(Extension):
         finally:
             response = ReplyDAO().get_reply(receive)
             embed = discord.Embed(title=embed_title)
+            embed.set_thumbnail(url=response['value'])
             embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
             embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             embed.add_field(name=response['_id'], value=response['value'])
