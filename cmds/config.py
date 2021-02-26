@@ -17,6 +17,8 @@ class Config(Extension):
     async def set_ban(self, ctx, role_id):
         validate_role(ctx.guild, role_id)
         ConfigDAO().set_ban_role(role_id)
+        response = ConfigDAO().get_ban_role()
+        # embed =
 
 
 def setup(bot):

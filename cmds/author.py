@@ -16,6 +16,18 @@ class Author(Cog):
     async def say(self, ctx, guild, channel, *, msg):
         await self.bot.get_guild(int(guild)).get_channel(int(channel)).send(msg)
 
+    @commands.command()
+    @commands.is_owner()
+    async def test(self, ctx):
+        data = {
+            'title': 'aaa',
+            'field': {
+                'name': 'bbb',
+                'value': 'ccc'
+            }
+        }
+        embed = discord.Embed(**data)
+
 
 def setup(bot):
     bot.add_cog(Author(bot))
