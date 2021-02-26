@@ -21,7 +21,8 @@ async def reply_message(message):
     found = list(filter(lambda reply:
                         reply['_id'] == message.content, ReplyDAO().get_reply()))
     if len(found) != 0:
-        await message.channel.send(found[0]['value'])
+        await message.channel.send(found[0]['value']
+                                   .format(m=message.author.mention))
 
 
 def setup(bot):

@@ -9,7 +9,7 @@ from impl.guild_impl import validate_role
 
 class Config(Extension):
     @commands.group(aliases=['set'])
-    # @commands.has_permissions(administrator=True)
+    @commands.has_permissions(administrator=True)
     async def config(self, ctx):
         pass
 
