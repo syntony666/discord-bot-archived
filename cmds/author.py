@@ -27,6 +27,7 @@ class Author(Cog):
             }
         }
         embed = discord.Embed(**data)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
