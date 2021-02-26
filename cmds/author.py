@@ -21,7 +21,7 @@ class Author(Cog):
     async def test(self, ctx):
         data = {
             'title': 'aaa',
-            'field': {
+            'fields': {
                 'name': 'bbb',
                 'value': 'ccc'
             }
