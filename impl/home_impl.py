@@ -3,9 +3,6 @@ from datetime import timedelta
 from core.exception import FormatError
 
 
-# def send_embed_response(data):
-
-
 def parse_time_duration(time):
     try:
         unit = time[-1:]

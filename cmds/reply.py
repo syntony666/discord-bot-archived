@@ -14,22 +14,22 @@ class Reply(Extension):
     async def reply(self, ctx):
         pass
 
-    # @reply.command(aliases=['a'])
-    # async def set_reply(self, ctx, receive, *, send):
-    #     # embed_title = ''
-    #     try:
-    #         ReplyDAO().create_reply(receive, send)
-    #         embed = discord.Embed(title="已新增回應")
-    #         embed.set_author(name=ctx.author.name)
-    #         embed.set_footer(text=datetime.now().)
-    #         await ctx.send(embed=embed)
-    #     except DataExist:
-    #         ReplyDAO().update_reply(receive, send)
-    #         embed = discord.Embed(title="已新增回應")
-    #         embed.set_author(name=ＡＡＡ)
-    #         embed.set_footer(text=datetime.now())
-    #     finally:
-    #         await ctx.send(embed=embed)
+    @reply.command(aliases=['a'])
+    async def set_reply(self, ctx, receive, *, send):
+        embed_title = ''
+        try:
+            ReplyDAO().create_reply(receive, send)
+            embed_title = "已新增回應"
+        except DataExist:
+            ReplyDAO().update_reply(receive, send)
+            embed_title = "已修改回應"
+        finally:
+            response = ReplyDAO().get_reply(receive)
+            embed = discord.Embed(title=embed_title)
+            embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+            embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            embed.add_field(name=response['_id'], value=response['value'])
+            await ctx.send(embed=embed)
 
     @reply.command(aliases=['l'])
     async def get_reply(self, ctx):
