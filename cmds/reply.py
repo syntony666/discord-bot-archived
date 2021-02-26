@@ -11,7 +11,7 @@ from dao.reply_dao import ReplyDAO
 class Reply(Extension):
     def __init__(self, bot: discord.Client):
         super().__init__(bot)
-        reply_thumbnail = discord.File('../src/img/reply_thumbnail.png', filename='reply_thumbnail.png')
+        reply_thumbnail = discord.File('src/img/reply_thumbnail.png', filename='reply_thumbnail.png')
 
     @commands.group()
     async def reply(self, ctx):
