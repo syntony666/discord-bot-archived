@@ -11,7 +11,7 @@ from dao.reply_dao import ReplyDAO
 class Reply(Extension):
     def __init__(self, bot: discord.Client):
         super().__init__(bot)
-        self.reply_thumbnail = discord.File('src/img/reply_thumbnail.png', filename='reply_thumbnail.png')
+        self.embed_color = discord.Color.blue
 
     @commands.group()
     async def reply(self, ctx):
@@ -28,12 +28,14 @@ class Reply(Extension):
             embed_title = "已修改回應"
         finally:
             response = ReplyDAO().get_reply(receive)
-            embed = discord.Embed(title=embed_title)
+            reply_thumbnail = discord.File(
+                'src/img/reply_thumbnail.png', filename='reply_thumbnail.png')
+            embed = discord.Embed(title=embed_title, color=self.embed_color)
             embed.set_thumbnail(url='attachment://reply_thumbnail.png')
             embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
             embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             embed.add_field(name=response['_id'], value=response['value'])
-            await ctx.send(file=self.reply_thumbnail, embed=embed)
+            await ctx.send(file=reply_thumbnail, embed=embed)
 
     @reply.command(aliases=['l'])
     async def get_reply(self, ctx):
