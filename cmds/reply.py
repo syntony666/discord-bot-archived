@@ -11,7 +11,7 @@ from dao.reply_dao import ReplyDAO
 class Reply(Extension):
     def __init__(self, bot: discord.Client):
         super().__init__(bot)
-        self.embed_color = discord.Color.blue
+        self.embed_color = discord.Color.blue()
 
     @commands.group()
     async def reply(self, ctx):
