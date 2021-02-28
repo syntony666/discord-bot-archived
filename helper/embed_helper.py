@@ -8,7 +8,7 @@ class EmbedPage:
         self.data = [data[i:i + page_num] for i in range(0, len(data), page_num)]
         self.embed = list()
         for n in range(len(self.data)):
-            self.embed += embed
+            self.embed.append(embed)
             for x in self.data[n]:
                 self.embed[n].add_field(name=x['key'], value=x['value'], inline=False)
         self.now_page = 1
