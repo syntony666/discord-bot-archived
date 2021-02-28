@@ -1,7 +1,6 @@
 import asyncio
 
 import discord
-from discord.ext.commands import Context
 
 
 class EmbedPage:
@@ -18,7 +17,7 @@ class EmbedPage:
             self.embed.add_field(name=key, value=value, inline=False)
         self.embed.set_footer(text=f'Page {self.now_page}/{self.max_page}')
 
-    def run(self, bot: discord.Client, ctx: Context, delay=30):
+    def run(self, bot: discord.Client, ctx, delay=30):
         def check(reaction, user):
             return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
 
@@ -29,7 +28,7 @@ class EmbedPage:
         await message.add_reaction("▶️")
 
         try:
-            reaction, user = await bot.wait_for("reaction_add", timeout=60, check=check)
+            reaction, user = await bot.wait_for("reaction_add", timeout=delay, check=check)
             if str(reaction.emoji) == "▶️" and self.now_page != self.max_page:
                 self.set_page(self.now_page + 1)
                 await message.remove_reaction(reaction, user)
