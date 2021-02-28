@@ -7,10 +7,12 @@ class EmbedPage:
     def __init__(self, embed: discord.Embed, data: list, page_num: int):
         self.data = [data[i:i + page_num] for i in range(0, len(data), page_num)]
         self.embed = list()
+        print(len(self.data))
         for n in range(len(self.data)):
             self.embed.append(embed)
             for x in self.data[n]:
                 self.embed[n].add_field(name=x['key'], value=x['value'], inline=False)
+            print(self.embed[n].to_dict())
         self.now_page = 1
         self.max_page = len(self.embed)
 
