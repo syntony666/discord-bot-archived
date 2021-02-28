@@ -17,7 +17,7 @@ class EmbedPage:
             self.embed.add_field(name=key, value=value, inline=False)
         self.embed.set_footer(text=f'Page {self.now_page}/{self.max_page}')
 
-    def run(self, bot: discord.Client, ctx, delay=30):
+    async def run(self, bot: discord.Client, ctx, delay=30):
         def check(reaction, user):
             return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
 
