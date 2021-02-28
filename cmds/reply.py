@@ -6,6 +6,7 @@ from discord.ext import commands
 from core.exception import DataExist, DataNotExist
 from core.extension import Extension
 from dao.reply_dao import ReplyDAO
+from helper.embed_helper import EmbedPage
 
 
 class Reply(Extension):
@@ -39,13 +40,16 @@ class Reply(Extension):
             await ctx.send('**沒有回應列表**')
             return
         embed = discord.Embed(title='__回應列表__', color=0x3ea076)
-        reply_list = [reply_list[i:i + 10] for i in range(0, len(reply_list), 10)]
-        print(len(reply_list), len(reply_list[0]))
-        for y in reply_list:
-            for x in y:
-                embed.add_field(name=x['_id'], value=x['value'], inline=False)
-            await ctx.send(embed=embed)
-            embed.clear_fields()
+        reply_list = [{x: y} for x, y in reply_list]
+        embed_page = EmbedPage(embed, reply_list, 10)
+        embed_page.run(self.bot, ctx)
+        # reply_list = [reply_list[i:i + 10] for i in range(0, len(reply_list), 10)]
+        # print(len(reply_list), len(reply_list[0]))
+        # for y in reply_list:
+        #     for x in y:
+        #         embed.add_field(name=x['_id'], value=x['value'], inline=False)
+        #     await ctx.send(embed=embed)
+        #     embed.clear_fields()
 
     @reply.command(aliases=['d'])
     async def delete_reply(self, ctx, receive):
