@@ -50,8 +50,11 @@ class Reply(Extension):
             response = ReplyDAO().del_reply(receive)
             await send_embed_msg(ctx, '已刪除回應', response, discord.Color.red())
         except DataNotExist:
-            await ctx.send(
-                f'{ctx.author.mention} 沒人叫我聽到 **{receive}** 的時候要回應，你是不是想騙！')
+            response = {
+                '_id': receive,
+                'value': '__*查無資料*__'
+            }
+            await send_embed_msg(ctx, '無回應可刪除', response, discord.Color.red())
 
 
 async def send_embed_msg(ctx, title, response, color):
