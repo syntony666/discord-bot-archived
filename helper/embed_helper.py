@@ -8,7 +8,7 @@ class EmbedPage:
         self.data = [data[i:i + page_num] for i in range(0, len(data), page_num)]
         self.embed = embed
         self.now_page = 1
-        self.max_page = page_num
+        self.max_page = len(data)
 
     def set_page(self, page):
         self.now_page = page
@@ -28,17 +28,18 @@ class EmbedPage:
         await message.add_reaction("▶️")
 
         try:
-            reaction, user = await bot.wait_for("reaction_add", timeout=delay, check=check)
-            if str(reaction.emoji) == "▶️" and self.now_page != self.max_page:
-                self.set_page(self.now_page + 1)
-                await message.remove_reaction(reaction, user)
-                await message.edit(embed=self.embed)
-            elif str(reaction.emoji) == "◀️" and self.now_page > 1:
-                self.set_page(self.now_page - 1)
-                await message.remove_reaction(reaction, user)
-                await message.edit(embed=self.embed)
-            else:
-                await message.remove_reaction(reaction, user)
+            while True:
+                reaction, user = await bot.wait_for("reaction_add", timeout=delay, check=check)
+                if str(reaction.emoji) == "▶️" and self.now_page != self.max_page:
+                    self.set_page(self.now_page + 1)
+                    await message.remove_reaction(reaction, user)
+                    await message.edit(embed=self.embed)
+                elif str(reaction.emoji) == "◀️" and self.now_page > 1:
+                    self.set_page(self.now_page - 1)
+                    await message.remove_reaction(reaction, user)
+                    await message.edit(embed=self.embed)
+                else:
+                    await message.remove_reaction(reaction, user)
         except asyncio.TimeoutError:
             message.clear_reactions()
             message.add_reaction('🚫')
