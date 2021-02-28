@@ -40,7 +40,7 @@ class Reply(Extension):
             await ctx.send('**沒有回應列表**')
             return
         embed = discord.Embed(title='__回應列表__', color=0x3ea076)
-        reply_list = [{x: y} for x, y in reply_list]
+        reply_list = [{x['_id']: y['value']} for x in reply_list]
         print(reply_list)
         embed_page = EmbedPage(embed, reply_list, 10)
         await embed_page.run(self.bot, ctx)
