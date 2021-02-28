@@ -28,14 +28,7 @@ class Reply(Extension):
             embed_title = "已修改回應"
         finally:
             response = ReplyDAO().get_reply(receive)
-            reply_thumbnail = discord.File(
-                'src/img/reply_thumbnail.png', filename='reply_thumbnail.png')
-            embed = discord.Embed(title=embed_title, color=self.embed_color)
-            embed.set_thumbnail(url='attachment://reply_thumbnail.png')
-            embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
-            embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-            embed.add_field(name=response['_id'], value=response['value'])
-            await ctx.send(file=reply_thumbnail, embed=embed)
+            await send_embed_msg(ctx, embed_title, response, discord.Color.blue())
 
     @reply.command(aliases=['l'])
     async def get_reply(self, ctx):
@@ -54,12 +47,22 @@ class Reply(Extension):
     @reply.command(aliases=['d'])
     async def delete_reply(self, ctx, receive):
         try:
-            ReplyDAO().del_reply(receive)
-            await ctx.send(
-                f'{ctx.author.mention} 叫我聽到 **{receive}** 的時候不要回應，存在感-1 QAQ')
+            response = ReplyDAO().del_reply(receive)
+            await send_embed_msg(ctx, '已刪除回應', response, discord.Color.red())
         except DataNotExist:
             await ctx.send(
                 f'{ctx.author.mention} 沒人叫我聽到 **{receive}** 的時候要回應，你是不是想騙！')
+
+
+async def send_embed_msg(ctx, title, response, color):
+    reply_thumbnail = discord.File(
+        'src/img/reply_thumbnail.png', filename='reply_thumbnail.png')
+    embed = discord.Embed(title=title, color=color)
+    embed.set_thumbnail(url='attachment://reply_thumbnail.png')
+    embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+    embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    embed.add_field(name=response['_id'], value=response['value'])
+    await ctx.send(file=reply_thumbnail, embed=embed)
 
 
 def setup(bot):

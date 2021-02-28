@@ -35,4 +35,6 @@ class ReplyDAO:
         self.db.del_data({
             "_id": receive
         })
+        if len(self.db.get_data({"_id": receive})) != 0:
+            raise DataExist
         return response
