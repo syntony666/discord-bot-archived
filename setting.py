@@ -9,4 +9,4 @@ STAT_ROLE = {
 
 
 
-VERSION = 'ver. 1.0.1 release'
+VERSION = 'ver. 1.0.2 beta'
