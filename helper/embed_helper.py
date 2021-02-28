@@ -13,8 +13,8 @@ class EmbedPage:
     def set_page(self, page):
         self.now_page = page
         self.embed.clear_fields()
-        for key, value in self.data[self.now_page - 1].items():
-            self.embed.add_field(name=key, value=value, inline=False)
+        for x in self.data[self.now_page - 1]:
+            self.embed.add_field(name=x['key'], value=x['value'], inline=False)
         self.embed.set_footer(text=f'Page {self.now_page}/{self.max_page}')
 
     async def run(self, bot: discord.Client, ctx, delay=30):
