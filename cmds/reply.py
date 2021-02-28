@@ -30,6 +30,8 @@ class Reply(Extension):
             response = ReplyDAO().get_reply(receive)
             await send_embed_msg(ctx, embed_title, response, discord.Color.blue())
 
+    # @reply.command(aliases='s')
+
     @reply.command(aliases=['l'])
     async def get_reply(self, ctx):
         reply_list = ReplyDAO().get_reply()
@@ -38,6 +40,7 @@ class Reply(Extension):
             return
         embed = discord.Embed(title='__回應列表__', color=0x3ea076)
         reply_list = [reply_list[i:i + 10] for i in range(0, len(reply_list), 10)]
+        print(len(reply_list), len(reply_list[0]))
         for y in reply_list:
             for x in y:
                 embed.add_field(name=x['_id'], value=x['value'], inline=False)
