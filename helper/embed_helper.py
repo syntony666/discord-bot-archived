@@ -32,9 +32,11 @@ class EmbedPage:
             if str(reaction.emoji) == "▶️" and self.now_page != self.max_page:
                 self.set_page(self.now_page + 1)
                 await message.remove_reaction(reaction, user)
+                await message.edit(embed=self.embed)
             elif str(reaction.emoji) == "◀️" and self.now_page > 1:
-                self.now_page -= 1
+                self.set_page(self.now_page - 1)
                 await message.remove_reaction(reaction, user)
+                await message.edit(embed=self.embed)
             else:
                 await message.remove_reaction(reaction, user)
         except asyncio.TimeoutError:
