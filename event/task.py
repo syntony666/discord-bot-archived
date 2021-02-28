@@ -12,7 +12,7 @@ class Task(Extension):
         super().__init__(*args, **kwargs)
         guild_id = int(Database('auth').get_data({"_id": "test"})[0]['guild_id'])
 
-        async def run_task(sleep, method):
+        async def run_task(method, sleep=1):
             await self.bot.wait_until_ready()
             while not self.bot.is_closed():
                 await asyncio.sleep(sleep)
@@ -26,7 +26,7 @@ class Task(Extension):
                         await guild.get_member(ban['member_id']).remove_roles(guild.get_role(ConfigDAO().get_ban_role()))
                         BanDAO().update_ban(str(ban['_id']), unban=True)
 
-        self.bot.loop.create_task(run_task(1, remove_ban))
+        self.bot.loop.create_task(run_task(remove_ban))
 
 
 def setup(bot):

@@ -31,6 +31,10 @@ class ReplyDAO:
     def del_reply(self, receive):
         if len(self.db.get_data({"_id": receive})) == 0:
             raise DataNotExist
+        response = self.db.get_data({"_id": receive})[0]
         self.db.del_data({
             "_id": receive
         })
+        if len(self.db.get_data({"_id": receive})) != 0:
+            raise DataExist
+        return response

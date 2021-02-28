@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import discord
 from discord.ext import commands
 
@@ -7,6 +9,9 @@ from dao.reply_dao import ReplyDAO
 
 
 class Reply(Extension):
+    def __init__(self, bot: discord.Client):
+        super().__init__(bot)
+        self.embed_color = discord.Color.blue()
 
     @commands.group()
     async def reply(self, ctx):
@@ -14,14 +19,16 @@ class Reply(Extension):
 
     @reply.command(aliases=['a'])
     async def set_reply(self, ctx, receive, *, send):
+        embed_title = ''
         try:
             ReplyDAO().create_reply(receive, send)
-            await ctx.send(
-                f'{ctx.author.mention} 跟我說當說出 **{receive}** 的時候要回答 **{send}**')
+            embed_title = "已新增回應"
         except DataExist:
             ReplyDAO().update_reply(receive, send)
-            await ctx.send(
-                f'{ctx.author.mention} 叫我把 **{receive}** 的回答改成 **{send}**')
+            embed_title = "已修改回應"
+        finally:
+            response = ReplyDAO().get_reply(receive)
+            await send_embed_msg(ctx, embed_title, response, discord.Color.blue())
 
     @reply.command(aliases=['l'])
     async def get_reply(self, ctx):
@@ -40,12 +47,25 @@ class Reply(Extension):
     @reply.command(aliases=['d'])
     async def delete_reply(self, ctx, receive):
         try:
-            ReplyDAO().del_reply(receive)
-            await ctx.send(
-                f'{ctx.author.mention} 叫我聽到 **{receive}** 的時候不要回應，存在感-1 QAQ')
+            response = ReplyDAO().del_reply(receive)
+            await send_embed_msg(ctx, '已刪除回應', response, discord.Color.red())
         except DataNotExist:
-            await ctx.send(
-                f'{ctx.author.mention} 沒人叫我聽到 **{receive}** 的時候要回應，你是不是想騙！')
+            response = {
+                '_id': receive,
+                'value': '__*查無資料*__'
+            }
+            await send_embed_msg(ctx, '無回應可刪除', response, discord.Color.red())
+
+
+async def send_embed_msg(ctx, title, response, color):
+    reply_thumbnail = discord.File(
+        'src/img/reply_thumbnail.png', filename='reply_thumbnail.png')
+    embed = discord.Embed(title=title, color=color)
+    embed.set_thumbnail(url='attachment://reply_thumbnail.png')
+    embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+    embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    embed.add_field(name=response['_id'], value=response['value'])
+    await ctx.send(file=reply_thumbnail, embed=embed)
 
 
 def setup(bot):
