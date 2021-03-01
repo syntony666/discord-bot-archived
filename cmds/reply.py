@@ -33,7 +33,19 @@ class Reply(Extension):
             response = ReplyDAO().get_reply(receive)
             await send_embed_msg(ctx, embed_title, response, discord.Color.blue())
 
-    # @reply.command(aliases='s')
+    @reply.command(aliases='s')
+    async def search(self, ctx, keyword):
+        reply_list = ReplyDAO().get_reply(f'/{keyword}/')
+        embed = discord.Embed(title=f'*{keyword}* 搜尋結果', color=discord.Color.green())
+        embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        if len(reply_list) == 0:
+            embed.description = '查無結果'
+            await ctx.send(embed=embed)
+            return
+        reply_list = [{'key': x['_id'], 'value': x['value']} for x in reply_list]
+        embed_page = EmbedPage(embed, reply_list, 8)
+        await embed_page.run(self.bot, ctx)
 
     @reply.command(aliases=['l'])
     async def get_reply(self, ctx):
@@ -41,17 +53,10 @@ class Reply(Extension):
         if len(reply_list) == 0:
             await ctx.send('**沒有回應列表**')
             return
-        embed = discord.Embed(title='__回應列表__', color=0x3ea076)
+        embed = discord.Embed(title='__回應列表__', color=discord.Color.green())
         reply_list = [{'key': x['_id'], 'value': x['value']} for x in reply_list]
         embed_page = EmbedPage(embed, reply_list, 8)
         await embed_page.run(self.bot, ctx)
-        # reply_list = [reply_list[i:i + 10] for i in range(0, len(reply_list), 10)]
-        # print(len(reply_list), len(reply_list[0]))
-        # for y in reply_list:
-        #     for x in y:
-        #         embed.add_field(name=x['_id'], value=x['value'], inline=False)
-        #     await ctx.send(embed=embed)
-        #     embed.clear_fields()
 
     @reply.command(aliases=['d'])
     async def delete_reply(self, ctx, receive):
