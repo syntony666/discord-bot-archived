@@ -33,7 +33,7 @@ class Reply(Extension):
             response = ReplyDAO().get_reply(receive)
             await send_embed_msg(ctx, embed_title, response, discord.Color.blue())
 
-    @reply.command(aliases='s')
+    @reply.command(aliases=['s'])
     async def search(self, ctx, keyword):
         reply_list = ReplyDAO().get_reply(f'/{keyword}/')
         embed = discord.Embed(title=f'*{keyword}* 搜尋結果', color=discord.Color.green())
