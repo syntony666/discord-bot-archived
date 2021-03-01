@@ -15,7 +15,7 @@ class EmbedPage:
         #         self.embed[n].add_field(name=x['key'], value=x['value'], inline=False)
         #     print(self.embed[n].to_dict())
         self.now_page = 1
-        self.max_page = len(self.embed)
+        self.max_page = len(self.data)
 
     def set_page(self, page):
         self.now_page = page
@@ -42,12 +42,12 @@ class EmbedPage:
                     self.now_page += 1
                     self.set_page(self.now_page + 1)
                     # await message.remove_reaction(reaction, user)
-                    await message.edit(embed=self.embed[self.now_page-1])
+                    await message.edit(embed=self.embed)
                 elif str(reaction.emoji) == "◀️" and self.now_page > 1:
                     self.now_page -= 1
                     # self.set_page(self.now_page - 1)
                     await message.remove_reaction(reaction, user)
-                    await message.edit(embed=self.embed[self.now_page-1])
+                    await message.edit(embed=self.embed)
                 else:
                     await message.remove_reaction(reaction, user)
         except asyncio.TimeoutError:
