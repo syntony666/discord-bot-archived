@@ -41,7 +41,7 @@ class Reply(Extension):
             return
         embed = discord.Embed(title='__回應列表__', color=0x3ea076)
         reply_list = [{'key': x['_id'], 'value': x['value']} for x in reply_list]
-        embed_page = EmbedPage(embed, reply_list, 5)
+        embed_page = EmbedPage(embed, reply_list, 8)
         await embed_page.run(self.bot, ctx)
         # reply_list = [reply_list[i:i + 10] for i in range(0, len(reply_list), 10)]
         # print(len(reply_list), len(reply_list[0]))

@@ -22,7 +22,9 @@ class EmbedPage:
         self.now_page = page
         embed = self.embed.copy()
         for x in self.data[self.now_page - 1]:
-            embed.add_field(name=x['key'], value=x['value'] if len(x['value'])<150 else '__*太長了 略過*__', inline=False)
+            embed.add_field(name=x['key'],
+                            value=x['value'] if len(x['value'])<150 else '__*太長了 略過*__',
+                            inline=False)
         embed.set_footer(text=f'Page {self.now_page}/{self.max_page}')
         return embed
 
@@ -38,9 +40,9 @@ class EmbedPage:
             await self.message.remove_reaction(reaction, user)
             await self.message.edit(embed=embed)
         except discord.errors.HTTPException:
+            await ctx.send(f'```Page {} cannot be display```')
             await self.message.delete()
             await self.set_new_message(ctx)
-            # await self.change_page(ctx, self.now_page, reaction, user)
 
     async def run(self, bot: discord.Client, ctx, delay=30):
         def check(reaction, user):
