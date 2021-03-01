@@ -40,7 +40,7 @@ class EmbedPage:
             await self.message.remove_reaction(reaction, user)
             await self.message.edit(embed=embed)
         except discord.errors.HTTPException:
-            await ctx.send(f'```Page {} cannot be display```')
+            await ctx.send(f'```Page {page} cannot be display```')
             await self.message.delete()
             await self.set_new_message(ctx)
 
