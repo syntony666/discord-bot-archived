@@ -22,7 +22,7 @@ class EmbedPage:
         self.now_page = page
         embed = self.embed.copy()
         for x in self.data[self.now_page - 1]:
-            embed.add_field(name=x['key'], value=x['value'], inline=False)
+            embed.add_field(name=x['key'], value=x['value'] if len(x['value'])>150 else '__*太長了 略過*__', inline=False)
         embed.set_footer(text=f'Page {self.now_page}/{self.max_page}')
         return embed
 
