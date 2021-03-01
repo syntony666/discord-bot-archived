@@ -39,12 +39,10 @@ class EmbedPage:
             while True:
                 reaction, user = await bot.wait_for("reaction_add", timeout=delay, check=check)
                 if str(reaction.emoji) == "▶️" and self.now_page != self.max_page:
-                    self.now_page += 1
                     self.set_page(self.now_page + 1)
                     # await message.remove_reaction(reaction, user)
                     await message.edit(embed=self.embed)
                 elif str(reaction.emoji) == "◀️" and self.now_page > 1:
-                    self.now_page -= 1
                     # self.set_page(self.now_page - 1)
                     await message.remove_reaction(reaction, user)
                     await message.edit(embed=self.embed)
