@@ -3,6 +3,7 @@ from datetime import datetime
 import discord
 from discord.ext import commands
 
+from core.database import Database
 from core.exception import DataExist, DataNotExist
 from core.extension import Extension
 from dao.reply_dao import ReplyDAO
@@ -35,7 +36,7 @@ class Reply(Extension):
 
     @reply.command(aliases=['s'])
     async def search(self, ctx, keyword):
-        reply_list = ReplyDAO().get_reply(f'/{keyword}/')
+        reply_list = [x for x in Database('reply').get_col().find({'_id': {'$regex': "爸爸"}})]
         embed = discord.Embed(title=f'*{keyword}* 搜尋結果', color=discord.Color.green())
         embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
         embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
