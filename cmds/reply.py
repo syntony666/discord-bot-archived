@@ -36,7 +36,7 @@ class Reply(Extension):
 
     @reply.command(aliases=['s'])
     async def search(self, ctx, keyword):
-        reply_list = [x for x in Database('reply').get_col().find({'_id': {'$regex': "爸爸"}})]
+        reply_list = [x for x in Database('reply').get_col().find({'_id': {'$regex': keyword}})]
         embed = discord.Embed(title=f'*{keyword}* 搜尋結果', color=discord.Color.green())
         embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
         embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
