@@ -40,7 +40,7 @@ class EmbedPage:
         except discord.errors.HTTPException:
             await self.message.delete()
             await self.set_new_message(ctx)
-            await self.change_page(ctx, self.now_page, reaction, user)
+            # await self.change_page(ctx, self.now_page, reaction, user)
 
     async def run(self, bot: discord.Client, ctx, delay=30):
         def check(reaction, user):
