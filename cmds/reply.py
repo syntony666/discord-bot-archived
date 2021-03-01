@@ -21,6 +21,8 @@ class Reply(Extension):
     @reply.command(aliases=['a'])
     async def set_reply(self, ctx, receive, *, send):
         embed_title = ''
+        if len(receive) > 200 or len(send) > 1000:
+            await ctx.send('```字數限制：關鍵字200字內，回應1000字內```')
         try:
             ReplyDAO().create_reply(receive, send)
             embed_title = "已新增回應"
