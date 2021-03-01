@@ -40,12 +40,14 @@ class EmbedPage:
         except discord.errors.HTTPException:
             await self.message.delete()
             await self.set_new_message(ctx)
+            await self.change_page(ctx, self.now_page, reaction, user)
 
     async def run(self, bot: discord.Client, ctx, delay=30):
         def check(reaction, user):
             return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
 
         await self.set_new_message(ctx)
+        await self.message.edit(embed=self.set_page(self.now_page))
 
         try:
             while True:
@@ -53,7 +55,7 @@ class EmbedPage:
                 if str(reaction.emoji) == "▶️" and self.now_page != self.max_page:
                     await self.change_page(ctx, self.now_page + 1, reaction, user)
                 elif str(reaction.emoji) == "◀️" and self.now_page > 1:
-                    await self.change_page(ctx, self.now_page + 1, reaction, user)
+                    await self.change_page(ctx, self.now_page - 1, reaction, user)
                 else:
                     await self.message.remove_reaction(reaction, user)
         except asyncio.TimeoutError:
