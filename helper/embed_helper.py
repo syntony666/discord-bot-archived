@@ -16,6 +16,7 @@ class EmbedPage:
         #     print(self.embed[n].to_dict())
         self.now_page = 1
         self.max_page = len(self.data)
+        self.message = None
 
     def set_page(self, page):
         self.now_page = page
@@ -25,31 +26,36 @@ class EmbedPage:
         embed.set_footer(text=f'Page {self.now_page}/{self.max_page}')
         return embed
 
+    async def set_new_message(self, ctx):
+        self.set_page(self.now_page)
+        self.message = await ctx.send(embed=self.embed)
+        await self.message.add_reaction("◀️")
+        await self.message.add_reaction("▶️")
+
+    async def change_page(self, ctx, page, reaction, user):
+        try:
+            embed = self.set_page(page)
+            await self.message.remove_reaction(reaction, user)
+            await self.message.edit(embed=embed)
+        except discord.errors.HTTPException:
+            await self.message.delete()
+            await self.set_new_message(ctx)
+
     async def run(self, bot: discord.Client, ctx, delay=30):
         def check(reaction, user):
             return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
 
-        self.set_page(self.now_page)
-        # print(self.embed[0])
-        message = await ctx.send(embed=self.embed)
-
-        await message.add_reaction("◀️")
-        await message.add_reaction("▶️")
+        await self.set_new_message(ctx)
 
         try:
             while True:
                 reaction, user = await bot.wait_for("reaction_add", timeout=delay, check=check)
                 if str(reaction.emoji) == "▶️" and self.now_page != self.max_page:
-                    embed = self.set_page(self.now_page + 1)
-                    await message.remove_reaction(reaction, user)
-                    await message.edit(embed=embed)
+                    await self.change_page(ctx, self.now_page + 1, reaction, user)
                 elif str(reaction.emoji) == "◀️" and self.now_page > 1:
-                    embed = self.set_page(self.now_page - 1)
-                    await message.remove_reaction(reaction, user)
-                    await message.edit(embed=embed)
+                    await self.change_page(ctx, self.now_page + 1, reaction, user)
                 else:
-                    await message.remove_reaction(reaction, user)
+                    await self.message.remove_reaction(reaction, user)
         except asyncio.TimeoutError:
-            message.clear_reactions()
-            message.add_reaction('🚫')
-
+            await self.message.clear_reactions()
+            await self.message.add_reaction('🚫')
