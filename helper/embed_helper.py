@@ -19,10 +19,11 @@ class EmbedPage:
 
     def set_page(self, page):
         self.now_page = page
-        self.embed.clear_fields()
+        embed = self.embed
         for x in self.data[self.now_page - 1]:
-            self.embed.add_field(name=x['key'], value=x['value'], inline=False)
-        self.embed.set_footer(text=f'Page {self.now_page}/{self.max_page}')
+            embed.add_field(name=x['key'], value=x['value'], inline=False)
+        embed.set_footer(text=f'Page {self.now_page}/{self.max_page}')
+        return embed
 
     async def run(self, bot: discord.Client, ctx, delay=30):
         def check(reaction, user):
@@ -39,11 +40,11 @@ class EmbedPage:
             while True:
                 reaction, user = await bot.wait_for("reaction_add", timeout=delay, check=check)
                 if str(reaction.emoji) == "▶️" and self.now_page != self.max_page:
-                    self.set_page(self.now_page + 1)
+                    embed = self.set_page(self.now_page + 1)
                     await message.remove_reaction(reaction, user)
-                    await message.edit(embed=self.embed)
+                    await message.edit(embed=embed)
                 elif str(reaction.emoji) == "◀️" and self.now_page > 1:
-                    # self.set_page(self.now_page - 1)
+                    self.set_page(self.now_page - 1)
                     await message.remove_reaction(reaction, user)
                     await message.edit(embed=self.embed)
                 else:
