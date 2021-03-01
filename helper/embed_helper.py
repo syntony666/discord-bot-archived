@@ -27,9 +27,8 @@ class EmbedPage:
         return embed
 
     async def set_new_message(self, ctx):
-        embed = self.set_page(self.now_page)
+        self.set_page(self.now_page)
         self.message = await ctx.send(embed=self.embed)
-        await self.message.edit(embed=embed)
         await self.message.add_reaction("◀️")
         await self.message.add_reaction("▶️")
 
