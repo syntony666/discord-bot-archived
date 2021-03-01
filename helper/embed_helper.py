@@ -19,7 +19,7 @@ class EmbedPage:
 
     def set_page(self, page):
         self.now_page = page
-        embed = self.embed
+        embed = self.embed.copy()
         for x in self.data[self.now_page - 1]:
             embed.add_field(name=x['key'], value=x['value'], inline=False)
         embed.set_footer(text=f'Page {self.now_page}/{self.max_page}')
