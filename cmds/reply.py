@@ -39,7 +39,7 @@ class Reply(Extension):
         embed = discord.Embed(title=f'*{keyword}* 搜尋結果', color=discord.Color.green())
         embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
         embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        if len(reply_list) == 0:
+        if reply_list is None:
             embed.description = '查無結果'
             await ctx.send(embed=embed)
             return
