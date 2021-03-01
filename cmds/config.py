@@ -4,7 +4,7 @@ from discord.ext import commands
 
 from core.extension import Extension
 from dao.config_dao import ConfigDAO
-from impl.guild_impl import validate_role
+from helper.guild_helper import validate_role
 
 
 class Config(Extension):

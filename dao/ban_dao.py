@@ -3,7 +3,7 @@ from bson import ObjectId
 from core.database import Database
 from core.exception import DataExist, DataNotExist
 from core.extension import Extension
-from impl.home_impl import parse_time_duration
+from helper.parse_helper import parse_time_duration
 
 
 class BanDAO:

@@ -3,9 +3,11 @@ from datetime import datetime
 import discord
 from discord.ext import commands
 
+from core.database import Database
 from core.exception import DataExist, DataNotExist
 from core.extension import Extension
 from dao.reply_dao import ReplyDAO
+from helper.embed_helper import EmbedPage
 
 
 class Reply(Extension):
@@ -20,6 +22,8 @@ class Reply(Extension):
     @reply.command(aliases=['a'])
     async def set_reply(self, ctx, receive, *, send):
         embed_title = ''
+        if len(receive) > 200 or len(send) > 1000:
+            await ctx.send('```字數限制：關鍵字200字內，回應1000字內```')
         try:
             ReplyDAO().create_reply(receive, send)
             embed_title = "已新增回應"
@@ -30,19 +34,30 @@ class Reply(Extension):
             response = ReplyDAO().get_reply(receive)
             await send_embed_msg(ctx, embed_title, response, discord.Color.blue())
 
+    @reply.command(aliases=['s'])
+    async def search(self, ctx, keyword):
+        reply_list = [x for x in Database('reply').get_col().find({'_id': {'$regex': keyword}})]
+        embed = discord.Embed(title=f'*{keyword}* 搜尋結果', color=discord.Color.green())
+        embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        if reply_list is None:
+            embed.description = '查無結果'
+            await ctx.send(embed=embed)
+            return
+        reply_list = [{'key': x['_id'], 'value': x['value']} for x in reply_list]
+        embed_page = EmbedPage(embed, reply_list, 8)
+        await embed_page.run(self.bot, ctx)
+
     @reply.command(aliases=['l'])
     async def get_reply(self, ctx):
         reply_list = ReplyDAO().get_reply()
         if len(reply_list) == 0:
             await ctx.send('**沒有回應列表**')
             return
-        embed = discord.Embed(title='__回應列表__', color=0x3ea076)
-        reply_list = [reply_list[i:i + 10] for i in range(0, len(reply_list), 10)]
-        for y in reply_list:
-            for x in y:
-                embed.add_field(name=x['_id'], value=x['value'], inline=False)
-            await ctx.send(embed=embed)
-            embed.clear_fields()
+        embed = discord.Embed(title='__回應列表__', color=discord.Color.green())
+        reply_list = [{'key': x['_id'], 'value': x['value']} for x in reply_list]
+        embed_page = EmbedPage(embed, reply_list, 8)
+        await embed_page.run(self.bot, ctx)
 
     @reply.command(aliases=['d'])
     async def delete_reply(self, ctx, receive):

@@ -15,7 +15,7 @@ class ReplyDAO:
         else:
             raise DataExist
 
-    def get_reply(self, receive=None):
+    def get_reply(self, receive=None, all=False):
         if receive is None:
             return self.db.get_data({})
         if len(self.db.get_data({"_id": receive})) == 0:
