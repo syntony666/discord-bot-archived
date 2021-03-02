@@ -52,7 +52,9 @@ class Reply(Extension):
     async def get_reply(self, ctx):
         reply_list = ReplyDAO().get_reply()
         if len(reply_list) == 0:
-            await ctx.send('**沒有回應列表**')
+            embed = discord.Embed(title='__回應列表__', description='查無資料',
+                                  color=discord.Color.green())
+            await ctx.send(embed=embed)
             return
         embed = discord.Embed(title='__回應列表__', color=discord.Color.green())
         reply_list = [{'key': x['_id'], 'value': x['value']} for x in reply_list]

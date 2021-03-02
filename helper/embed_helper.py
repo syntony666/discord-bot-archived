@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 
 import discord
 
@@ -16,9 +17,10 @@ class EmbedPage:
         embed = self.embed.copy()
         for x in self.data[self.now_page - 1]:
             embed.add_field(name=x['key'],
-                            value=x['value'] if len(x['value'])<150 else '__*太長了 略過*__',
+                            value=x['value'] if len(x['value']) < 150 else '__*太長了 略過*__',
                             inline=False)
-        embed.set_footer(text=f'Page {self.now_page}/{self.max_page}')
+        embed.set_footer(
+            text=f'Page {self.now_page}/{self.max_page} • {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
         return embed
 
     async def set_new_message(self, ctx):

@@ -21,13 +21,11 @@ class Ban(Extension):
             if len(ctx.message.mentions) == 0:
                 raise CommandSyntaxError
             m = ctx.message.mentions[0]
-            BanDAO().create_ban(m.id, datetime.now(), duration, reason)
+            time = datetime.now()
+            BanDAO().create_ban(m.id, time, duration, reason)
             await m.add_roles(ctx.guild.get_role(ConfigDAO().get_ban_role()))
-            embed = discord.Embed(title='__已新增封鎖清單__', color=0x3ea076)
-            embed.add_field(name='可撥仔', value=m.name, inline=False)
-            embed.add_field(name='結束時間', value='')
-            embed.add_field(name='原因', value=reason, inline=False)
-            await ctx.send(embed=embed)
+            response = BanDAO().get_ban(_id=f'{m.id}{time.strftime("%Y-%m-%d %H:%M:%S")}')
+            await send_embed_msg(ctx, '已加入封鎖清單', response, discord.Color.blue())
         except CommandSyntaxError:
             await ctx.send(f'指令錯誤')
         except DataExist:
@@ -43,6 +41,23 @@ class Ban(Extension):
 
         except CommandSyntaxError:
             await ctx.send(f'指令錯誤')
+
+
+async def send_embed_msg(ctx, title, response, color):
+    ban_thumbnail = discord.File(
+        'src/img/ban_thumbnail.png', filename='ban_thumbnail.png')
+    embed = discord.Embed(title=title, description=response['reason'], color=color)
+    embed.set_thumbnail(url='attachment://ban_thumbnail.png')
+    embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+    embed.set_footer(text=response['_id'])
+    embed.add_field(name='可撥仔', value=ctx.guild.get_member(int(response['value'])).name, inline=False)
+    embed.add_field(name='開始時間', value=response['start_time'].strftime("%Y-%m-%d %H:%M:%S"), inline=True)
+    embed.add_field(name='結束時間', value=response['end_time'].strftime("%Y-%m-%d %H:%M:%S"), inline=True)
+    embed.add_field(name='時長', value=response['duration'], inline=True)
+    embed.add_field(name='原因', value=response['reason'], inline=True)
+    embed.add_field(name='已解除封鎖', value=response['unban'], inline=False)
+
+    await ctx.send(file=ban_thumbnail, embed=embed)
 
 
 def setup(bot):
