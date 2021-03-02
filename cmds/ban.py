@@ -50,7 +50,7 @@ async def send_embed_msg(ctx, title, response, color):
     embed.set_thumbnail(url='attachment://ban_thumbnail.png')
     embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
     embed.set_footer(text=response['_id'])
-    embed.add_field(name='可撥仔', value=ctx.guild.get_member(int(response['value'])).name, inline=False)
+    embed.add_field(name='可撥仔', value=ctx.guild.get_member(int(response['member_id'])).name, inline=False)
     embed.add_field(name='開始時間', value=response['start_time'].strftime("%Y-%m-%d %H:%M:%S"), inline=True)
     embed.add_field(name='結束時間', value=response['end_time'].strftime("%Y-%m-%d %H:%M:%S"), inline=True)
     embed.add_field(name='時長', value=response['duration'], inline=True)
