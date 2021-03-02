@@ -24,7 +24,7 @@ class Ban(Extension):
             time = datetime.now()
             BanDAO().create_ban(m.id, time, duration, reason)
             await m.add_roles(ctx.guild.get_role(ConfigDAO().get_ban_role()))
-            response = BanDAO().get_ban(_id=f'{m.id}{time.strftime("%Y%m%d%H%M%S")}')
+            response = BanDAO().get_ban(_id=f'{m.id}{time.strftime("%Y%m%d%H%M%S")}')[0]
             await send_embed_msg(ctx, '已加入封鎖清單', response, discord.Color.blue())
         except CommandSyntaxError:
             await ctx.send(f'指令錯誤')
