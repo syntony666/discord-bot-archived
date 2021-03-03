@@ -1,9 +1,6 @@
-from bson import ObjectId
-
 from core.database import Database
 from core.exception import DataExist, DataNotExist
-from core.extension import Extension
-from helper.parse_helper import parse_time_duration
+from helper.parse_helper import DurationParser
 
 
 class BanDAO:
@@ -11,16 +8,16 @@ class BanDAO:
         self.db = Database('ban')
 
     def create_ban(self, member_id, start_time, duration, reason):
-        end_time = start_time + parse_time_duration(duration)
+        end_time = start_time + DurationParser(duration).get_time()
         for ban in self.db.get_data({"member_id": member_id}):
-            if ban['start_time'] + parse_time_duration(ban['duration']) > end_time:
+            if ban['start_time'] + DurationParser(ban['duration']).get_time() > end_time:
                 raise DataExist
         if end_time:
             self.db.create_data({
                 "_id": f'{member_id}{start_time.strftime("%Y%m%d%H%M%S")}',
                 "member_id": member_id,
                 "start_time": start_time,
-                "end_time": start_time + parse_time_duration(duration),
+                "end_time": start_time + DurationParser(duration).get_time(),
                 "duration": duration,
                 "reason": reason,
                 "unban": False
@@ -45,7 +42,7 @@ class BanDAO:
         data = dict()
         start_time = self.db.get_data({"_id": _id})[0]['start_time']
         if duration is not None:
-            data['end_time'] = start_time + parse_time_duration(duration)
+            data['end_time'] = start_time + DurationParser(duration).get_time()
         if unban is not None:
             data['unban'] = unban
         if reason is not None:

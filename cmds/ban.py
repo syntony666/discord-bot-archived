@@ -7,6 +7,7 @@ from core.exception import CommandSyntaxError, DataExist
 from core.extension import Extension
 from dao.ban_dao import BanDAO
 from dao.config_dao import ConfigDAO
+from helper.parse_helper import DurationParser
 
 
 class Ban(Extension):
@@ -49,11 +50,11 @@ async def send_embed_msg(ctx, title, response, color):
     embed = discord.Embed(title=title, color=color)
     embed.set_thumbnail(url='attachment://ban_thumbnail.png')
     embed.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
-    embed.set_footer(text=response['_id'])
+    embed.set_footer(text=f'ID: {response["_id"]}')
     embed.add_field(name='可撥仔', value=ctx.guild.get_member(int(response['member_id'])).name, inline=False)
     embed.add_field(name='開始時間', value=response['start_time'].strftime("%Y-%m-%d %H:%M:%S"), inline=True)
     embed.add_field(name='結束時間', value=response['end_time'].strftime("%Y-%m-%d %H:%M:%S"), inline=True)
-    embed.add_field(name='時長', value=response['duration'], inline=True)
+    embed.add_field(name='時長', value=DurationParser(response['duration']).get_str(), inline=True)
     embed.add_field(name='原因', value=response['reason'], inline=True)
     embed.add_field(name='已解除封鎖', value=response['unban'], inline=False)
 
