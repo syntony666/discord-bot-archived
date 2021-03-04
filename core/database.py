@@ -1,13 +1,13 @@
 from pymongo import MongoClient
 
-from setting import DATABASE_URL
+from setting import DATABASE_URL, DATABASE
 
 
 class Database:
     def __init__(self, col_name: str):
         db_url = DATABASE_URL
         # access data from MongoDB
-        self.col = MongoClient(db_url).get_database('dd_bot').get_collection(col_name)
+        self.col = MongoClient(db_url).get_database(DATABASE).get_collection(col_name)
 
     def get_col(self):
         return self.col
