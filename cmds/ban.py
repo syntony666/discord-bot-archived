@@ -39,7 +39,10 @@ class Ban(Extension):
             response = BanDAO().get_ban()
         else:
             response = BanDAO().get_ban(member_id=ctx.message.mentions[0].id)
-
+        if response is None:
+            embed = discord.Embed(title='封鎖清單', color=discord.Color.green(), description='查無資料')
+            await ctx.send(embed=embed)
+            return
         for x in response:
             await send_embed_msg(ctx, '封鎖清單', x, discord.Color.green())
 
