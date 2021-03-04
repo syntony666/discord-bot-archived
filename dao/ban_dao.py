@@ -15,7 +15,7 @@ class BanDAO:
         if end_time:
             self.db.create_data({
                 "_id": f'{member_id}{start_time.strftime("%Y%m%d%H%M%S")}',
-                "member_id": member_id,
+                "member_id": str(member_id),
                 "start_time": start_time,
                 "end_time": start_time + DurationParser(duration).get_time(),
                 "duration": duration,
