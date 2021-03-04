@@ -9,9 +9,8 @@ class BanDAO:
 
     def create_ban(self, member_id, start_time, duration, reason):
         end_time = start_time + DurationParser(duration).get_time()
-        for ban in self.db.get_data({"member_id": member_id}):
-            if ban['start_time'] + DurationParser(ban['duration']).get_time() > end_time:
-                raise DataExist
+        if self.get_ban(time=start_time) is not None:
+            raise DataExist
         if end_time:
             self.db.create_data({
                 "_id": f'{member_id}{start_time.strftime("%Y%m%d%H%M%S")}',
