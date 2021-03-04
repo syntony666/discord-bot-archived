@@ -51,12 +51,11 @@ class Reply(Extension):
     @reply.command(aliases=['l'])
     async def get_reply(self, ctx):
         reply_list = ReplyDAO().get_reply()
+        embed = discord.Embed(title='__回應列表__', color=discord.Color.green())
         if len(reply_list) == 0:
-            embed = discord.Embed(title='__回應列表__', description='查無資料',
-                                  color=discord.Color.green())
+            embed.description='查無資料'
             await ctx.send(embed=embed)
             return
-        embed = discord.Embed(title='__回應列表__', color=discord.Color.green())
         reply_list = [{'key': x['_id'], 'value': x['value']} for x in reply_list]
         embed_page = EmbedPage(embed, reply_list, 8)
         await embed_page.run(self.bot, ctx)

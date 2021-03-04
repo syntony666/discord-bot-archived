@@ -33,15 +33,14 @@ class Ban(Extension):
             await ctx.send(f'你已經ban過了')
 
     @ban.command(aliases=['l'])
-    async def get_ban_list(self, ctx):
-        try:
-            if len(ctx.message.mentions) == 0:
-                raise CommandSyntaxError
-            BanDAO().get_ban()
-            embed = discord.Embed(title='__已新增封鎖清單__', color=0x3ea076)
-
-        except CommandSyntaxError:
-            await ctx.send(f'指令錯誤')
+    async def get_ban_list(self, ctx, member):
+        response = None
+        if len(ctx.message.mentions) == 0:
+            response = BanDAO().get_ban()
+        else:
+            response = BanDAO().get_ban(member_id=ctx.message.mentions.id)
+        for x in response:
+            await send_embed_msg(ctx, '封鎖清單', x, discord.Color.green())
 
 
 async def send_embed_msg(ctx, title, response, color):
@@ -56,7 +55,7 @@ async def send_embed_msg(ctx, title, response, color):
     embed.add_field(name='結束時間', value=response['end_time'].strftime("%Y-%m-%d %H:%M:%S"), inline=True)
     embed.add_field(name='時長', value=DurationParser(response['duration']).get_str(), inline=True)
     embed.add_field(name='原因', value=response['reason'], inline=True)
-    embed.add_field(name='已解除封鎖', value=response['unban'], inline=False)
+    embed.add_field(name='已解除封鎖', value='是' if response['unban'] else '否', inline=False)
 
     await ctx.send(file=ban_thumbnail, embed=embed)
 

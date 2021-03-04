@@ -1,6 +1,7 @@
 import os
 
 DATABASE_URL = os.environ.get('DB_URL')
+DATABASE = 'dd_bot'
 
 STAT_ROLE = {
     'Vtuber': 785901109071839244,

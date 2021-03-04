@@ -27,8 +27,8 @@ class DurationParser:
         if 'hours' in self.time.keys():
             time_str += f' {self.time["hours"]}小時'
         if 'minutes' in self.time.keys():
-            time_str += f' {self.time["minutes"]}分鐘'
+            time_str += f' {self.time["minutes"]}分'
         if 'seconds' in self.time.keys():
-            time_str += f' {self.time["seconds"]}秒鐘'
+            time_str += f' {self.time["seconds"]}秒'
         return time_str
 
