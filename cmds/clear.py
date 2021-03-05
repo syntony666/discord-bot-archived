@@ -17,7 +17,7 @@ class Clear(Extension):
     async def clear_by_time(self, ctx, duration):
         purge_time = datetime.now() - DurationParser(duration).get_time()
         print(purge_time)
-        await ctx.channel.purge(after=purge_time, limit=1000)
+        await ctx.channel.purge(after=purge_time - timedelta(hours=8), limit=1000)
         await send_embed_msg(ctx, f'刪除了 **{purge_time.strftime("%Y/%m/%d %H:%M")}** 後的訊息')
 
     @clear.command(aliases=['n'])
