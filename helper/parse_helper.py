@@ -13,7 +13,6 @@ class DurationParser:
             if parts is None:
                 raise FormatError
             self.time = {name: int(param) for name, param in parts.groupdict().items() if param}
-            print(parts.groupdict())
         except ValueError:
             raise FormatError
 
