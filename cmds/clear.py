@@ -13,13 +13,19 @@ class Clear(Extension):
     async def clear(self, ctx):
         pass
 
-    @clear.command(aliases=['t'])
+    @clear.command(aliases=['time'])
+    async def clear_by_time(self, ctx, year: int, month: int, day: int, hour: int = 0, minute: int = 0):
+        purge_time = datetime(year, month, day, hour=hour, minute=minute)
+        await ctx.channel.purge(after=purge_time - timedelta(hours=8), limit=10000)
+        await send_embed_msg(ctx, f'刪除了 **{purge_time.strftime("%Y/%m/%d %H:%M")}** 後的訊息')
+
+    @clear.command(aliases=['dur'])
     async def clear_by_time(self, ctx, duration):
         purge_time = datetime.now() - DurationParser(duration).get_time()
         await ctx.channel.purge(after=purge_time, limit=10000)
         await send_embed_msg(ctx, f'刪除了 **{purge_time.strftime("%Y/%m/%d %H:%M")}** 後的訊息')
 
-    @clear.command(aliases=['n'])
+    @clear.command(aliases=['num'])
     async def clear_by_num(self, ctx, num: int):
         await ctx.channel.purge(limit=num + 1)
         await send_embed_msg(ctx, f'刪除了 **{num}** 則訊息')
