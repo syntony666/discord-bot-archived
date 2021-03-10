@@ -11,5 +11,4 @@ STAT_ROLE = {
 }
 
 
-
 VERSION = 'ver. 1.0.3 release'
