@@ -22,9 +22,12 @@ class Task(Extension):
             guild = self.bot.get_guild(guild_id)
             if BanDAO().get_ban(unban=False) is not None:
                 for ban in BanDAO().get_ban(unban=False):
+                    member = guild.get_member(int(ban['member_id']))
                     if ban['end_time'] < datetime.now():
-                        await guild.get_member(int(ban['member_id'])).remove_roles(
+                        await member.remove_roles(
                             guild.get_role(ConfigDAO().get_ban_role()))
+                        BanDAO().update_ban(ban['_id'], unban=True)
+                    if ConfigDAO().get_ban_role() in member.roles:
                         BanDAO().update_ban(ban['_id'], unban=True)
 
         self.bot.loop.create_task(run_task(remove_ban))

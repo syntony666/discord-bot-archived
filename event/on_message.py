@@ -11,9 +11,10 @@ from dao.reply_dao import ReplyDAO
 class OnMessage(Extension):
 
     @commands.Cog.listener()
+    @commands.guild_only()
     async def on_message(self, message):
         print(message.content)
-        if message.author != self.bot.user:
+        if message.author != self.bot.user and self.check_guild(message.guild.id):
             await reply_message(message)
 
 

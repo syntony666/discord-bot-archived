@@ -8,5 +8,8 @@ class Extension(commands.Cog):
     def __init__(self, bot: discord.Client):
         self.bot = bot
 
+    def check_guild(self, guild: int):
+        return len(Database('auth').get_data({'guild_id': str(guild)})) != 0
+
     async def cog_check(self, ctx):
-        return len(Database('auth').get_data({'guild_id': str(ctx.guild.id)})) != 0
+        return self.check_guild(ctx.guild.id)
