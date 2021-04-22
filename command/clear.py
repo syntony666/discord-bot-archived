@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from discord import Embed, Color
 from discord.ext import commands
 
-from duration_service import DurationService
+from service.duration_service import DurationService
 from extension import Extension
 
 
