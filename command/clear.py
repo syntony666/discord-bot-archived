@@ -4,7 +4,7 @@ from discord import Embed, Color
 from discord.ext import commands
 
 from service.duration_service import DurationService
-from extension import Extension
+from core.extension import Extension
 
 
 class Clear(Extension):
