@@ -74,4 +74,6 @@ __pycache__
 
 venv
 
+run.sh
+
 .idea

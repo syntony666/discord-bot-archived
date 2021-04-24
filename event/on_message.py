@@ -19,7 +19,7 @@ class OnMessage(Extension):
         found = self.reply_dao.get_data(str(message.guild.id), message.content)
         if len(found) != 0:
             await message.channel.send(
-                found[0].send.format(m=message.author.mention, a=' '.join(message.mentions)))
+                found[0].send.format(m=message.author.mention))
 
 
 def setup(bot):
