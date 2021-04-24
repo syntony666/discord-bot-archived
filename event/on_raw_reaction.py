@@ -16,7 +16,7 @@ class OnRawReaction(Extension):
         message_id = str(payload.message_id)
         emoji = str(payload.emoji)
         reaction_role = self.reaction_role_dao.get_data(guild_id, message=message_id, emoji=emoji)
-        if len(reaction_role) != 0:
+        if len(reaction_role) != 0 and payload.member != self.bot.user:
             await payload.member.add_roles(self.bot.get_guild(payload.guild_id).get_role(int(reaction_role[0].role)))
 
     @commands.Cog.listener()
@@ -26,7 +26,7 @@ class OnRawReaction(Extension):
         message_id = str(payload.message_id)
         emoji = str(payload.emoji)
         reaction_role = self.reaction_role_dao.get_data(guild_id, message=message_id, emoji=emoji)
-        if len(reaction_role) != 0:
+        if len(reaction_role) != 0 and guild.get_member(payload.user_id) != self.bot.user:
             await guild.get_member(payload.user_id).remove_roles(guild.get_role(int(reaction_role[0].role)))
 
 
