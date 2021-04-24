@@ -21,8 +21,8 @@ class EmbedPageService:
 
         try:
             await self.send_page(self.now_page)
-            reaction, user = await bot.wait_for("reaction_add", timeout=delay, check=check)
             while True:
+                reaction, user = await bot.wait_for("reaction_add", timeout=delay, check=check)
                 if str(reaction.emoji) == "▶️" and self.now_page != self.max_page:
                     await self.message.remove_reaction(reaction, user)
                     await self.send_page(self.now_page + 1)
