@@ -7,7 +7,6 @@ from dao.reply_dao import ReplyDao
 class OnMessage(Extension):
     def __init__(self, bot):
         super(OnMessage, self).__init__(bot)
-        self.col_name = 'reply'
         self.reply_dao = ReplyDao()
 
     @commands.Cog.listener()

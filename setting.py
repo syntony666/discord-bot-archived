@@ -2,7 +2,7 @@
 import os
 
 DATABASE_URL = os.environ.get('DB_URL')
-DATABASE_NAME = 'dc-bot'
+DATABASE_NAME = 'test'
 
 
 # bot arguments
