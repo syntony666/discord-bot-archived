@@ -54,7 +54,7 @@ class Config(Extension):
             if config.join_channel != '0' else "未設定"
         join_msg = config.join_message.format(m=ctx.author.mention) if config.join_channel != '0' else "未設定"
         remove_channel = f'https://discord.com/channels/{ctx.guild.id}/{config.remove_channel}' \
-            if config.remove_channel != 0 else "未設定"
+            if config.remove_channel != '0' else "未設定"
         remove_msg = config.remove_message.format(m=ctx.author) if config.remove_channel != '0' else "未設定"
 
         embed = Embed(title=ctx.guild, description="這是工具人在貴伺服器的設定列表")
