@@ -3,7 +3,8 @@ from discord.ext.commands import ChannelNotFound, RoleNotFound, MessageNotFound
 
 
 def validate_channel(guild: Guild, channel_id: int):
-    if int(channel_id) not in guild.text_channels:
+    print([x.id for x in guild.text_channels])
+    if int(channel_id) not in [x.id for x in guild.text_channels]:
         raise ChannelNotFound('Please type correct channel ID.')
 
 
