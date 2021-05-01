@@ -18,7 +18,8 @@ class Config(Extension):
 
     @config.command(aliases=["join-ch"])
     async def set_join_channel(self, ctx: commands.Context, channel_id: str):
-        validate_channel(ctx.guild, int(channel_id))
+        if channel_id != '0':
+            validate_channel(ctx.guild, int(channel_id))
         if len(self.config_dao.get_data(ctx.guild.id)) == 0:
             self.config_dao.create_data(ctx.guild.id)
         self.config_dao.update_data(ctx.guild.id, join_channel=channel_id)
@@ -31,7 +32,8 @@ class Config(Extension):
 
     @config.command(aliases=["remove-ch"])
     async def set_remove_channel(self, ctx: commands.Context, channel_id: str):
-        validate_channel(ctx.guild, int(channel_id))
+        if channel_id != '0':
+            validate_channel(ctx.guild, int(channel_id))
         if len(self.config_dao.get_data(ctx.guild.id)) == 0:
             self.config_dao.create_data(ctx.guild.id)
         self.config_dao.update_data(ctx.guild.id, remove_channel=channel_id)
@@ -48,10 +50,12 @@ class Config(Extension):
             self.config_dao.create_data(ctx.guild.id)
         config = self.config_dao.get_data(ctx.guild.id)[0]
 
-        join_channel = f'https://discord.com/channels/{ctx.guild.id}/{config.join_channel}' if config.join_channel != 0 else "未設定"
-        join_msg = config.join_message.format(m=ctx.author.mention) if config.join_channel != 0 else "未設定"
-        remove_channel = f'https://discord.com/channels/{ctx.guild.id}/{config.remove_channel}' if config.remove_channel != 0 else "未設定"
-        remove_msg = config.remove_message.format(m=ctx.author) if config.remove_channel != 0 else "未設定"
+        join_channel = f'https://discord.com/channels/{ctx.guild.id}/{config.join_channel}' \
+            if config.join_channel != '0' else "未設定"
+        join_msg = config.join_message.format(m=ctx.author.mention) if config.join_channel != '0' else "未設定"
+        remove_channel = f'https://discord.com/channels/{ctx.guild.id}/{config.remove_channel}' \
+            if config.remove_channel != 0 else "未設定"
+        remove_msg = config.remove_message.format(m=ctx.author) if config.remove_channel != '0' else "未設定"
 
         embed = Embed(title=ctx.guild, description="這是工具人在貴伺服器的設定列表")
         embed.set_author(name=ctx.guild.owner, icon_url=ctx.guild.owner.avatar_url)
