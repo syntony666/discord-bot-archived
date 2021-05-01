@@ -1,4 +1,4 @@
-from exception import DataExist, DataNotExist
+from core.exception import DataExist, DataNotExist
 from model.config_model import ConfigModel
 from core.database import Database
 
