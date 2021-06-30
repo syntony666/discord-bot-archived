@@ -21,6 +21,16 @@ class ReplyDao(Database):
                  for found in response]
         return reply
 
+    def search_data(self, guild: str, receive: str):
+        guild_id = str(guild)
+        query = {'_id.receive': {'$regex': receive}, '_id.guild': guild_id}
+        response = self._find_data(self.col_name, query)
+        if response is None:
+            return []
+        reply = [ReplyModel(guild_id, found['_id']['receive'], found['send'])
+                 for found in response]
+        return reply
+
     def create_data(self, guild: str, receive: str, send: str):
         guild_id = str(guild)
         if len(self.get_data(guild_id, receive)) != 0:

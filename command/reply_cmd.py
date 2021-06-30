@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from discord import Client, Color, File, Embed
@@ -41,7 +42,6 @@ class Reply(Extension):
     async def get_reply(self, ctx):
         guild_id = str(ctx.guild.id)
         reply_list = self.reply_dao.get_data(guild_id)
-        embed = Embed(title='__回應列表__', color=Color.green())
         if len(reply_list) == 0:
             embed = Embed(title='__回應列表__', color=Color.green())
             embed.description = '查無資料'
@@ -54,6 +54,39 @@ class Reply(Extension):
             Color.green()
         )
         await embed_page_service.run(self.bot, ctx)
+
+    @reply.command(aliases=['s'])
+    async def search_reply(self, ctx, receive):
+        guild_id = str(ctx.guild.id)
+        reply_list = self.reply_dao.search_data(guild_id, receive)
+        if len(reply_list) == 0:
+            embed = Embed(title='__回應列表__', color=Color.green())
+            embed.description = '查無資料'
+            await ctx.send(embed=embed)
+            return
+        reply_list = [{'name': x.receive, 'value': x.send} for x in reply_list]
+        embed_page_service = EmbedPageService(
+            '__回應列表__',
+            [reply_list[x:x + 10] for x in range(0, len(reply_list), 10)],
+            Color.green()
+        )
+        await embed_page_service.run(self.bot, ctx)
+
+    @reply.command(aliases=['file'])
+    async def get_reply_file(self, ctx):
+        filename = 'reply.json'
+        guild_id = str(ctx.guild.id)
+        reply_list = self.reply_dao.get_data(guild_id)
+        f = open(filename, "w", encoding="utf-8")
+        f.write("{\n")
+        for x in reply_list:
+            f.write(f'\t"{x.receive}" : "{x.send}",\n')
+        f.write('}')
+        f.close()
+        reply_file = File(filename, filename=filename)
+        await ctx.send(file=reply_file)
+        os.remove(filename)
+
 
     @reply.command(aliases=['d'])
     async def delete_reply(self, ctx: commands.Context, receive):
