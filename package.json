@@ -1,0 +1,17 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "syntony666",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^13.8.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.19.0"
+  }
+}
