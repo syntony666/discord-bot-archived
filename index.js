@@ -5,7 +5,10 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [
+	Intents.FLAGS.GUILDS,
+	Intents.FLAGS.GUILD_MESSAGES
+] });
 
 // Set commands for the client
 const commandsPath = path.join(__dirname, "commands");
