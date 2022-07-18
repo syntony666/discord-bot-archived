@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
-        console.log(`Interaction created: ${interaction} by ${interaction.author}`);
+        console.log(`Interaction created: ${interaction} by ${interaction.user.username}`);
 
         const client = interaction.client;
 

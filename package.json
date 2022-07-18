@@ -1,10 +1,11 @@
 {
   "name": "discord-bot",
-  "version": "1.0.0",
+  "version": "4.0.0b",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "register": "node register-command.js",
+    "app": "node index.js"
   },
   "author": "syntony666",
   "license": "MIT",
@@ -12,7 +13,9 @@
     "@discordjs/builders": "^0.15.0",
     "@discordjs/rest": "^0.5.0",
     "discord-api-types": "^0.36.1",
-    "discord.js": "^13.8.1"
+    "discord.js": "^13.8.1",
+    "mariadb": "^3.0.0",
+    "sequelize": "^6.21.2"
   },
   "devDependencies": {
     "eslint": "^8.19.0"

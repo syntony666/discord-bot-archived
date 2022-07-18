@@ -4,11 +4,18 @@ const { token } = require("./config.json");
 const fs = require("node:fs");
 const path = require("node:path");
 
+// Prepare database
+const sequelize = require("./database/db").client;
+sequelize.sync();
+console.log("Database connected")
+
 // Create a new client instance
-const client = new Client({ intents: [
-	Intents.FLAGS.GUILDS,
-	Intents.FLAGS.GUILD_MESSAGES
-] });
+const client = new Client({
+	intents: [
+		Intents.FLAGS.GUILDS,
+		Intents.FLAGS.GUILD_MESSAGES
+	]
+});
 
 // Set commands for the client
 const commandsPath = path.join(__dirname, "commands");
@@ -16,9 +23,9 @@ const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith
 
 client.commands = new Collection();
 for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
-    client.commands.set(command.data.name, command);
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	client.commands.set(command.data.name, command);
 }
 
 // Set events for the client
