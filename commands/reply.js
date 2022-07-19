@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const reply = require('../database/model/replyModel');
-const config = require('../config.json');
 const pageService = require('../service/pageService');
 
 module.exports = {
@@ -102,11 +101,9 @@ module.exports = {
                 } else {
                     let replyList = res.map(item => {return { name: item.request, value: item.response }});
                     let embedFields = [], embedList = [];
-                    const totalReplies = replyList.length;
                     while(replyList.length > 0) {
                         embedFields.push(replyList.splice(0, 10));
                     }
-                    console.log(embedFields);
                     let page = 1;
                     embedFields.forEach(field => {
                         let embed = new MessageEmbed()
@@ -114,7 +111,7 @@ module.exports = {
                             .setTitle('回覆內容列表')
                             .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
                             .setDescription('這些回答都不是我自願的...')
-                            .setFooter({ text: `page ${(page++)}/${(embedFields.length)} · total: ${totalReplies}`, iconURL: interaction.client.user.avatarURL() })
+                            .setFooter({ text: `page ${(page++)}/${(embedFields.length)} · total: ${res.length}`, iconURL: interaction.client.user.avatarURL() })
                             .addFields(field);
                         embedList.push(embed);
                     })
