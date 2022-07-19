@@ -28,7 +28,6 @@ module.exports = async (interaction, pages, time = 60000) => {
         ephemeral: true
     }
     const msg = interaction.replied ? await interaction.followUp(data) : await interaction.reply(data);
-    console.log(msg);
     const collector = msg.createMessageComponentCollector({
         time: time
     });
@@ -42,7 +41,6 @@ module.exports = async (interaction, pages, time = 60000) => {
         } else if (res.customId == 'last') {
             index = pages.length - 1;
         }
-        console.log(index);
         buttons = new MessageActionRow()
             .addComponents(new MessageButton().setCustomId('first').setEmoji(buttonEmojis.first).setStyle(buttonStyles.first).setDisabled(index == 0))
             .addComponents(new MessageButton().setCustomId('previous').setEmoji(buttonEmojis.previous).setStyle(buttonStyles.previous).setDisabled(index == 0))

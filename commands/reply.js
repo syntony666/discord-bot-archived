@@ -101,9 +101,8 @@ module.exports = {
                     interaction.reply({ content: '目前沒有任何回覆內容', ephemeral: true });
                 } else {
                     let replyList = res.map(item => {return { name: item.request, value: item.response }});
+                    let embedFields = [], embedList = [];
                     const totalReplies = replyList.length;
-                    let embedFields = [];
-                    let embedList = [];
                     while(replyList.length > 0) {
                         embedFields.push(replyList.splice(0, 10));
                     }
