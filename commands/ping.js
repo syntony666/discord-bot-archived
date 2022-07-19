@@ -1,4 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const pageService = require('../service/pageService');
+const { MessageEmbed } = require('discord.js');
 
 
 module.exports = {
@@ -15,7 +17,16 @@ module.exports = {
                 .setDescription('Replies with ping!')}),
     async execute(interaction) {
         if (interaction.options.getSubcommand() == 'ping') {
-            await interaction.reply('pong');
+            var embed = []
+            for (let i = 0; i < 10; i++) {
+                embed.push(new MessageEmbed()
+                    .setColor('#f0b01d')
+                    .setTitle(i.toString())
+                    .setDescription('pong')
+                )
+            }
+            // await interaction.reply({ embeds: embed });
+            await pageService(interaction, embed);
         }
         else {
             await interaction.reply('You said: ' + interaction.option.getContent());
