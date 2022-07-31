@@ -1,9 +1,10 @@
 const { Sequelize } = require('sequelize');
+
 const Database = require('../database/db');
 
 const databaseClient = Database.client;
 
-const reply = databaseClient.define('reply_message',{
+const reply = databaseClient.define('reply_message', {
     response: Sequelize.STRING,
 })
 
@@ -20,6 +21,6 @@ module.exports = {
                 message.reply(msg.response);
                 console.log(`${message.content} ===> ${msg.response}`);
             }
-        }).catch(err => {});
+        }).catch(err => { });
     },
 };

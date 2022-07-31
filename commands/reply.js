@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+
 const reply = require('../database/model/replyModel');
 const pageService = require('../service/pageService');
 
@@ -47,7 +48,7 @@ module.exports = {
             .setDescription('又在教我奇怪的東西了...')
             .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL() })
             .setTimestamp();
-            
+
         if (interaction.options.getSubcommand() == 'add') {
             const input = interaction.options.get('input').value;
             const output = interaction.options.get('output').value;
@@ -69,7 +70,7 @@ module.exports = {
                     interaction.reply({ content: '回覆內容新增失敗，可能是資料庫損壞', ephemeral: true });
                 }
             });
-        } else if (interaction.options.getSubcommand() == 'remove') { 
+        } else if (interaction.options.getSubcommand() == 'remove') {
             var input = interaction.options.get('input').value;
             reply.destroy({
                 where: {
@@ -99,9 +100,9 @@ module.exports = {
                 if (res.length == 0) {
                     interaction.reply({ content: '目前沒有任何回覆內容', ephemeral: true });
                 } else {
-                    let replyList = res.map(item => {return { name: item.request, value: item.response }});
+                    let replyList = res.map(item => { return { name: item.request, value: item.response } });
                     let embedFields = [], embedList = [];
-                    while(replyList.length > 0) {
+                    while (replyList.length > 0) {
                         embedFields.push(replyList.splice(0, 10));
                     }
                     let page = 1;
@@ -120,7 +121,7 @@ module.exports = {
             });
         }
         else {
-            await interaction.reply({content: `指令錯誤: ${interaction.option.getContent()}`, ephemeral: true });
+            await interaction.reply({ content: `指令錯誤: ${interaction.option.getContent()}`, ephemeral: true });
         }
     },
 };

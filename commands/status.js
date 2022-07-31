@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageAttachment, MessageEmbed } = require('discord.js');
 
-const {version} = require('../package.json');
+const { version } = require('../package.json');
 
 
 module.exports = {
@@ -27,13 +27,15 @@ module.exports = {
                 .setColor('#0099ff')
                 .setTitle(interaction.client.user.username)
                 .setAuthor({ name: '自我介紹', iconURL: 'attachment://logo.png' })
-                .setDescription('我是可憐的廉價勞工')
+                .setDescription('做這種事才不是為了你呢...!')
                 .setThumbnail('attachment://avatar_bg.png')
                 .addFields(
                     { name: 'Bot Ping', value: `\`${Date.now() - interaction.createdAt} ms\``, inline: true },
                     { name: 'API Ping', value: `\`${interaction.client.ws.ping} ms\``, inline: true },
                     { name: '\u200B', value: '\u200B' },
-                    { name: '使用說明', value: 'https://discord-bot.syntony666.com/' }
+                    { name: '使用說明', value: 'https://discord.com/' },
+                    // { name: '使用說明', value: 'https://discord-bot.syntony666.com/' },
+                    { name: '人家才沒有很希望進你的伺服器呢!!', value: '[邀請連結](https://discord.com/api/oauth2/authorize?client_id=995551157151862854&permissions=1644971945463&scope=bot)' },
                 )
                 .setTimestamp()
                 .setFooter({ text: `ver. ${version}`, iconURL: 'attachment://discord_js.png' });
@@ -41,7 +43,7 @@ module.exports = {
             interaction.reply({ embeds: [embed], files: [avatar_bg, logo, discord_js], ephemeral: false });
         }
         else {
-            await interaction.reply({content: `指令錯誤: ${interaction.option.getContent()}`, ephemeral: true });
+            await interaction.reply({ content: `指令錯誤: ${interaction.option.getContent()}`, ephemeral: true });
         }
     },
 };

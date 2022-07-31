@@ -34,7 +34,7 @@ module.exports = async (interaction, pages, time = 60000) => {
     const collector = msg.createMessageComponentCollector({
         time: time
     });
-    
+
     collector.on('collect', res => {
         if (res.customId == 'first') {
             index = 0;
