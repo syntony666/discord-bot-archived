@@ -2,7 +2,6 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, Permissions } = require('discord.js');
 
 module.exports = {
-    name: 'clear',
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('批次刪除訊息')

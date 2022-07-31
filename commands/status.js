@@ -1,8 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageAttachment, MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { MessageAttachment, MessageEmbed, MessageButton, MessageActionRow, Formatters } = require('discord.js');
 
 const { version } = require('../package.json');
-
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,10 +18,10 @@ module.exports = {
                 .setDescription('取得伺服器資訊')
         }),
     async execute(interaction) {
+        const avatar_bg = new MessageAttachment('./assets/avatar_bg.png');
+        const logo = new MessageAttachment('./assets/logo.png');
+        const discord_js = new MessageAttachment('./assets/discord_js.png');
         if (interaction.options.getSubcommand() == 'bot') {
-            const avatar_bg = new MessageAttachment('./assets/avatar_bg.png');
-            const logo = new MessageAttachment('./assets/logo.png');
-            const discord_js = new MessageAttachment('./assets/discord_js.png');
             const embed = new MessageEmbed()
                 .setColor('#0099ff')
                 .setTitle(interaction.client.user.username)
@@ -47,8 +46,26 @@ module.exports = {
                         .setStyle('LINK')
                 )
             interaction.reply({ embeds: [embed], files: [avatar_bg, logo, discord_js], components: [buttons], ephemeral: false });
-        }
-        else {
+        } else if (interaction.options.getSubcommand() == 'server') {
+            interaction.guild.fetchOwner()
+                .then(owner => {
+                    return owner.user.tag;
+                }).then(ownerTag => {
+                    const embed = new MessageEmbed()
+                        .setColor('#0099ff')
+                        .setTitle(interaction.guild.name)
+                        .setAuthor({ name: '伺服器資訊', iconURL: 'attachment://logo.png' })
+                        .setFields(
+                            { name: '伺服器擁有者', value: ownerTag, inline: true },
+                            { name: '創立時間', value: Formatters.time(interaction.guild.createdAt), inline: true },
+                            { name: '成員數量', value: `${interaction.guild.memberCount}`, inline: false },
+                        )
+                        .setThumbnail(interaction.guild.iconURL())
+                        .setTimestamp()
+                        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL() });
+                    interaction.reply({ embeds: [embed], files: [logo], ephemeral: false });
+                })
+        } else {
             await interaction.reply({ content: `指令錯誤: ${interaction.option.getContent()}`, ephemeral: true });
         }
     },
