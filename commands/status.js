@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageAttachment, MessageEmbed } = require('discord.js');
+const { MessageAttachment, MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 
 const { version } = require('../package.json');
 
@@ -31,16 +31,22 @@ module.exports = {
                 .setThumbnail('attachment://avatar_bg.png')
                 .addFields(
                     { name: 'Bot Ping', value: `\`${Date.now() - interaction.createdAt} ms\``, inline: true },
-                    { name: 'API Ping', value: `\`${interaction.client.ws.ping} ms\``, inline: true },
-                    { name: '\u200B', value: '\u200B' },
-                    { name: '使用說明', value: 'https://discord.com/' },
-                    // { name: '使用說明', value: 'https://discord-bot.syntony666.com/' },
-                    { name: '人家才沒有很希望進你的伺服器呢!!', value: '[邀請連結](https://discord.com/api/oauth2/authorize?client_id=995551157151862854&permissions=1644971945463&scope=bot)' },
+                    { name: 'API Ping', value: `\`${interaction.client.ws.ping} ms\``, inline: true }
                 )
                 .setTimestamp()
                 .setFooter({ text: `ver. ${version}`, iconURL: 'attachment://discord_js.png' });
-
-            interaction.reply({ embeds: [embed], files: [avatar_bg, logo, discord_js], ephemeral: false });
+            const buttons = new MessageActionRow()
+                .addComponents(
+                    new MessageButton()
+                        .setLabel('使用說明').setURL('https://discord.com/')
+                        .setStyle('LINK')
+                )
+                .addComponents(
+                    new MessageButton()
+                        .setLabel('邀請連結').setURL('https://discord.com/api/oauth2/authorize?client_id=995551157151862854&permissions=1644971945463&scope=bot')
+                        .setStyle('LINK')
+                )
+            interaction.reply({ embeds: [embed], files: [avatar_bg, logo, discord_js], components: [buttons], ephemeral: false });
         }
         else {
             await interaction.reply({ content: `指令錯誤: ${interaction.option.getContent()}`, ephemeral: true });
