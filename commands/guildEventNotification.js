@@ -53,7 +53,6 @@ module.exports = {
         if (interaction.options.getSubcommand() == 'join') {
             const channel = interaction.options.get('channel').channel;
             const message = interaction.options.get('message').value;
-            console.log(channel);
             guild.update(
                 { join_channel_id: channel.id, join_message: message },
                 { where: { guild_id: interaction.guild.id } }
@@ -71,7 +70,6 @@ module.exports = {
         } else if (interaction.options.getSubcommand() == 'leave') {
             const channel = interaction.options.get('channel').channel;
             const message = interaction.options.get('message').value;
-            console.log(channel);
             guild.update(
                 { leave_channel_id: channel.id, leave_message: message },
                 { where: { guild_id: interaction.guild.id } }

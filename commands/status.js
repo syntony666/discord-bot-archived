@@ -37,7 +37,7 @@ module.exports = {
             const buttons = new MessageActionRow()
                 .addComponents(
                     new MessageButton()
-                        .setLabel('使用說明').setURL('https://discord.com/')
+                        .setLabel('使用說明').setURL('https://discord-bot.syntony666.com/')
                         .setStyle('LINK')
                 )
                 .addComponents(
