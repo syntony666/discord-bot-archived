@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Formatters } = require('discord.js');
 const guild = require('../database/model/guildModel');
 
 module.exports = {
@@ -17,10 +17,10 @@ module.exports = {
                     .setTimestamp();
                 if (res.delete_notification_channel_id != null && !message.author.bot) {
                     embed.addFields(
-                        { name: '傳送者', value: `<@${message.author.id}> (${message.author.tag})`, inline: true },
+                        { name: '傳送者', value: `<@${message.author.id}> (${Formatters.time(message.createdAt)})`, inline: true },
                         { name: '頻道', value: `<#${message.channel.id}>`, inline: true },
                         { name: '內容', value: `${message.content}` }
-                    );
+                    )
                     message.guild.channels.cache.get(res.delete_notification_channel_id).send({embeds: [embed]});
                     console.log(`deleted message ===> message.content: ${message.content}`);
                 }
