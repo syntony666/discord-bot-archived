@@ -17,7 +17,7 @@ module.exports = {
                     .setTimestamp();
                 if (res.delete_notification_channel_id != null && !message.author.bot) {
                     embed.addFields(
-                        { name: '傳送者', value: `<@${message.author.tag}>`, inline: true },
+                        { name: '傳送者', value: `<@${message.author.id}> (${message.author.tag})`, inline: true },
                         { name: '頻道', value: `<#${message.channel.id}>`, inline: true },
                         { name: '內容', value: `${message.content}` }
                     );
