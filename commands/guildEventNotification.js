@@ -77,7 +77,7 @@ module.exports = {
                 embed.setTitle('成員離開通知已設定')
                     .setFields(
                         { name: '頻道', value: `<#${channel.id}>`, inline: true },
-                        { name: '測試訊息', value: message.replace('{m}', `<@${interaction.user.id}>`), inline: true }
+                        { name: '測試訊息', value: message.replace('{m}', `${interaction.user.tag}`), inline: true }
                     );
                 interaction.reply({ embeds: [embed], ephemeral: false });
             }).catch(err => {
