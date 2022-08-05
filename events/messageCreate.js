@@ -1,12 +1,4 @@
-const { Sequelize } = require('sequelize');
-
-const Database = require('../database/db');
-
-const databaseClient = Database.client;
-
-const reply = databaseClient.define('reply_message', {
-    response: Sequelize.STRING,
-})
+const reply = require('../database/model/replyModel');
 
 module.exports = {
     name: 'messageCreate',

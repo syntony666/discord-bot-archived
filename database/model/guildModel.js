@@ -10,5 +10,6 @@ module.exports =
         join_channel_id: Sequelize.STRING,
         join_message: Sequelize.STRING,
         leave_channel_id: Sequelize.STRING,
-        leave_message: Sequelize.STRING
+        leave_message: Sequelize.STRING,
+        delete_notification_channel_id: Sequelize.STRING,
     })
