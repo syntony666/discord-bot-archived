@@ -11,5 +11,5 @@ services:
       - ./:/home/node/app
     command: >
       sh -c   "npm install &&
-              npm register &&
+              npm run register &&
               npm run app"
