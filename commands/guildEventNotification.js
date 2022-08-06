@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, Permissions } = require('discord.js');
+const { MessageEmbed, Permissions, Formatters } = require('discord.js');
 
 const guild = require('../database/model/guildModel');
 
@@ -104,8 +104,8 @@ module.exports = {
             ).then(() => {
                 embed.setTitle('成員加入通知已設定')
                     .setFields(
-                        { name: '頻道', value: `<#${channel.id}>`, inline: true },
-                        { name: '測試訊息', value: message.replace('{m}', `<@${interaction.user.id}>`), inline: true }
+                        { name: '頻道', value: Formatters.channelMention(channel.id), inline: true },
+                        { name: '測試訊息', value: message.replace('{m}', Formatters.userMention(interaction.user.id)), inline: true }
                     );
                 interaction.reply({ embeds: [embed], ephemeral: false });
             }).catch(err => {
@@ -121,7 +121,7 @@ module.exports = {
             ).then(() => {
                 embed.setTitle('成員離開通知已設定')
                     .setFields(
-                        { name: '頻道', value: `<#${channel.id}>`, inline: true },
+                        { name: '頻道', value: Formatters.channelMention(channel.id), inline: true },
                         { name: '測試訊息', value: message.replace('{m}', `${interaction.user.tag}`), inline: true }
                     );
                 interaction.reply({ embeds: [embed], ephemeral: false });
@@ -137,7 +137,7 @@ module.exports = {
             ).then(() => {
                 embed.setTitle('訊息刪除通知已設定')
                     .setFields(
-                        { name: '頻道', value: `<#${channel.id}>`, inline: true }
+                        { name: '頻道', value: Formatters.channelMention(channel.id), inline: true }
                     );
                 interaction.reply({ embeds: [embed], ephemeral: false });
             }).catch(err => {
@@ -162,16 +162,16 @@ module.exports = {
                 const join = {
                     name: (guild.join_channel_id ? '✅' : '❎') + ' 成員加入通知',
                     value: guild.join_channel_id ? 
-                        `**發送頻道:**\n> <#${guild.join_channel_id}>\n**測試訊息:**\n> ${guild.join_message.replace('{m}', `<@${interaction.user.id}>`)}` : '\u200B'
+                        `**發送頻道:**\n> ${Formatters.channelMention(guild.join_channel_id)}\n**測試訊息:**\n> ${guild.join_message.replace('{m}', Formatters.userMention(interaction.user.id))}` : '\u200B'
                 };
                 const leave = {
                     name: (guild.leave_channel_id ? '✅' : '❎') + ' 成員離開通知',
                     value: guild.leave_channel_id ? 
-                        `**發送頻道:**\n> <#${guild.leave_channel_id}>\n**測試訊息:**\n> ${guild.leave_message.replace('{m}', `${interaction.user.tag}`)}` : '\u200B'
+                        `**發送頻道:**\n> ${Formatters.channelMention(guild.leave_channel_id)}\n**測試訊息:**\n> ${guild.leave_message.replace('{m}', interaction.user.tag)}` : '\u200B'
                 };
                 const delete_notification = {
                     name: (guild.delete_notification_channel_id ? '✅' : '❎') + ' 訊息刪除通知',
-                    value: guild.delete_notification_channel_id ? `**發送頻道:**\n> <#${guild.delete_notification_channel_id}>` : '\u200B'
+                    value: guild.delete_notification_channel_id ? `**發送頻道:**\n> ${Formatters.channelMention(guild.delete_notification_channel_id)}` : '\u200B'
                 };
                 embed.setTitle('通知設定')
                     .setFields(

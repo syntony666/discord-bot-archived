@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, Permissions } = require('discord.js');
+const { MessageEmbed, Permissions, Formatters } = require('discord.js');
 
 const reactionRole = require('../database/model/reactionRoleModel');
 const MessageUrlService = require('../service/messageUrlService');
@@ -97,7 +97,7 @@ module.exports = {
                     embed.setTitle('身分組已設定')
                         .setFields(
                             { name: '訊息連結', value: res.messageUrl },
-                            { name: '身分組', value: `<@&${res.roleId}>`, inline: true },
+                            { name: '身分組', value: Formatters.roleMention(res.roleId), inline: true },
                             { name: '表情符號', value: res.emoji, inline: true }
                         )
                     interaction.reply({ embeds: [embed], ephemeral: false });
@@ -124,7 +124,7 @@ module.exports = {
                 if (res != 0) {
                     embed.setTitle('身分組設定已移除')
                         .setFields(
-                            { name: '身分組', value: `<@&${roleId}>` }
+                            { name: '身分組', value: Formatters.roleMention(roleId) }
                         )
                     interaction.reply({ embeds: [embed], ephemeral: false });
                 } else {
@@ -147,9 +147,9 @@ module.exports = {
                 let deletedRoleString = '';
                 res.forEach(item => {
                     if (index == 0)
-                        deletedRoleString += `<@&${item.role_id}>`;
+                        deletedRoleString += Formatters.roleMention(item.role_id);
                     else
-                        deletedRoleString += `, <@&${item.role_id}>`;
+                        deletedRoleString += `, ${Formatters.roleMention(item.role_id)}`;
                     index++;
                 })
                 deletedRoles.push({ name: '身分組', value: deletedRoleString });
@@ -180,7 +180,7 @@ module.exports = {
             }).then(res => {
                 let roleEmbed = [], embedFields = [], embedList = [];
                 res.forEach(item => {
-                    roleEmbed.push({ name: '\u200B', value: `<@&${item.role_id}>` });
+                    roleEmbed.push({ name: '\u200B', value: Formatters.roleMention(item.role_id) });
                     roleEmbed.push({ name: item.reaction, value: `[訊息連結](${item.message_url})` });
                 })
                 while (roleEmbed.length > 0) {
