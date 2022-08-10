@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const Sequelize = require('sequelize');
 
 const reply = require('../database/model/replyModel');
 const pageService = require('../service/pageService');
@@ -29,6 +30,17 @@ module.exports = {
             return subcommand
                 .setName('remove')
                 .setDescription('移除回覆內容')
+                .addStringOption(option => {
+                    return option
+                        .setName('input')
+                        .setDescription('輸入關鍵字')
+                        .setRequired(true)
+                })
+        })
+        .addSubcommand(subcommand => {
+            return subcommand
+                .setName('search')
+                .setDescription('從關鍵字搜尋回覆內容')
                 .addStringOption(option => {
                     return option
                         .setName('input')
@@ -90,6 +102,35 @@ module.exports = {
             }).catch(err => {
                 interaction.reply({ content: '回覆內容移除失敗，可能是資料庫損壞', ephemeral: true });
                 console.log(err);
+            });
+        } else if (interaction.options.getSubcommand() == 'search') {
+            reply.findAll({
+                where: {
+                    guild_id: interaction.guild.id,
+                    request: {[Sequelize.Op.substring]: interaction.options.get('input').value}
+                }
+            }).then(res => {
+                if (res.length == 0) {
+                    interaction.reply({ content: '目前沒有任何回覆內容', ephemeral: true });
+                } else {
+                    let replyList = res.map(item => { return { name: item.request, value: item.response } });
+                    let embedFields = [], embedList = [];
+                    while (replyList.length > 0) {
+                        embedFields.push(replyList.splice(0, 10));
+                    }
+                    let page = 1;
+                    embedFields.forEach(field => {
+                        let embed = new MessageEmbed()
+                            .setColor('#f0b01d')
+                            .setTitle('回覆內容列表')
+                            .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                            .setDescription('這些回答都不是我自願的...')
+                            .setFooter({ text: `page ${(page++)}/${(embedFields.length)} · total: ${res.length}`, iconURL: interaction.client.user.avatarURL() })
+                            .addFields(field);
+                        embedList.push(embed);
+                    })
+                    pageService(interaction, embedList);
+                }
             });
         } else if (interaction.options.getSubcommand() == 'list') {
             reply.findAll({
