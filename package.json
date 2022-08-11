@@ -1,6 +1,6 @@
 {
   "name": "discord-bot",
-  "version": "4.0.1",
+  "version": "4.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
