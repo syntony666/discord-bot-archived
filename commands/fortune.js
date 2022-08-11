@@ -34,7 +34,6 @@ module.exports = {
         const random = Math.floor(Math.random() * cards.length);
         const choice = cards[random];
         const image = new MessageAttachment('./assets/' + cardImage[choice]);
-        console.log(image);
         embed.setImage('attachment://' + cardImage[choice])
         if (description) {
             embed.setDescription(description);
