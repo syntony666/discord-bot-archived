@@ -7,6 +7,7 @@ const databaseClient = Database.client;
 module.exports =
     databaseClient.define('reply_message', {
         guild_id: Sequelize.STRING,
+        last_editor_id: Sequelize.STRING,
         request: Sequelize.STRING,
         response: Sequelize.STRING
     })

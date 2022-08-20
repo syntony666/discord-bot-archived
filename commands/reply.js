@@ -1,9 +1,37 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Formatters } = require('discord.js');
 const Sequelize = require('sequelize');
 
 const reply = require('../database/model/replyModel');
 const pageService = require('../service/pageService');
+
+function displayReplyResult(embedTitle, queryResult, interaction) {
+    if (queryResult.length == 0) {
+        interaction.reply({ content: '目前沒有任何回覆內容', ephemeral: true });
+    } else {
+        let replyList = queryResult.map(item => {
+            let last_editor = item.last_editor_id ? `\n> ${Formatters.userMention(item.last_editor_id)}` : '';
+            let value = item.response + last_editor;
+            return { name: item.request, value: value }
+        });
+        let embedFields = [], embedList = [];
+        while (replyList.length > 0) {
+            embedFields.push(replyList.splice(0, 10));
+        }
+        let page = 1;
+        embedFields.forEach(field => {
+            let embed = new MessageEmbed()
+                .setColor('#f0b01d')
+                .setTitle(embedTitle)
+                .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                .setDescription('這些回答都不是我自願的...')
+                .setFooter({ text: `page ${(page++)}/${(embedFields.length)} · total: ${queryResult.length}`, iconURL: interaction.client.user.avatarURL() })
+                .addFields(field);
+            embedList.push(embed);
+        })
+        pageService(interaction, embedList);
+    }
+}
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,6 +41,23 @@ module.exports = {
             return subcommand
                 .setName('add')
                 .setDescription('新增回覆內容')
+                .addStringOption(option => {
+                    return option
+                        .setName('input')
+                        .setDescription('輸入關鍵字')
+                        .setRequired(true)
+                })
+                .addStringOption(option => {
+                    return option
+                        .setName('output')
+                        .setDescription('輸入回覆內容')
+                        .setRequired(true)
+                })
+        })
+        .addSubcommand(subcommand => {
+            return subcommand
+                .setName('edit')
+                .setDescription('編輯回覆內容')
                 .addStringOption(option => {
                     return option
                         .setName('input')
@@ -66,10 +111,11 @@ module.exports = {
             const output = interaction.options.get('output').value;
             reply.create({
                 guild_id: interaction.guild.id,
+                last_editor_id: interaction.user.id,
                 request: input,
                 response: output
             }).then(() => {
-                embed.setTitle('回覆內容已新增')
+                embed.setTitle('回覆內容已修改')
                     .setFields(
                         { name: '關鍵字', value: input, inline: true },
                         { name: '回覆內容', value: output, inline: true },
@@ -82,6 +128,38 @@ module.exports = {
                     interaction.reply({ content: '回覆內容新增失敗，可能是資料庫損壞', ephemeral: true });
                 }
             });
+        } else if (interaction.options.getSubcommand() == 'edit') {
+            const input = interaction.options.get('input').value;
+            const output = interaction.options.get('output').value;
+            reply.findOne({
+                where: {
+                    request: input,
+                    guild_id: interaction.guild.id
+                }
+            }).then(item => {
+                if (item) {
+                    item.update({
+                        last_editor_id: interaction.user.id,
+                        response: output
+                    }).then(() => {
+                        embed.setTitle('回覆內容已新增')
+                            .setFields(
+                                { name: '關鍵字', value: input, inline: true },
+                                { name: '回覆內容', value: output, inline: true },
+                            )
+                        interaction.reply({ embeds: [embed], ephemeral: false });
+                    }).catch(err => {
+                        if (err.name == 'SequelizeUniqueConstraintError') {
+                            interaction.reply({ content: '關鍵字已重複', ephemeral: true });
+                        } else {
+                            interaction.reply({ content: '回覆內容新增失敗，可能是資料庫損壞', ephemeral: true });
+                        }
+                    });
+                }
+                else {
+                    interaction.reply({ content: '找不到該關鍵字', ephemeral: true });
+                }
+            })
         } else if (interaction.options.getSubcommand() == 'remove') {
             var input = interaction.options.get('input').value;
             reply.destroy({
@@ -107,30 +185,10 @@ module.exports = {
             reply.findAll({
                 where: {
                     guild_id: interaction.guild.id,
-                    request: {[Sequelize.Op.substring]: interaction.options.get('input').value}
+                    request: { [Sequelize.Op.substring]: interaction.options.get('input').value }
                 }
             }).then(res => {
-                if (res.length == 0) {
-                    interaction.reply({ content: '目前沒有任何回覆內容', ephemeral: true });
-                } else {
-                    let replyList = res.map(item => { return { name: item.request, value: item.response } });
-                    let embedFields = [], embedList = [];
-                    while (replyList.length > 0) {
-                        embedFields.push(replyList.splice(0, 10));
-                    }
-                    let page = 1;
-                    embedFields.forEach(field => {
-                        let embed = new MessageEmbed()
-                            .setColor('#f0b01d')
-                            .setTitle('回覆內容列表')
-                            .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
-                            .setDescription('這些回答都不是我自願的...')
-                            .setFooter({ text: `page ${(page++)}/${(embedFields.length)} · total: ${res.length}`, iconURL: interaction.client.user.avatarURL() })
-                            .addFields(field);
-                        embedList.push(embed);
-                    })
-                    pageService(interaction, embedList);
-                }
+                displayReplyResult(`查詢結果: ${interaction.options.get('input').value}`, res, interaction);
             });
         } else if (interaction.options.getSubcommand() == 'list') {
             reply.findAll({
@@ -138,27 +196,7 @@ module.exports = {
                     guild_id: interaction.guild.id
                 }
             }).then(res => {
-                if (res.length == 0) {
-                    interaction.reply({ content: '目前沒有任何回覆內容', ephemeral: true });
-                } else {
-                    let replyList = res.map(item => { return { name: item.request, value: item.response } });
-                    let embedFields = [], embedList = [];
-                    while (replyList.length > 0) {
-                        embedFields.push(replyList.splice(0, 10));
-                    }
-                    let page = 1;
-                    embedFields.forEach(field => {
-                        let embed = new MessageEmbed()
-                            .setColor('#f0b01d')
-                            .setTitle('回覆內容列表')
-                            .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
-                            .setDescription('這些回答都不是我自願的...')
-                            .setFooter({ text: `page ${(page++)}/${(embedFields.length)} · total: ${res.length}`, iconURL: interaction.client.user.avatarURL() })
-                            .addFields(field);
-                        embedList.push(embed);
-                    })
-                    pageService(interaction, embedList);
-                }
+                displayReplyResult('回覆內容列表', res, interaction);
             });
         }
         else {
