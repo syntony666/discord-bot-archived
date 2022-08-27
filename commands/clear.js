@@ -25,7 +25,7 @@ module.exports = {
                     return option
                         .setName('day')
                         .setDescription('天')
-                        .setRequired(true)
+                        .setRequired(false)
                 })
                 .addIntegerOption(option => {
                     return option

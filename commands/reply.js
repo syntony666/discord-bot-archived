@@ -10,7 +10,7 @@ function displayReplyResult(embedTitle, queryResult, interaction) {
         interaction.reply({ content: '目前沒有任何回覆內容', ephemeral: true });
     } else {
         let replyList = queryResult.map(item => {
-            let last_editor = item.last_editor_id ? `\n> ${Formatters.userMention(item.last_editor_id)}` : '';
+            let last_editor = item.last_editor_id ? `\n> //${Formatters.userMention(item.last_editor_id)}` : '';
             let value = item.response + last_editor;
             return { name: item.request, value: value }
         });
@@ -115,7 +115,7 @@ module.exports = {
                 request: input,
                 response: output
             }).then(() => {
-                embed.setTitle('回覆內容已修改')
+                embed.setTitle('回覆內容已新增')
                     .setFields(
                         { name: '關鍵字', value: input, inline: true },
                         { name: '回覆內容', value: output, inline: true },
@@ -142,7 +142,7 @@ module.exports = {
                         last_editor_id: interaction.user.id,
                         response: output
                     }).then(() => {
-                        embed.setTitle('回覆內容已新增')
+                        embed.setTitle('回覆內容已修改')
                             .setFields(
                                 { name: '關鍵字', value: input, inline: true },
                                 { name: '回覆內容', value: output, inline: true },
