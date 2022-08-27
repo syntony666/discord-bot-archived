@@ -10,8 +10,8 @@ function displayReplyResult(embedTitle, queryResult, interaction) {
         interaction.reply({ content: '目前沒有任何回覆內容', ephemeral: true });
     } else {
         let replyList = queryResult.map(item => {
-            let last_editor = item.last_editor_id ? `\n> //${Formatters.userMention(item.last_editor_id)}` : '';
-            let value = item.response + last_editor;
+            let last_editor = item.last_editor_id ? `> ${Formatters.userMention(item.last_editor_id)}\n` : '';
+            let value = last_editor + item.response;
             return { name: item.request, value: value }
         });
         let embedFields = [], embedList = [];
