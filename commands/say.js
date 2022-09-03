@@ -3,7 +3,6 @@ const { MessageEmbed, Formatters } = require('discord.js');
 
 function getBaseEmbed(interaction) {
     return new MessageEmbed()
-        .setDescription(interaction.options.get('input').value)
         .setColor('#3d3d3d');
 }
 
@@ -29,6 +28,7 @@ module.exports = {
         let replyEmbed = getBaseEmbed(interaction)
             .setAuthor({ name: interaction.client.user.username, iconURL: interaction.client.user.avatarURL() })
             .setTitle('訊息內容已傳送')
+            .setDescription('又在叫我做奇怪的事情...')
             .addFields(
                 {name: '訊息內容', value: message},
                 {name: '頻道', value: Formatters.channelMention(channelId)}
