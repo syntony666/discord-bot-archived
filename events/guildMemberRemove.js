@@ -9,7 +9,7 @@ module.exports = {
                 guild_id: member.guild.id
             }
         }).then(res => {
-            if (res == null) return;
+            if (res == null || res.join_channel_id == null) return;
             const embed = new MessageEmbed()
                 .setColor('#f58e69')
                 .setAuthor({ name: member.guild.name, iconURL: member.guild.iconURL() })
